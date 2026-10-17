@@ -1,6 +1,6 @@
 import type { Chain, RawItem } from '../types';
+import { convertItems } from './convertItems';
 import {
-  assertValidItem,
   cleanPath,
   cleanText,
   parseUnitPrice,
@@ -74,11 +74,12 @@ export function parseWalmartItem(raw: WalmartRawItem): RawItem {
 export function createWalmartConnector(
   loadRaw: () => Promise<WalmartRawItem[]> = async () => walmartSample,
 ): StoreConnector {
+  const fetchResult = async () => convertItems(await loadRaw(), parseWalmartItem, (raw) => raw.sku);
   return {
     chain: walmartChain,
+    fetchResult,
     async fetchItems() {
-      const raw = await loadRaw();
-      return raw.map((item) => assertValidItem(parseWalmartItem(item)));
+      return (await fetchResult()).items;
     },
     async fetchLocations() {
       return sampleLocationsFor(walmartChain.slug);

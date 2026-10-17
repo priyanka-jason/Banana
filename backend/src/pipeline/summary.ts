@@ -1,3 +1,4 @@
+import { nameSku as withSku } from '../connectors/convertItems';
 import type { CategoryNote } from './types';
 import type { IngestResult } from './runIngest';
 import { toPriceRow } from './priceRow';
@@ -31,12 +32,28 @@ export function formatIngestSummary(result: IngestResult, options: { sampleRows?
   lines.push('Fetched:');
   for (const entry of result.scraped) {
     const name = result.chains.find((chain) => chain.slug === entry.chainSlug)?.name ?? entry.chainSlug;
-    lines.push(`  ${name}: ${entry.count} items`);
+    const skippedCount = result.skipped.filter((item) => item.chainSlug === entry.chainSlug).length;
+    lines.push(`  ${name}: ${entry.count} items${skippedCount > 0 ? ` (${skippedCount} skipped)` : ''}`);
   }
   for (const failure of result.failures) {
     lines.push(`  ${failure.chainSlug}: FAILED - ${failure.error}`);
   }
   lines.push('');
+
+  if (result.warnings.length > 0) {
+    lines.push('Warnings:');
+    for (const warning of result.warnings) lines.push(`  ${warning.chainSlug}: ${warning.message}`);
+    lines.push('');
+  }
+
+  if (result.skipped.length > 0) {
+    lines.push(`Skipped items (${result.skipped.length}), left out so the rest could go through:`);
+    for (const entry of result.skipped.slice(0, 10)) {
+      lines.push(`  ${entry.chainSlug}: ${withSku(entry.sku, entry.reason)}`);
+    }
+    if (result.skipped.length > 10) lines.push(`  ...and ${result.skipped.length - 10} more`);
+    lines.push('');
+  }
 
   if (!result.dryRun) {
     lines.push(`Saved: ${result.savedStoreRecords} per-store records, ${result.savedItems} final items`);

@@ -1,6 +1,6 @@
 import type { Chain, RawItem } from '../types';
+import { convertItems } from './convertItems';
 import {
-  assertValidItem,
   cleanPath,
   cleanText,
   parseUnitPrice,
@@ -79,11 +79,12 @@ export function parseSaveOnFoodsItem(raw: SaveOnFoodsRawItem): RawItem {
 export function createSaveOnFoodsConnector(
   loadRaw: () => Promise<SaveOnFoodsRawItem[]> = async () => saveOnFoodsSample,
 ): StoreConnector {
+  const fetchResult = async () => convertItems(await loadRaw(), parseSaveOnFoodsItem, (raw) => raw.sku);
   return {
     chain: saveOnFoodsChain,
+    fetchResult,
     async fetchItems() {
-      const raw = await loadRaw();
-      return raw.map((item) => assertValidItem(parseSaveOnFoodsItem(item)));
+      return (await fetchResult()).items;
     },
     async fetchLocations() {
       return sampleLocationsFor(saveOnFoodsChain.slug);

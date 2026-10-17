@@ -1,6 +1,6 @@
 import type { Chain, RawItem } from '../types';
+import { convertItems } from './convertItems';
 import {
-  assertValidItem,
   cleanPath,
   cleanText,
   parseUnitPrice,
@@ -82,11 +82,12 @@ export function parseCostcoItem(raw: CostcoRawItem): RawItem {
 export function createCostcoConnector(
   loadRaw: () => Promise<CostcoRawItem[]> = async () => costcoSample,
 ): StoreConnector {
+  const fetchResult = async () => convertItems(await loadRaw(), parseCostcoItem, (raw) => raw.itemNumber);
   return {
     chain: costcoChain,
+    fetchResult,
     async fetchItems() {
-      const raw = await loadRaw();
-      return raw.map((item) => assertValidItem(parseCostcoItem(item)));
+      return (await fetchResult()).items;
     },
     async fetchLocations() {
       return sampleLocationsFor(costcoChain.slug);

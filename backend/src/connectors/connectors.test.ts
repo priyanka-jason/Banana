@@ -212,10 +212,14 @@ describe('swapping in a different data source', () => {
     ]);
   });
 
-  it('fails loudly on a bad price instead of saving a wrong one', async () => {
+  it('does not save a wrong price: the bad item is skipped and reported with its sku', async () => {
     const connector = createWalmartConnector(async () => [
       { sku: 'X-2', name: 'Broken', department: 'Pantry', price: 'call us' },
     ]);
-    await expect(connector.fetchItems()).rejects.toThrow(/Invalid price/);
+
+    expect(await connector.fetchItems()).toEqual([]);
+    const result = await connector.fetchResult?.();
+    expect(result?.items).toEqual([]);
+    expect(result?.skipped).toEqual([{ sku: 'X-2', index: 0, reason: 'X-2: Invalid price: "call us"' }]);
   });
 });
