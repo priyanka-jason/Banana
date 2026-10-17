@@ -42,6 +42,8 @@ create index store_locations_location_idx on store_locations using gist (locatio
 create index store_locations_chain_idx on store_locations (chain_slug);
 
 -- An item as one chain sells it. The same product at two chains is two rows.
+-- The id shown to shoppers is chain_slug || ':' || sku (see itemId() in
+-- backend/src/pricing.ts), so a search query can build it from these two columns.
 -- "category" must match PRODUCT_CATEGORIES in backend/src/categories.ts.
 create table products (
   id         bigint generated always as identity primary key,

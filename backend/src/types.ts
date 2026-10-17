@@ -79,6 +79,11 @@ export interface RawItem {
 
 /** One result row from a price search: item, chain and price, ready to show. */
 export interface PriceRow {
+  /**
+   * Unique across all stores and stable between scrapes: "chain:sku", built with itemId()
+   * in pricing.ts. Treat it as plain text and encode it before putting it in a web address.
+   */
+  id: string;
   chainSlug: string;
   chainName: string;
   parentCompany: string;
@@ -91,12 +96,21 @@ export interface PriceRow {
   category?: ProductCategory;
   imageUrl?: string;
   /**
-   * The price to compare, after applying the `memberPricing` filter.
+   * The price the shopper pays, after applying the `memberPricing` filter.
    * Non-member: the sale price if there is one, otherwise the regular price.
    * Member: the lowest of the member price and the non-member price.
+   * Build it with effectivePriceCents() in pricing.ts.
    */
   priceCents: number;
+  /** The original price, before any sale or member price. */
   regularPriceCents: number;
+  /**
+   * How much cheaper `priceCents` is than the original price, in cents.
+   * Only set when the price is below the original. Build it with discountFor() in pricing.ts.
+   */
+  discountCents?: number;
+  /** The same discount as a whole percent of the original price, e.g. 17. Only set with `discountCents`. */
+  discountPercent?: number;
   salePriceCents?: number;
   memberPriceCents?: number;
   unitPriceCents?: number;
