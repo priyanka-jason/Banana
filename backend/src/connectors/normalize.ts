@@ -1,4 +1,4 @@
-import { isProductCategory, type ProductCategory } from '../categories';
+import type { ProductCategory } from '../categories';
 import type { RawItem } from '../types';
 
 /**
@@ -21,6 +21,19 @@ export function requireText(value: string | null | undefined, label: string): st
   const text = cleanText(value);
   if (text === undefined) throw new Error(`Missing text: ${label}`);
   return text;
+}
+
+/**
+ * Tidy a store's category names, keeping the store's own wording and order.
+ * Missing or empty names are dropped: cleanPath("Produce", undefined, "Fruit") is ["Produce", "Fruit"].
+ */
+export function cleanPath(...names: Array<string | null | undefined>): string[] {
+  const path: string[] = [];
+  for (const name of names) {
+    const clean = cleanText(name);
+    if (clean !== undefined) path.push(clean);
+  }
+  return path;
 }
 
 const PRICE_TEXT = /^(?:\d+(?:\.\d{1,2})?|\.\d{1,2})$/;
@@ -106,12 +119,15 @@ const CATEGORY_RULES: ReadonlyArray<readonly [ProductCategory, RegExp]> = [
 ];
 
 /**
- * Guess our category from a store's own category names.
+ * Guess one of our shared categories from a store's own category names.
  * Pass the most specific name first ("Fresh Vegetables" before "Fruits & Vegetables").
  * The first name that matches a rule wins; if none match the answer is 'other'.
  *
+ * The connectors do NOT call this: they keep each store's own category names.
+ * It is a starting point for the later step that combines every store's
+ * categories into the shared list, and a person should review the result.
+ *
  * Limit: a combined name like "Meat & Seafood" on its own maps to 'meat'.
- * Use the store's more specific sub-category when it has one.
  */
 export function categoryFromText(...texts: Array<string | null | undefined>): ProductCategory {
   for (const text of texts) {
@@ -133,6 +149,10 @@ export function assertValidItem(item: RawItem): RawItem {
   if (item.sku.trim() === '') problems.push('sku is empty');
   if (item.name.trim() === '') problems.push('name is empty');
 
+  if (item.storeCategories.some((name) => name.trim() === '')) {
+    problems.push('storeCategories must not contain empty names');
+  }
+
   const amounts: Array<[string, number | undefined]> = [
     ['regularPriceCents', item.regularPriceCents],
     ['salePriceCents', item.salePriceCents],
@@ -150,10 +170,6 @@ export function assertValidItem(item: RawItem): RawItem {
   }
   if (item.memberPriceCents !== undefined && item.memberPriceCents > item.regularPriceCents) {
     problems.push('memberPriceCents must not be higher than regularPriceCents');
-  }
-
-  if (item.category !== undefined && !isProductCategory(item.category)) {
-    problems.push(`category "${item.category}" is not a known category`);
   }
 
   const dates: Array<[string, string | undefined]> = [

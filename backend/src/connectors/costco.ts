@@ -1,7 +1,7 @@
 import type { Chain, RawItem } from '../types';
 import {
   assertValidItem,
-  categoryFromText,
+  cleanPath,
   cleanText,
   parseUnitPrice,
   requireCents,
@@ -62,7 +62,8 @@ export function parseCostcoItem(raw: CostcoRawItem): RawItem {
     name: requireText(raw.description, `${raw.itemNumber} description`),
     brand: cleanText(raw.brand),
     size: cleanText(raw.packSize),
-    category: categoryFromText(raw.subcategory, raw.category),
+    // Keep the store's own category names exactly as the store words them, broadest first.
+    storeCategories: cleanPath(raw.category, raw.subcategory),
     regularPriceCents,
     salePriceCents,
     ...parseUnitPrice(raw.perUnit),

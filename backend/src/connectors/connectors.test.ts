@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { isProductCategory } from '../categories';
 import type { RawItem } from '../types';
 import { createCostcoConnector } from './costco';
 import { sampleConnectors } from './index';
@@ -29,14 +28,13 @@ describe.each(sampleConnectors.map((connector) => [connector.chain.slug, connect
       expect(new Set(skus).size).toBe(skus.length);
     });
 
-    it('uses only known categories and covers the main food groups', async () => {
+    it("keeps the store's own category names and does not assign shared categories", async () => {
       const items = await connector.fetchItems();
-      const categories = new Set(items.map((item) => item.category));
-      for (const category of categories) {
-        expect(category !== undefined && isProductCategory(category)).toBe(true);
-      }
-      for (const wanted of ['fruits', 'vegetables', 'meat', 'seafood', 'dairy-eggs'] as const) {
-        expect(categories.has(wanted)).toBe(true);
+      for (const item of items) {
+        expect(item.storeCategories.length).toBeGreaterThan(0);
+        for (const name of item.storeCategories) expect(name.trim()).not.toBe('');
+        // Mapping to the shared categories is a later step, done after all stores are combined.
+        expect(item).not.toHaveProperty('category');
       }
     });
 
@@ -60,6 +58,14 @@ describe('all sample connectors together', () => {
     const slugs = sampleConnectors.map((connector) => connector.chain.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
   });
+
+  it('keep each store using its own wording for the same kind of item', async () => {
+    const [saveOn, walmart, costco] = await Promise.all(sampleConnectors.map((connector) => connector.fetchItems()));
+    // Same product, three different category paths, kept as each store words them.
+    expect(itemWithSku(saveOn ?? [], 'SOF-1007').storeCategories).toEqual(['Meat & Seafood', 'Fish']);
+    expect(itemWithSku(walmart ?? [], 'W-2007').storeCategories).toEqual(['Meat & Seafood', 'Fish']);
+    expect(itemWithSku(costco ?? [], 'C-3007').storeCategories).toEqual(['Seafood', 'Fish']);
+  });
 });
 
 describe('Save-On-Foods', () => {
@@ -68,7 +74,7 @@ describe('Save-On-Foods', () => {
 
     expect(itemWithSku(items, 'SOF-1002')).toMatchObject({
       name: 'Gala Apples 1.36 kg Bag',
-      category: 'fruits',
+      storeCategories: ['Produce', 'Fruit'],
       regularPriceCents: 599,
       salePriceCents: 499,
       saleStart: '2026-10-16',
@@ -77,7 +83,7 @@ describe('Save-On-Foods', () => {
       unitLabel: '100g',
     });
     expect(itemWithSku(items, 'SOF-1001')).toMatchObject({ regularPriceCents: 169, memberPriceCents: 149 });
-    expect(itemWithSku(items, 'SOF-1011').category).toBe('frozen');
+    expect(itemWithSku(items, 'SOF-1011').storeCategories).toEqual(['Frozen', 'Frozen Vegetables']);
   });
 
   it('has no sale dates on items that are not on sale', async () => {
@@ -101,7 +107,7 @@ describe('Walmart', () => {
     const items = await createWalmartConnector().fetchItems();
 
     expect(itemWithSku(items, 'W-2002')).toMatchObject({
-      category: 'fruits',
+      storeCategories: ['Fruits & Vegetables', 'Fresh Fruit'],
       regularPriceCents: 597,
       salePriceCents: 547,
       unitPriceCents: 40,
@@ -110,10 +116,10 @@ describe('Walmart', () => {
     expect(itemWithSku(items, 'W-2001')).toMatchObject({ regularPriceCents: 69, unitPriceCents: 152, unitLabel: 'kg' });
   });
 
-  it('uses the aisle to tell vegetables from fruit inside "Fruits & Vegetables"', async () => {
+  it('keeps the department and aisle exactly as the store words them', async () => {
     const items = await createWalmartConnector().fetchItems();
-    expect(itemWithSku(items, 'W-2003').category).toBe('vegetables');
-    expect(itemWithSku(items, 'W-2001').category).toBe('fruits');
+    expect(itemWithSku(items, 'W-2003').storeCategories).toEqual(['Fruits & Vegetables', 'Fresh Vegetables']);
+    expect(itemWithSku(items, 'W-2015').storeCategories).toEqual(['Household Essentials', 'Paper Towels']);
   });
 
   it('has no sale price when the old price is missing', async () => {
@@ -127,7 +133,7 @@ describe('Costco', () => {
     const items = await createCostcoConnector().fetchItems();
 
     expect(itemWithSku(items, 'C-3002')).toMatchObject({
-      category: 'fruits',
+      storeCategories: ['Produce', 'Fruit'],
       regularPriceCents: 1199,
       salePriceCents: 999,
       saleStart: '2026-10-14',
@@ -138,20 +144,20 @@ describe('Costco', () => {
     expect(itemWithSku(items, 'C-3015').salePriceCents).toBe(1999);
   });
 
-  it('puts fish under seafood even though the broad group is "Seafood"', async () => {
+  it('keeps the group and subgroup as the store words them', async () => {
     const items = await createCostcoConnector().fetchItems();
-    expect(itemWithSku(items, 'C-3007').category).toBe('seafood');
+    expect(itemWithSku(items, 'C-3008').storeCategories).toEqual(['Dairy', 'Milk']);
   });
 });
 
 describe('swapping in a different data source', () => {
   it('uses the loader it is given instead of the sample data', async () => {
     const items = await createWalmartConnector(async () => [
-      { sku: 'X-1', name: ' Test  Rice ', department: 'Pantry', price: '$1.00' },
+      { sku: 'X-1', name: ' Test  Rice ', department: ' Pantry ', price: '$1.00' },
     ]).fetchItems();
 
     expect(items).toEqual([
-      expect.objectContaining({ sku: 'X-1', name: 'Test Rice', category: 'pantry', regularPriceCents: 100 }),
+      expect.objectContaining({ sku: 'X-1', name: 'Test Rice', storeCategories: ['Pantry'], regularPriceCents: 100 }),
     ]);
   });
 

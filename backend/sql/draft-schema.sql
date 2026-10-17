@@ -6,6 +6,12 @@
 --
 -- Not yet run against a real database. Needs Postgres 15 or newer ("nulls not
 -- distinct" below). Supabase projects are on 15 or newer.
+--
+-- NOTE: this draft is the FINAL layer that the website reads, using our shared
+-- categories. Each store's own data, with the store's own category names (see
+-- RawItem.storeCategories), is meant to be kept as scraped in a separate raw
+-- layer that is not drafted yet. Combining store categories into the shared
+-- ones is a later step, so the category check below applies to this layer only.
 
 -- Extensions. In Supabase these live in the "extensions" schema.
 create extension if not exists postgis with schema extensions;   -- map locations and radius search

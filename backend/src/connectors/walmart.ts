@@ -1,7 +1,7 @@
 import type { Chain, RawItem } from '../types';
 import {
   assertValidItem,
-  categoryFromText,
+  cleanPath,
   cleanText,
   parseUnitPrice,
   requireCents,
@@ -56,7 +56,8 @@ export function parseWalmartItem(raw: WalmartRawItem): RawItem {
     name: requireText(raw.name, `${raw.sku} name`),
     brand: cleanText(raw.brand),
     size: cleanText(raw.size),
-    category: categoryFromText(raw.aisle, raw.department),
+    // Keep the store's own category names exactly as the store words them, broadest first.
+    storeCategories: cleanPath(raw.department, raw.aisle),
     regularPriceCents,
     salePriceCents,
     ...parseUnitPrice(raw.unitPriceText),

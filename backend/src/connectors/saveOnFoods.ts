@@ -1,7 +1,7 @@
 import type { Chain, RawItem } from '../types';
 import {
   assertValidItem,
-  categoryFromText,
+  cleanPath,
   cleanText,
   parseUnitPrice,
   requireCents,
@@ -58,8 +58,8 @@ export function parseSaveOnFoodsItem(raw: SaveOnFoodsRawItem): RawItem {
     name: requireText(raw.title, `${raw.sku} title`),
     brand: cleanText(raw.brand),
     size: cleanText(raw.packageSize),
-    // The path is broadest first, so reverse it to try the most specific name first.
-    category: categoryFromText(...[...raw.categories].reverse()),
+    // Keep the store's own category names exactly as the store words them.
+    storeCategories: cleanPath(...raw.categories),
     regularPriceCents,
     salePriceCents,
     memberPriceCents,

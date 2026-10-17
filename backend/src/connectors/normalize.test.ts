@@ -3,6 +3,7 @@ import type { RawItem } from '../types';
 import {
   assertValidItem,
   categoryFromText,
+  cleanPath,
   cleanText,
   parseUnitPrice,
   requireCents,
@@ -28,6 +29,16 @@ describe('requireText', () => {
   });
   it('throws when the text is missing', () => {
     expect(() => requireText('  ', 'name')).toThrow(/Missing text: name/);
+  });
+});
+
+describe('cleanPath', () => {
+  it("tidies each name but keeps the store's own wording and order", () => {
+    expect(cleanPath(' Meat  &  Seafood ', 'Poultry')).toEqual(['Meat & Seafood', 'Poultry']);
+  });
+  it('drops missing and empty names', () => {
+    expect(cleanPath('Produce', undefined, 'Fruit', '  ', null)).toEqual(['Produce', 'Fruit']);
+    expect(cleanPath()).toEqual([]);
   });
 });
 
@@ -100,6 +111,8 @@ describe('toIsoDate', () => {
   });
 });
 
+// Not used by the connectors. It is the starting point for the later step
+// that combines every store's own categories into the shared list.
 describe('categoryFromText', () => {
   it('maps common category names', () => {
     expect(categoryFromText('Fruit')).toBe('fruits');
@@ -135,7 +148,7 @@ describe('assertValidItem', () => {
   const valid: RawItem = {
     sku: 'T-1',
     name: 'Test item',
-    category: 'pantry',
+    storeCategories: ['Pantry', 'Pasta & Rice'],
     regularPriceCents: 500,
     salePriceCents: 400,
     memberPriceCents: 450,
@@ -148,9 +161,15 @@ describe('assertValidItem', () => {
   it('returns a good item unchanged', () => {
     expect(assertValidItem(valid)).toBe(valid);
   });
+  it('accepts an item whose store gave no categories', () => {
+    expect(() => assertValidItem({ ...valid, storeCategories: [] })).not.toThrow();
+  });
   it('rejects an empty sku or name', () => {
     expect(() => assertValidItem({ ...valid, sku: ' ' })).toThrow(/sku is empty/);
     expect(() => assertValidItem({ ...valid, name: '' })).toThrow(/name is empty/);
+  });
+  it('rejects an empty store category name', () => {
+    expect(() => assertValidItem({ ...valid, storeCategories: ['Pantry', ' '] })).toThrow(/storeCategories/);
   });
   it('rejects prices that are not whole cents', () => {
     expect(() => assertValidItem({ ...valid, regularPriceCents: 4.99 })).toThrow(/whole number of cents/);
@@ -161,9 +180,6 @@ describe('assertValidItem', () => {
   });
   it('rejects a member price above the regular price', () => {
     expect(() => assertValidItem({ ...valid, memberPriceCents: 600 })).toThrow(/memberPriceCents must not be higher/);
-  });
-  it('rejects an unknown category', () => {
-    expect(() => assertValidItem({ ...valid, category: 'snacks-and-stuff' as never })).toThrow(/not a known category/);
   });
   it('rejects bad or backwards dates', () => {
     expect(() => assertValidItem({ ...valid, saleStart: '16/10/2026' })).toThrow(/YYYY-MM-DD/);

@@ -55,7 +55,13 @@ export interface RawItem {
   /** Package size as printed, e.g. "500 g" or "12 ct". */
   size?: string;
   upc?: string;
-  category?: ProductCategory;
+  /**
+   * The store's own category names for this item, broadest first, exactly as
+   * the store's website words them, e.g. ["Produce", "Fruit"]. Every store uses
+   * different words, so we keep them as they are. Combining them into our
+   * shared categories (see categories.ts) is a separate, later step.
+   */
+  storeCategories: string[];
   imageUrl?: string;
   regularPriceCents: number;
   salePriceCents?: number;
@@ -81,6 +87,7 @@ export interface PriceRow {
   name: string;
   brand?: string;
   size?: string;
+  /** One of our shared categories, set once each store's own category names have been combined. */
   category?: ProductCategory;
   imageUrl?: string;
   /**
@@ -127,7 +134,7 @@ export interface PriceFilters {
   onSaleOnly?: boolean;
   /** Which price to compare. Default: 'non-member', what an anonymous visitor sees. */
   memberPricing?: MemberPricing;
-  /** Only items in these categories, e.g. ['fruits', 'vegetables']. */
+  /** Only items in these shared categories, e.g. ['fruits', 'vegetables']. */
   categories?: ProductCategory[];
   /** Default: 'price', cheapest first. */
   sortBy?: PriceSort;
