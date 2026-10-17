@@ -1,0 +1,21 @@
+:root {
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+  color: #17231c;
+  background: #fff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-width: 320px;
+}
+code {
+  font-family: ui-monospace, monospace;
+}
