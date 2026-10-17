@@ -1,29 +1,15 @@
-import type {
-  Chain,
-  NearbyStore,
-  PriceFilters,
-  PriceRow,
-  RawItem,
-  StoreLocation,
-} from '../types';
+import type { NearbyStore, PriceFilters, PriceRow } from '../types';
 
 /**
- * Everything the app needs from the database, in one place.
- * One version will talk to Supabase and another will keep data in memory
- * for local work. Code that uses this interface works with either.
+ * The read side: everything the website needs from the database.
+ * It only ever sees the final data, never the per-store layer.
+ *
+ * Writing is split off: StoreDataRepository (storeData.ts) for the per-store layer
+ * and FinalRepository (final.ts) for the final layer. One version of this
+ * will talk to Supabase with the limited key and another will work on
+ * in-memory data for local work, so code using it works with either.
  */
 export interface PriceRepository {
-  upsertChains(chains: Chain[]): Promise<void>;
-
-  upsertLocations(locations: StoreLocation[]): Promise<void>;
-
-  /**
-   * Save items and their latest prices for one chain.
-   * An item with a `sku` that already exists is updated, not duplicated.
-   * Returns how many items were saved.
-   */
-  upsertItems(chainSlug: string, items: RawItem[], scrapedAt: string): Promise<number>;
-
   /** Search prices using the filters. Leave `filters` out to get everything (up to the default limit). */
   searchPrices(filters?: PriceFilters): Promise<PriceRow[]>;
 

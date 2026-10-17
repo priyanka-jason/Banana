@@ -1,21 +1,85 @@
 -- DRAFT ONLY. Nothing runs this file automatically.
 --
--- A proposed table layout for Banana, written to match backend/src/types.ts.
--- The person setting up Supabase can copy it, change it, or ignore it. If the
--- layout changes, tell the backend owner so the TypeScript code can follow.
+-- A proposed table layout for Banana, written to match backend/src/types.ts and
+-- backend/src/pipeline/types.ts. The person setting up Supabase can copy it,
+-- change it, or ignore it. If the layout changes, tell the backend owner so the
+-- TypeScript code can follow.
 --
 -- Not yet run against a real database. Needs Postgres 15 or newer ("nulls not
 -- distinct" below). Supabase projects are on 15 or newer.
 --
--- NOTE: this draft is the FINAL layer that the website reads, using our shared
--- categories. Each store's own data, with the store's own category names (see
--- RawItem.storeCategories), is meant to be kept as scraped in a separate raw
--- layer that is not drafted yet. Combining store categories into the shared
--- ones is a later step, so the category check below applies to this layer only.
+-- TWO LAYERS
+--   1. PER-STORE LAYER (schema "raw"): what each store's connector scraped, kept
+--      as scraped (JSON), one table per store, with the store's own category
+--      names. Private: the website never reads it.
+--   2. FINAL LAYER (schema "public"): checked, combined data with our shared
+--      categories. The only layer the website reads.
+-- The combine step (backend/src/pipeline/combine.ts) reads layer 1 and writes
+-- layer 2, using the admin (service role) key.
 
 -- Extensions. In Supabase these live in the "extensions" schema.
 create extension if not exists postgis with schema extensions;   -- map locations and radius search
 create extension if not exists pg_trgm with schema extensions;   -- fast "contains this text" search
+
+
+-- ===========================================================================
+-- LAYER 1: PER-STORE (schema "raw")
+-- ===========================================================================
+
+create schema if not exists raw;
+
+-- One table per store, all the same shape (it matches StoreRecord in
+-- backend/src/pipeline/types.ts). To add a store, copy one and change the name.
+-- "payload" is the item as the connector saved it: normally a RawItem plus any
+-- extra store-specific fields, with the store's own category names kept in
+-- "storeCategories". Saving again with the same sku replaces the row.
+create table raw.save_on_foods (
+  sku        text primary key,
+  scraped_at timestamptz not null,
+  payload    jsonb not null check (jsonb_typeof(payload) = 'object')
+);
+
+create table raw.walmart (
+  sku        text primary key,
+  scraped_at timestamptz not null,
+  payload    jsonb not null check (jsonb_typeof(payload) = 'object')
+);
+
+create table raw.costco (
+  sku        text primary key,
+  scraped_at timestamptz not null,
+  payload    jsonb not null check (jsonb_typeof(payload) = 'object')
+);
+
+-- Keep this layer private. Row level security with no policies means the
+-- website's keys can neither read nor write it. Taking away privileges is a
+-- second lock. The service role key skips row level security but still needs
+-- privileges on this schema.
+alter table raw.save_on_foods enable row level security;
+alter table raw.walmart       enable row level security;
+alter table raw.costco        enable row level security;
+
+revoke all on schema raw from anon, authenticated;
+revoke all on all tables in schema raw from anon, authenticated;
+alter default privileges in schema raw revoke all on tables from anon, authenticated;
+
+grant usage on schema raw to service_role;
+grant all on all tables in schema raw to service_role;
+alter default privileges in schema raw grant all on tables to service_role;
+
+-- DECISION for whoever sets up Supabase: how does the backend reach "raw"?
+--   a) Add "raw" to "Exposed schemas" in the API settings, so supabase-js can
+--      use .schema('raw'). The privileges and row level security above still
+--      keep the website's anon key out, so those two locks must stay.
+--   b) Leave "raw" unexposed (by default only "public" is exposed; check the API
+--      settings) and have the backend connect to Postgres directly with the
+--      database connection string.
+-- Either way, the website only ever talks to the final layer below.
+
+
+-- ===========================================================================
+-- LAYER 2: FINAL (schema "public"), the only layer the website reads
+-- ===========================================================================
 
 -- One store brand, e.g. Save-On-Foods.
 create table chains (
@@ -44,20 +108,24 @@ create index store_locations_chain_idx on store_locations (chain_slug);
 -- An item as one chain sells it. The same product at two chains is two rows.
 -- The id shown to shoppers is chain_slug || ':' || sku (see itemId() in
 -- backend/src/pricing.ts), so a search query can build it from these two columns.
--- "category" must match PRODUCT_CATEGORIES in backend/src/categories.ts.
+-- "category" is our shared category and must match PRODUCT_CATEGORIES in
+-- backend/src/categories.ts. "store_categories" keeps the store's own category
+-- names (broadest first) so we can see where the shared category came from.
 create table products (
-  id         bigint generated always as identity primary key,
-  chain_slug text not null references chains (slug),
-  sku        text not null,
-  name       text not null,
-  brand      text,
-  size       text,
-  upc        text,
-  category   text check (category in (
+  id               bigint generated always as identity primary key,
+  chain_slug       text not null references chains (slug),
+  sku              text not null,
+  name             text not null,
+  brand            text,
+  size             text,
+  upc              text,
+  category         text check (category in (
     'fruits', 'vegetables', 'meat', 'seafood', 'dairy-eggs', 'bakery',
     'frozen', 'beverages', 'snacks', 'pantry', 'household', 'other'
   )),
-  image_url  text,
+  store_categories text[] not null default '{}',
+  multipack_of     integer check (multipack_of > 1),
+  image_url        text,
   unique (chain_slug, sku)
 );
 create index products_name_trgm_idx on products using gin (name gin_trgm_ops);
@@ -66,6 +134,8 @@ create index products_category_idx on products (category);
 -- The latest price for a product. This draft keeps only the newest price
 -- (saving again overwrites). Keep history later if the team wants price trends.
 -- location_id null means the price applies to every store in the chain.
+-- What a shopper pays, the discount and the comparable unit price are worked out
+-- when reading (they depend on member or non-member), so they are not stored.
 create table prices (
   id                  bigint generated always as identity primary key,
   product_id          bigint not null references products (id) on delete cascade,
