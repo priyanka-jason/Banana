@@ -1,0 +1,47 @@
+{
+  "description": "A request with several problems. Every problem is listed in error.details, not just the first.",
+  "request": {
+    "method": "POST",
+    "path": "/api/prices/search",
+    "body": {
+      "query": "milk",
+      "near": {
+        "lat": 123,
+        "lng": -123.1,
+        "radiusKm": 5
+      },
+      "sortBy": "cheapest",
+      "limit": 500,
+      "chains": [
+        "walmart"
+      ]
+    }
+  },
+  "response": {
+    "status": 400,
+    "body": {
+      "error": {
+        "code": "invalid_request",
+        "message": "The request has 4 problems.",
+        "details": [
+          {
+            "field": "chains",
+            "message": "is not a known field (known fields: query, chainSlugs, parentCompanies, locationIds, near, onSaleOnly, memberPricing, categories, sortBy, limit, offset)"
+          },
+          {
+            "field": "near.lat",
+            "message": "must be at least -90 and at most 90"
+          },
+          {
+            "field": "sortBy",
+            "message": "must be one of: price, unitPrice, name, distance, discount"
+          },
+          {
+            "field": "limit",
+            "message": "must be at least 1 and at most 100"
+          }
+        ]
+      }
+    }
+  }
+}

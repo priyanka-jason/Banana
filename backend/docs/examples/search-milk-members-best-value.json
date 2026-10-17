@@ -1,0 +1,94 @@
+{
+  "description": "A member searching milk, cheapest per unit first. Costco sells a 2-pack (packCount 2), which costs more up front but about the same per millilitre.",
+  "request": {
+    "method": "POST",
+    "path": "/api/prices/search",
+    "body": {
+      "query": "milk",
+      "memberPricing": "member",
+      "sortBy": "unitPrice"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "id": "walmart:W-2008",
+          "chainSlug": "walmart",
+          "chainName": "Walmart",
+          "parentCompany": "Walmart",
+          "sku": "W-2008",
+          "name": "2% Milk 4 L",
+          "size": "4 L",
+          "sizeAmount": 4,
+          "sizeUnit": "l",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "dairy-eggs",
+          "priceCents": 597,
+          "regularPriceCents": 597,
+          "unitPriceCents": 15,
+          "unitLabel": "100ml",
+          "comparableUnitPrice": {
+            "per": "100ml",
+            "cents": 14.93
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "save-on-foods:SOF-1008",
+          "chainSlug": "save-on-foods",
+          "chainName": "Save-On-Foods",
+          "parentCompany": "Pattison Food Group",
+          "sku": "SOF-1008",
+          "name": "2% Milk 4 L",
+          "size": "4 L",
+          "sizeAmount": 4,
+          "sizeUnit": "l",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "dairy-eggs",
+          "priceCents": 599,
+          "regularPriceCents": 629,
+          "discountCents": 30,
+          "discountPercent": 5,
+          "memberPriceCents": 599,
+          "unitPriceCents": 16,
+          "unitLabel": "100ml",
+          "comparableUnitPrice": {
+            "per": "100ml",
+            "cents": 14.98
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "costco:C-3008",
+          "chainSlug": "costco",
+          "chainName": "Costco",
+          "parentCompany": "Costco Wholesale",
+          "sku": "C-3008",
+          "name": "2% Milk",
+          "size": "2 x 4 L",
+          "sizeAmount": 4,
+          "sizeUnit": "l",
+          "packCount": 2,
+          "pricedByWeight": false,
+          "category": "dairy-eggs",
+          "priceCents": 1199,
+          "regularPriceCents": 1199,
+          "unitPriceCents": 15,
+          "unitLabel": "100ml",
+          "comparableUnitPrice": {
+            "per": "100ml",
+            "cents": 14.99
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        }
+      ],
+      "total": 3,
+      "limit": 50,
+      "offset": 0
+    }
+  }
+}

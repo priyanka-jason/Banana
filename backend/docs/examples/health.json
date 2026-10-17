@@ -1,0 +1,13 @@
+{
+  "description": "A check that the API is up.",
+  "request": {
+    "method": "GET",
+    "path": "/api/health"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok"
+    }
+  }
+}

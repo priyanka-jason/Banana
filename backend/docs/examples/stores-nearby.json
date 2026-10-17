@@ -1,0 +1,37 @@
+{
+  "description": "Stores within 10 km of the shopper, nearest first.",
+  "request": {
+    "method": "POST",
+    "path": "/api/stores/nearby",
+    "body": {
+      "lat": 49.28,
+      "lng": -123.12,
+      "radiusKm": 10
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "stores": [
+        {
+          "id": "save-on-foods-sample-1",
+          "chainSlug": "save-on-foods",
+          "name": "Save-On-Foods (sample, Vancouver)",
+          "city": "Vancouver",
+          "lat": 49.2827,
+          "lng": -123.1207,
+          "distanceKm": 0.3
+        },
+        {
+          "id": "costco-sample-1",
+          "chainSlug": "costco",
+          "name": "Costco (sample, Burnaby)",
+          "city": "Burnaby",
+          "lat": 49.261,
+          "lng": -123.013,
+          "distanceKm": 8
+        }
+      ]
+    }
+  }
+}

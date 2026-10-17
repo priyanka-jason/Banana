@@ -1,0 +1,27 @@
+{
+  "description": "A location that is not on Earth.",
+  "request": {
+    "method": "POST",
+    "path": "/api/stores/nearby",
+    "body": {
+      "lat": 200,
+      "lng": -123.1,
+      "radiusKm": 5
+    }
+  },
+  "response": {
+    "status": 400,
+    "body": {
+      "error": {
+        "code": "invalid_request",
+        "message": "The request has 1 problem.",
+        "details": [
+          {
+            "field": "lat",
+            "message": "must be at least -90 and at most 90"
+          }
+        ]
+      }
+    }
+  }
+}

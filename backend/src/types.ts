@@ -164,7 +164,14 @@ export interface PriceRow {
 
 export type MemberPricing = 'member' | 'non-member';
 
-export type PriceSort = 'price' | 'unitPrice' | 'name';
+export type PriceSort = 'price' | 'unitPrice' | 'name' | 'distance' | 'discount';
+
+/** One page of search results. */
+export interface PriceSearchResult {
+  rows: PriceRow[];
+  /** How many items match in all, before paging, so the website can show "page 2 of 5". */
+  total: number;
+}
 
 /** Every option a user can pick when searching. Leave a field out to not filter on it. */
 export interface PriceFilters {
@@ -189,9 +196,14 @@ export interface PriceFilters {
   memberPricing?: MemberPricing;
   /** Only items in these shared categories, e.g. ['fruits', 'vegetables']. */
   categories?: ProductCategory[];
-  /** Default: 'price', cheapest first. */
+  /**
+   * How to order the results, each in its natural direction:
+   * 'price' cheapest first (the default); 'unitPrice' cheapest per standard unit first
+   * (best compared within one kind of item, like milk); 'name' A to Z; 'distance' nearest
+   * first (needs `near`); 'discount' biggest percent off first (for "top deals").
+   */
   sortBy?: PriceSort;
-  /** Default: 50. */
+  /** Default: 50. Largest allowed: 100. */
   limit?: number;
   offset?: number;
 }
