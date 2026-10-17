@@ -77,6 +77,17 @@ export interface RawItem {
   locationId?: string;
 }
 
+/**
+ * A price converted to one standard amount, so different stores, units and pack
+ * sizes can be compared directly: per 100 g for things sold by weight, per
+ * 100 ml for liquids, and per item for things sold by count (rolls, eggs).
+ */
+export interface ComparableUnitPrice {
+  per: '100g' | '100ml' | 'each';
+  /** Price in cents for that amount. It can have decimals (e.g. 15.21) because per-gram prices are small. */
+  cents: number;
+}
+
 /** One result row from a price search: item, chain and price, ready to show. */
 export interface PriceRow {
   /**
@@ -113,8 +124,21 @@ export interface PriceRow {
   discountPercent?: number;
   salePriceCents?: number;
   memberPriceCents?: number;
+  /** The store's own unit price, if it gave one. Stores use different units, so don't compare these across stores. */
   unitPriceCents?: number;
   unitLabel?: string;
+  /**
+   * `priceCents` converted to a standard unit (per 100 g, per 100 ml or per item), worked out
+   * from `size`. Compare these across stores. Build it with comparableUnitPrice() in units.ts.
+   * Missing when the size is missing or can't be read.
+   */
+  comparableUnitPrice?: ComparableUnitPrice;
+  /**
+   * How many packs are bundled when the size is written "N x size" (a "2 x 4 L" is 2). Only set
+   * for multi-packs. Bulk packs often cost less per unit but more up front, so show both prices.
+   * Comes from parsePackSize() in units.ts.
+   */
+  multipackOf?: number;
   saleEnd?: string;
   sourceUrl?: string;
   /** When the connector last fetched this price. */
