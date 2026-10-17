@@ -1,0 +1,16 @@
+{
+  "name": "banana-backend",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Banana backend: store connectors, database layer and search filters",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}
