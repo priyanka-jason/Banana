@@ -28,6 +28,8 @@ export interface IngestResult {
   /** Connectors (or their locations) that threw. The other connectors still ran. */
   failures: Array<{ chainSlug: string; error: string }>;
   savedStoreRecords: number;
+  /** How many fetched items came without the store's original data. Connectors should set `original` on every item. */
+  missingOriginal: number;
   savedItems: number;
   combine: CombineResult;
 }
@@ -74,6 +76,8 @@ export async function runIngest(options: IngestOptions): Promise<IngestResult> {
     }
   }
 
+  const missingOriginal = fetched.filter((record) => record.original === undefined).length;
+
   const chains = succeeded.map((connector) => connector.chain);
   const toCombine = dryRun
     ? fetched
@@ -94,5 +98,5 @@ export async function runIngest(options: IngestOptions): Promise<IngestResult> {
     savedItems = await final.upsertItems(combined.items);
   }
 
-  return { dryRun, chains, scraped, failures, savedStoreRecords, savedItems, combine: combined };
+  return { dryRun, chains, scraped, failures, savedStoreRecords, missingOriginal, savedItems, combine: combined };
 }

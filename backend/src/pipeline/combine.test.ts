@@ -9,6 +9,8 @@ import type { FinalItem, StoreRecord } from './types';
 
 const NOW = '2026-10-17T20:00:00.000Z';
 
+const testChain: Chain = { slug: 'walmart', name: 'Walmart', parentCompany: 'Walmart', hasMemberPricing: false };
+
 async function sampleRecords(): Promise<{ chains: Chain[]; records: StoreRecord[] }> {
   const chains = sampleConnectors.map((connector) => connector.chain);
   const records = (
@@ -32,6 +34,15 @@ function badRecord(overrides: Partial<StoreRecord> & { payload?: Record<string, 
     scrapedAt: NOW,
     payload: { sku: 'BAD', name: 'Bad', storeCategories: ['Pantry'], regularPriceCents: 'free' },
     ...overrides,
+  };
+}
+
+function recordWith(payload: Record<string, unknown>): StoreRecord {
+  return {
+    chainSlug: 'walmart',
+    sku: 'A',
+    scrapedAt: NOW,
+    payload: { sku: 'A', name: 'X', storeCategories: ['Pantry'], regularPriceCents: 100, ...payload },
   };
 }
 
@@ -114,16 +125,94 @@ describe('combine with the sample stores', () => {
       scrapedAt: NOW,
     });
   });
+});
 
-  it('notes multi-packs and leaves single packs alone', async () => {
+describe('combine splits sizes into separate values', () => {
+  it('splits multi-packs into pack count, amount, unit, kind and total', async () => {
     const { chains, records } = await sampleRecords();
     const { items } = combine(chains, records);
 
-    expect(itemWithId(items, 'costco:C-3008').multipackOf).toBe(2);
-    expect(itemWithId(items, 'costco:C-3013').multipackOf).toBe(30);
-    expect(itemWithId(items, 'costco:C-3014').multipackOf).toBe(6);
-    expect(itemWithId(items, 'save-on-foods:SOF-1001').multipackOf).toBeUndefined();
-    expect(itemWithId(items, 'walmart:W-2009').multipackOf).toBeUndefined();
+    expect(itemWithId(items, 'costco:C-3008')).toMatchObject({
+      size: '2 x 4 L',
+      packCount: 2,
+      sizeAmount: 4,
+      sizeUnit: 'l',
+      sizeKind: 'volume',
+      sizeTotalBase: 8000,
+      pricedByWeight: false,
+    });
+    expect(itemWithId(items, 'costco:C-3013')).toMatchObject({
+      packCount: 30,
+      sizeAmount: 40,
+      sizeUnit: 'g',
+      sizeKind: 'weight',
+      sizeTotalBase: 1200,
+    });
+    expect(itemWithId(items, 'costco:C-3014')).toMatchObject({ packCount: 6, sizeAmount: 454, sizeUnit: 'g', sizeTotalBase: 2724 });
+  });
+
+  it('treats single packs and counts as one pack', async () => {
+    const { chains, records } = await sampleRecords();
+    const { items } = combine(chains, records);
+
+    expect(itemWithId(items, 'save-on-foods:SOF-1002')).toMatchObject({
+      packCount: 1,
+      sizeAmount: 1.36,
+      sizeUnit: 'kg',
+      sizeKind: 'weight',
+      sizeTotalBase: 1360,
+    });
+    expect(itemWithId(items, 'walmart:W-2009')).toMatchObject({
+      packCount: 1,
+      sizeAmount: 12,
+      sizeUnit: 'ct',
+      sizeKind: 'count',
+      sizeTotalBase: 12,
+      pricedByWeight: false,
+    });
+    expect(itemWithId(items, 'save-on-foods:SOF-1015')).toMatchObject({ sizeAmount: 6, sizeUnit: 'ct', sizeKind: 'count' });
+  });
+
+  it('marks items whose price is per unit of weight', async () => {
+    const { chains, records } = await sampleRecords();
+    const { items } = combine(chains, records);
+
+    const perLb = itemWithId(items, 'walmart:W-2001'); // "per lb"
+    expect(perLb).toMatchObject({ pricedByWeight: true, sizeAmount: 1, sizeUnit: 'lb', sizeKind: 'weight' });
+    expect(perLb.sizeTotalBase).toBeCloseTo(453.592, 2);
+
+    expect(itemWithId(items, 'save-on-foods:SOF-1001').pricedByWeight).toBe(true); // "per kg"
+    expect(itemWithId(items, 'save-on-foods:SOF-1007')).toMatchObject({ pricedByWeight: true, sizeAmount: 100, sizeUnit: 'g' }); // "per 100 g"
+    expect(itemWithId(items, 'costco:C-3005')).toMatchObject({ pricedByWeight: false, sizeAmount: 2.5, sizeUnit: 'kg' }); // "approx. 2.5 kg" is a package
+  });
+
+  it('leaves the size values empty for an item that has no size', async () => {
+    const { chains, records } = await sampleRecords();
+    const result = combine(chains, records);
+    const broccoli = itemWithId(result.items, 'walmart:W-2004');
+
+    expect(broccoli).toMatchObject({ packCount: 1, pricedByWeight: false });
+    expect(broccoli.sizeAmount).toBeUndefined();
+    expect(broccoli.sizeUnit).toBeUndefined();
+    expect(broccoli.sizeKind).toBeUndefined();
+    expect(broccoli.sizeTotalBase).toBeUndefined();
+    expect(result.unreadableSizes).toEqual([]);
+  });
+
+  it('can read every size in the sample data', async () => {
+    const { chains, records } = await sampleRecords();
+    expect(combine(chains, records).unreadableSizes).toEqual([]);
+  });
+
+  it('reports a size it cannot read but still saves the item', () => {
+    const result = combine([testChain], [recordWith({ size: 'assorted' })]);
+
+    expect(result.rejected).toEqual([]);
+    expect(result.unreadableSizes).toEqual([{ chainSlug: 'walmart', sku: 'A', size: 'assorted' }]);
+    expect(result.items).toHaveLength(1);
+    expect(result.items[0]).toMatchObject({ size: 'assorted', packCount: 1, pricedByWeight: false });
+    expect(result.items[0]?.sizeUnit).toBeUndefined();
+    expect(result.items[0]?.sizeTotalBase).toBeUndefined();
   });
 });
 
@@ -146,21 +235,19 @@ describe('combine with bad or odd records', () => {
   });
 
   it('rejects a record whose sku does not match its payload', () => {
-    const chain: Chain = { slug: 'walmart', name: 'Walmart', parentCompany: 'Walmart', hasMemberPricing: false };
     const record: StoreRecord = {
       chainSlug: 'walmart',
       sku: 'A',
       scrapedAt: NOW,
       payload: { sku: 'B', name: 'X', storeCategories: [], regularPriceCents: 100 },
     };
-    const result = combine([chain], [record]);
+    const result = combine([testChain], [record]);
 
     expect(result.items).toEqual([]);
     expect(result.rejected[0]?.reason).toMatch(/does not match payload sku/);
   });
 
   it('keeps only the newest copy when the same item was saved twice, in either order', () => {
-    const chain: Chain = { slug: 'walmart', name: 'Walmart', parentCompany: 'Walmart', hasMemberPricing: false };
     const make = (scrapedAt: string, name: string): StoreRecord => ({
       chainSlug: 'walmart',
       sku: 'A',
@@ -170,25 +257,31 @@ describe('combine with bad or odd records', () => {
     const older = make('2026-10-16T00:00:00.000Z', 'Old name');
     const newer = make('2026-10-17T00:00:00.000Z', 'New name');
 
-    expect(combine([chain], [older, newer]).items.map((item) => item.name)).toEqual(['New name']);
-    expect(combine([chain], [newer, older]).items.map((item) => item.name)).toEqual(['New name']);
+    expect(combine([testChain], [older, newer]).items.map((item) => item.name)).toEqual(['New name']);
+    expect(combine([testChain], [newer, older]).items.map((item) => item.name)).toEqual(['New name']);
   });
 
   it('ignores extra store-specific fields in the payload', () => {
-    const chain: Chain = { slug: 'walmart', name: 'Walmart', parentCompany: 'Walmart', hasMemberPricing: false };
-    const record: StoreRecord = {
-      chainSlug: 'walmart',
-      sku: 'A',
-      scrapedAt: NOW,
-      payload: { sku: 'A', name: 'X', storeCategories: ['Pantry'], regularPriceCents: 100, aisleNumber: 7 },
-    };
-    const result = combine([chain], [record]);
+    const result = combine([testChain], [recordWith({ aisleNumber: 7 })]);
 
     expect(result.rejected).toEqual([]);
     expect(result.items[0]).not.toHaveProperty('aisleNumber');
   });
 
+  it('does not copy the store original into the final item', () => {
+    const record: StoreRecord = { ...recordWith({}), original: { price: '$1.00' } };
+    const result = combine([testChain], [record]);
+
+    expect(result.items[0]).not.toHaveProperty('original');
+  });
+
   it('handles no records at all', () => {
-    expect(combine([], [])).toEqual({ items: [], rejected: [], guessedCategories: [], unmappedCategories: [] });
+    expect(combine([], [])).toEqual({
+      items: [],
+      rejected: [],
+      guessedCategories: [],
+      unmappedCategories: [],
+      unreadableSizes: [],
+    });
   });
 });

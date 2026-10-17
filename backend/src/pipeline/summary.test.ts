@@ -70,6 +70,34 @@ describe('formatIngestSummary', () => {
     expect(text).toContain('rejected test-chain:BAD: Invalid item "BAD": salePriceCents must be lower than regularPriceCents');
   });
 
+  it('warns when items came without original store data, and not otherwise', async () => {
+    const without: StoreConnector[] = [
+      {
+        chain: { slug: 'test-chain', name: 'Test Chain', parentCompany: 'Test Co', hasMemberPricing: false },
+        fetchItems: async () => [{ sku: 'A', name: 'A', storeCategories: ['Pantry'], regularPriceCents: 100 }],
+      },
+    ];
+
+    expect(formatIngestSummary(await ingest(without))).toContain('Warning: 1 items had no original store data');
+    expect(formatIngestSummary(await ingest(sampleConnectors))).not.toContain('Warning');
+  });
+
+  it('lists sizes that could not be read', async () => {
+    const connectors: StoreConnector[] = [
+      {
+        chain: { slug: 'test-chain', name: 'Test Chain', parentCompany: 'Test Co', hasMemberPricing: false },
+        fetchItems: async () => [
+          { sku: 'A', name: 'A', storeCategories: ['Pantry'], regularPriceCents: 100, size: 'assorted', original: {} },
+        ],
+      },
+    ];
+    const text = formatIngestSummary(await ingest(connectors));
+
+    expect(text).toContain('Sizes that could not be read (1)');
+    expect(text).toContain('test-chain:A  "assorted"');
+    expect(formatIngestSummary(await ingest(sampleConnectors))).not.toContain('Sizes that could not be read');
+  });
+
   it('lists categories with no match so they can be added to the map', async () => {
     const connectors: StoreConnector[] = [
       {

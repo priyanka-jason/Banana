@@ -62,6 +62,8 @@ export function parseWalmartItem(raw: WalmartRawItem): RawItem {
     salePriceCents,
     ...parseUnitPrice(raw.unitPriceText),
     sourceUrl: cleanText(raw.link),
+    // The store's data untouched, kept alongside the cleaned item.
+    original: { ...raw },
   };
 }
 

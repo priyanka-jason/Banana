@@ -9,11 +9,13 @@
 -- distinct" below). Supabase projects are on 15 or newer.
 --
 -- TWO LAYERS
---   1. PER-STORE LAYER (schema "raw"): what each store's connector scraped, kept
---      as scraped (JSON), one table per store, with the store's own category
---      names. Private: the website never reads it.
+--   1. PER-STORE LAYER (schema "raw"): one table per store. Each row has the
+--      cleaned item as JSON (with the store's own category names) and, in its own
+--      column, the store's original data exactly as received. Private: the
+--      website never reads it.
 --   2. FINAL LAYER (schema "public"): checked, combined data with our shared
---      categories. The only layer the website reads.
+--      categories and the size split into separate columns. The only layer the
+--      website reads.
 -- The combine step (backend/src/pipeline/combine.ts) reads layer 1 and writes
 -- layer 2, using the admin (service role) key.
 
@@ -30,25 +32,32 @@ create schema if not exists raw;
 
 -- One table per store, all the same shape (it matches StoreRecord in
 -- backend/src/pipeline/types.ts). To add a store, copy one and change the name.
--- "payload" is the item as the connector saved it: normally a RawItem plus any
--- extra store-specific fields, with the store's own category names kept in
--- "storeCategories". Saving again with the same sku replaces the row.
+--   payload  the cleaned item as the connector saved it: normally a RawItem (without
+--            "original") plus any extra store-specific fields, with the store's own
+--            category names in "storeCategories".
+--   original the store's data for the item exactly as received, untouched (for
+--            example Walmart's "$5.47" text and its "was" price). Connectors should
+--            always set it; it is null only if one didn't.
+-- Saving again with the same sku replaces the row.
 create table raw.save_on_foods (
   sku        text primary key,
   scraped_at timestamptz not null,
-  payload    jsonb not null check (jsonb_typeof(payload) = 'object')
+  payload    jsonb not null check (jsonb_typeof(payload) = 'object'),
+  original   jsonb check (original is null or jsonb_typeof(original) = 'object')
 );
 
 create table raw.walmart (
   sku        text primary key,
   scraped_at timestamptz not null,
-  payload    jsonb not null check (jsonb_typeof(payload) = 'object')
+  payload    jsonb not null check (jsonb_typeof(payload) = 'object'),
+  original   jsonb check (original is null or jsonb_typeof(original) = 'object')
 );
 
 create table raw.costco (
   sku        text primary key,
   scraped_at timestamptz not null,
-  payload    jsonb not null check (jsonb_typeof(payload) = 'object')
+  payload    jsonb not null check (jsonb_typeof(payload) = 'object'),
+  original   jsonb check (original is null or jsonb_typeof(original) = 'object')
 );
 
 -- Keep this layer private. Row level security with no policies means the
@@ -111,6 +120,19 @@ create index store_locations_chain_idx on store_locations (chain_slug);
 -- "category" is our shared category and must match PRODUCT_CATEGORIES in
 -- backend/src/categories.ts. "store_categories" keeps the store's own category
 -- names (broadest first) so we can see where the shared category came from.
+--
+-- SIZE. "size" is the text as the store wrote it ("2 x 4 L") and is what people
+-- see. The combine step splits it once into the columns below, so the database
+-- can sort and filter on it:
+--   pack_count        how many packs are bundled: 2 in "2 x 4 L" (1 for a single pack)
+--   size_amount       amount in one pack, in size_unit: 4
+--   size_unit         from a fixed list (g, kg, lb, oz, ml, l, fl oz, ct)
+--   size_kind         weight, volume or count
+--   size_total_base   everything in the pack in a base unit: grams for weight,
+--                     millilitres for volume, items for count (8000 here)
+--   priced_by_weight  true when the price is per unit of weight ("per lb", "per kg")
+--                     rather than for a package
+-- If the size text can't be read, the four size columns stay empty together.
 create table products (
   id               bigint generated always as identity primary key,
   chain_slug       text not null references chains (slug),
@@ -118,18 +140,29 @@ create table products (
   name             text not null,
   brand            text,
   size             text,
+  pack_count       integer not null default 1 check (pack_count >= 1),
+  size_amount      numeric check (size_amount > 0),
+  size_unit        text check (size_unit in ('g', 'kg', 'lb', 'oz', 'ml', 'l', 'fl oz', 'ct')),
+  size_kind        text check (size_kind in ('weight', 'volume', 'count')),
+  size_total_base  numeric check (size_total_base > 0),
+  priced_by_weight boolean not null default false,
   upc              text,
   category         text check (category in (
     'fruits', 'vegetables', 'meat', 'seafood', 'dairy-eggs', 'bakery',
     'frozen', 'beverages', 'snacks', 'pantry', 'household', 'other'
   )),
   store_categories text[] not null default '{}',
-  multipack_of     integer check (multipack_of > 1),
   image_url        text,
-  unique (chain_slug, sku)
+  unique (chain_slug, sku),
+  check (
+    (size_amount is null) = (size_unit is null)
+    and (size_unit is null) = (size_kind is null)
+    and (size_kind is null) = (size_total_base is null)
+  )
 );
 create index products_name_trgm_idx on products using gin (name gin_trgm_ops);
 create index products_category_idx on products (category);
+create index products_size_idx on products (size_kind, size_total_base);
 
 -- The latest price for a product. This draft keeps only the newest price
 -- (saving again overwrites). Keep history later if the team wants price trends.

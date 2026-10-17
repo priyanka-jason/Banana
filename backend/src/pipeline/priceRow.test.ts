@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { sampleConnectors } from '../connectors';
 import type { Chain } from '../types';
+import { comparableUnitPrice } from '../units';
 import { combine } from './combine';
 import { toPriceRow } from './priceRow';
 import { recordsFromItems } from './storeRecords';
@@ -59,14 +60,39 @@ describe('toPriceRow', () => {
     expect(row.comparableUnitPrice).toEqual({ per: '100g', cents: 40.22 });
   });
 
-  it('carries the multi-pack flag and the distance when given', async () => {
+  it('carries the pack count and the distance when given', async () => {
     const row = await rowFor('costco:C-3008', { distanceKm: 3.4 });
-    expect(row.multipackOf).toBe(2);
+    expect(row.packCount).toBe(2);
     expect(row.distanceKm).toBe(3.4);
   });
 
-  it('leaves the comparable unit price out when there is no size', async () => {
+  it('gives the size as text for showing and as amount and unit for code', async () => {
+    const row = await rowFor('costco:C-3008');
+    expect(row).toMatchObject({ size: '2 x 4 L', sizeAmount: 4, sizeUnit: 'l', packCount: 2, pricedByWeight: false });
+  });
+
+  it('flags items whose price is per unit of weight', async () => {
+    expect((await rowFor('walmart:W-2001')).pricedByWeight).toBe(true);
+    expect((await rowFor('walmart:W-2002')).pricedByWeight).toBe(false);
+  });
+
+  it('leaves the comparable unit price and size values out when there is no size', async () => {
     const row = await rowFor('walmart:W-2004');
     expect(row.comparableUnitPrice).toBeUndefined();
+    expect(row.sizeAmount).toBeUndefined();
+    expect(row.sizeUnit).toBeUndefined();
+    expect(row.packCount).toBe(1);
+  });
+
+  it('gets the same unit price from the stored size values as from reading the size text again', async () => {
+    const { chains, items } = await sampleFinal();
+    for (const item of items) {
+      const chain = chains.find((candidate) => candidate.slug === item.chainSlug);
+      if (chain === undefined) throw new Error(`No chain for ${item.id}`);
+      for (const memberPricing of ['member', 'non-member'] as const) {
+        const row = toPriceRow(item, chain, { memberPricing });
+        expect(row.comparableUnitPrice, `${item.id} ${memberPricing}`).toEqual(comparableUnitPrice(row.priceCents, item.size));
+      }
+    }
   });
 });

@@ -1,4 +1,5 @@
 import type { ProductCategory } from '../categories';
+import type { SizeKind, SizeUnit } from '../types';
 
 /**
  * The data goes through two layers:
@@ -20,10 +21,17 @@ export interface StoreRecord {
   /** When the connector fetched it (ISO date-time). */
   scrapedAt: string;
   /**
-   * The item as the connector saved it, as plain JSON. Normally a RawItem.
-   * Extra store-specific fields are allowed and are ignored by the combine step.
+   * The cleaned item as the connector saved it, as plain JSON. Normally a RawItem
+   * (without `original`). Extra store-specific fields are allowed and are ignored
+   * by the combine step.
    */
   payload: Record<string, unknown>;
+  /**
+   * The store's data for this item exactly as received, untouched. Kept in its
+   * own column so the cleaned `payload` stays clean. Missing only if the connector
+   * didn't provide it (the ingest summary warns about that).
+   */
+  original?: Record<string, unknown>;
 }
 
 /**
@@ -39,7 +47,18 @@ export interface FinalItem {
   sku: string;
   name: string;
   brand?: string;
+  /** The size as the store wrote it, e.g. "2 x 4 L". Kept for showing to people. */
   size?: string;
+  /** The size split into separate values, worked out once from `size`. Missing when the size can't be read. */
+  sizeAmount?: number;
+  sizeUnit?: SizeUnit;
+  sizeKind?: SizeKind;
+  /** Everything in the pack in a base unit: grams for weight, millilitres for volume, items for count. 8000 for "2 x 4 L". */
+  sizeTotalBase?: number;
+  /** How many packs are bundled: 2 for "2 x 4 L". 1 for a single pack, or when the size can't be read. */
+  packCount: number;
+  /** True when the price is per unit of weight ("per lb", "per kg") rather than for a package. */
+  pricedByWeight: boolean;
   upc?: string;
   /** One of our shared categories. */
   category: ProductCategory;
@@ -52,8 +71,6 @@ export interface FinalItem {
   memberPriceCents?: number;
   unitPriceCents?: number;
   unitLabel?: string;
-  /** How many packs are bundled for sizes written "N x size". Only set for multi-packs. */
-  multipackOf?: number;
   saleStart?: string;
   saleEnd?: string;
   sourceUrl?: string;
@@ -74,6 +91,13 @@ export interface CategoryNote {
   category: ProductCategory;
 }
 
+/** An item whose size text could not be split into amount and unit. The item is still saved. */
+export interface UnreadableSize {
+  chainSlug: string;
+  sku: string;
+  size: string;
+}
+
 export interface CombineResult {
   items: FinalItem[];
   /** Items that failed the checks. They are left out of `items` and the rest still go through. */
@@ -82,4 +106,6 @@ export interface CombineResult {
   guessedCategories: CategoryNote[];
   /** Nothing matched, so the shared category is 'other'. Add these to CATEGORY_MAP. One entry per store category path. */
   unmappedCategories: CategoryNote[];
+  /** Items that have a size text we couldn't read. Their size columns are left empty. */
+  unreadableSizes: UnreadableSize[];
 }

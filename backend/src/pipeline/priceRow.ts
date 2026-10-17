@@ -1,6 +1,6 @@
 import { discountFor, effectivePriceCents } from '../pricing';
 import type { Chain, MemberPricing, PriceRow } from '../types';
-import { comparableUnitPrice } from '../units';
+import { unitPriceFromTotal } from '../units';
 import type { FinalItem } from './types';
 
 /**
@@ -15,6 +15,10 @@ export function toPriceRow(
 ): PriceRow {
   const priceCents = effectivePriceCents(item, options.memberPricing);
   const discount = discountFor(item.regularPriceCents, priceCents);
+  const comparable =
+    item.sizeKind !== undefined && item.sizeTotalBase !== undefined
+      ? unitPriceFromTotal(priceCents, item.sizeKind, item.sizeTotalBase)
+      : undefined;
 
   return {
     id: item.id,
@@ -26,6 +30,10 @@ export function toPriceRow(
     name: item.name,
     brand: item.brand,
     size: item.size,
+    sizeAmount: item.sizeAmount,
+    sizeUnit: item.sizeUnit,
+    packCount: item.packCount,
+    pricedByWeight: item.pricedByWeight,
     category: item.category,
     imageUrl: item.imageUrl,
     priceCents,
@@ -35,8 +43,7 @@ export function toPriceRow(
     memberPriceCents: item.memberPriceCents,
     unitPriceCents: item.unitPriceCents,
     unitLabel: item.unitLabel,
-    comparableUnitPrice: comparableUnitPrice(priceCents, item.size),
-    multipackOf: item.multipackOf,
+    comparableUnitPrice: comparable,
     saleEnd: item.saleEnd,
     sourceUrl: item.sourceUrl,
     scrapedAt: item.scrapedAt,

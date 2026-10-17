@@ -13,11 +13,33 @@ const valid: RawItem = {
 };
 
 describe('recordsFromItems', () => {
-  it('builds one record per item with the item as the payload', () => {
+  it('builds one record per item with the cleaned item as the payload', () => {
     const records = recordsFromItems('walmart', [valid], '2026-10-17T20:00:00.000Z');
     expect(records).toEqual([
       { chainSlug: 'walmart', sku: 'T-1', scrapedAt: '2026-10-17T20:00:00.000Z', payload: { ...valid } },
     ]);
+  });
+
+  it("puts the store's original data in its own field, not in the payload", () => {
+    const original = { price: '$4.00', wasPrice: '$5.00' };
+    const [record] = recordsFromItems('walmart', [{ ...valid, original }], '2026-10-17T20:00:00.000Z');
+
+    expect(record?.original).toEqual(original);
+    expect(record?.payload).toEqual({ ...valid });
+    expect(record?.payload).not.toHaveProperty('original');
+  });
+
+  it('leaves the original field out when the connector did not provide one', () => {
+    const [record] = recordsFromItems('walmart', [valid], '2026-10-17T20:00:00.000Z');
+    expect(record).not.toHaveProperty('original');
+  });
+
+  it('keeps the original for every sample item', async () => {
+    for (const connector of sampleConnectors) {
+      const items = await connector.fetchItems();
+      const records = recordsFromItems(connector.chain.slug, items, '2026-10-17T20:00:00.000Z');
+      expect(records.every((record) => record.original !== undefined), connector.chain.slug).toBe(true);
+    }
   });
 });
 
@@ -25,8 +47,9 @@ describe('toRawItem', () => {
   it('reads back every sample item after a trip through JSON', async () => {
     for (const connector of sampleConnectors) {
       for (const item of await connector.fetchItems()) {
-        const saved = JSON.parse(JSON.stringify({ ...item })) as unknown;
-        expect(toRawItem(saved), item.sku).toEqual(item);
+        const { original: _original, ...cleaned } = item;
+        const saved = JSON.parse(JSON.stringify({ ...cleaned })) as unknown;
+        expect(toRawItem(saved), item.sku).toEqual(cleaned);
       }
     }
   });

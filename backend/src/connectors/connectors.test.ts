@@ -53,6 +53,57 @@ describe.each(sampleConnectors.map((connector) => [connector.chain.slug, connect
   },
 );
 
+describe("the store's original data", () => {
+  it('is set on every sample item', async () => {
+    for (const connector of sampleConnectors) {
+      for (const item of await connector.fetchItems()) {
+        expect(item.original, `${connector.chain.slug}:${item.sku}`).toBeDefined();
+        expect(Object.keys(item.original ?? {}).length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it("keeps Walmart's text prices and old price untouched", async () => {
+    const items = await createWalmartConnector().fetchItems();
+    expect(itemWithSku(items, 'W-2002').original).toMatchObject({
+      sku: 'W-2002',
+      price: '$5.47',
+      wasPrice: '$5.97',
+      unitPriceText: '$0.40/100g',
+      department: 'Fruits & Vegetables',
+      aisle: 'Fresh Fruit',
+    });
+  });
+
+  it("keeps Costco's dollars and instant savings untouched", async () => {
+    const items = await createCostcoConnector().fetchItems();
+    expect(itemWithSku(items, 'C-3002').original).toMatchObject({
+      itemNumber: 'C-3002',
+      priceCad: 11.99,
+      instantSavingsCad: 2,
+      savingsStart: '2026-10-14',
+      perUnit: '$0.28 per 100g',
+    });
+  });
+
+  it("keeps Save-On-Foods' promo and member prices untouched", async () => {
+    const items = await createSaveOnFoodsConnector().fetchItems();
+    expect(itemWithSku(items, 'SOF-1002').original).toMatchObject({ price: 5.99, promoPrice: 4.99, promoStart: '2026-10-16' });
+    expect(itemWithSku(items, 'SOF-1001').original).toMatchObject({ price: 1.69, memberPrice: 1.49 });
+  });
+
+  it('is a separate copy, so changing it does not change the next fetch', async () => {
+    const connector = createSaveOnFoodsConnector();
+    const first = await connector.fetchItems();
+    const original = itemWithSku(first, 'SOF-1002').original;
+    if (original === undefined) throw new Error('missing original');
+    original['price'] = 999;
+
+    const second = await connector.fetchItems();
+    expect(itemWithSku(second, 'SOF-1002').original).toMatchObject({ price: 5.99 });
+  });
+});
+
 describe('all sample connectors together', () => {
   it('have different chain slugs', () => {
     const slugs = sampleConnectors.map((connector) => connector.chain.slug);

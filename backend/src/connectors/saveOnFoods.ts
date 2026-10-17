@@ -67,6 +67,8 @@ export function parseSaveOnFoodsItem(raw: SaveOnFoodsRawItem): RawItem {
     saleStart: salePriceCents !== undefined ? toIsoDate(raw.promoStart) : undefined,
     saleEnd: salePriceCents !== undefined ? toIsoDate(raw.promoEnd) : undefined,
     sourceUrl: cleanText(raw.url),
+    // The store's data untouched, kept alongside the cleaned item.
+    original: { ...raw },
   };
 }
 

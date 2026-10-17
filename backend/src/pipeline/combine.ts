@@ -1,9 +1,16 @@
 import { itemId } from '../pricing';
 import type { Chain, RawItem } from '../types';
-import { parsePackSize } from '../units';
+import { parseSize } from '../units';
 import { CATEGORY_MAP, mapToSharedCategory, type CategoryMap } from './categoryMap';
 import { toRawItem } from './storeRecords';
-import type { CategoryNote, CombineResult, FinalItem, RejectedRecord, StoreRecord } from './types';
+import type {
+  CategoryNote,
+  CombineResult,
+  FinalItem,
+  RejectedRecord,
+  StoreRecord,
+  UnreadableSize,
+} from './types';
 
 /**
  * The combine step: turns what is saved in each store's own layer into final items.
@@ -12,7 +19,8 @@ import type { CategoryNote, CombineResult, FinalItem, RejectedRecord, StoreRecor
  *  - keeps only the newest copy if the same item was saved more than once,
  *  - checks the JSON and rejects anything bad (the rest still go through),
  *  - gives it a shared category (see mapToSharedCategory),
- *  - builds the item id and notes whether it is a multi-pack.
+ *  - builds the item id,
+ *  - splits the size text into separate values (pack count, amount, unit, kind, total).
  *
  * It does not touch any database. The caller reads the records and saves the result.
  */
@@ -32,6 +40,7 @@ export function combine(
 
   const items: FinalItem[] = [];
   const rejected: RejectedRecord[] = [];
+  const unreadableSizes: UnreadableSize[] = [];
   const guessed = new Map<string, CategoryNote>();
   const unmapped = new Map<string, CategoryNote>();
 
@@ -63,6 +72,11 @@ export function combine(
     if (how === 'guess') guessed.set(noteKey, note);
     if (how === 'none') unmapped.set(noteKey, note);
 
+    const size = parseSize(raw.size);
+    if (raw.size !== undefined && raw.size.trim() !== '' && size === undefined) {
+      unreadableSizes.push({ chainSlug: record.chainSlug, sku: raw.sku, size: raw.size });
+    }
+
     items.push({
       id: itemId(record.chainSlug, raw.sku),
       chainSlug: record.chainSlug,
@@ -70,6 +84,12 @@ export function combine(
       name: raw.name,
       brand: raw.brand,
       size: raw.size,
+      sizeAmount: size?.amount,
+      sizeUnit: size?.unit,
+      sizeKind: size?.kind,
+      sizeTotalBase: size?.totalBase,
+      packCount: size?.packCount ?? 1,
+      pricedByWeight: size?.pricedByWeight ?? false,
       upc: raw.upc,
       category,
       storeCategories: raw.storeCategories,
@@ -80,7 +100,6 @@ export function combine(
       memberPriceCents: raw.memberPriceCents,
       unitPriceCents: raw.unitPriceCents,
       unitLabel: raw.unitLabel,
-      multipackOf: parsePackSize(raw.size)?.multipackOf,
       saleStart: raw.saleStart,
       saleEnd: raw.saleEnd,
       sourceUrl: raw.sourceUrl,
@@ -90,11 +109,13 @@ export function combine(
 
   items.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   rejected.sort((a, b) => `${a.chainSlug}:${a.sku}`.localeCompare(`${b.chainSlug}:${b.sku}`));
+  unreadableSizes.sort((a, b) => `${a.chainSlug}:${a.sku}`.localeCompare(`${b.chainSlug}:${b.sku}`));
 
   return {
     items,
     rejected,
     guessedCategories: [...guessed.values()],
     unmappedCategories: [...unmapped.values()],
+    unreadableSizes,
   };
 }

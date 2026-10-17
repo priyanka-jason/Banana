@@ -43,6 +43,12 @@ export interface NearbyStore extends StoreLocation {
   distanceKm: number;
 }
 
+/** Units a pack size can be written in. Stores write them many ways ("KG", "lbs", "ea"), so we keep one fixed list. */
+export type SizeUnit = 'g' | 'kg' | 'lb' | 'oz' | 'ml' | 'l' | 'fl oz' | 'ct';
+
+/** What a size measures: weight, volume, or a count of items (eggs, rolls). */
+export type SizeKind = 'weight' | 'volume' | 'count';
+
 /** What a store connector returns for one item: the product and its current price. */
 export interface RawItem {
   /**
@@ -75,6 +81,14 @@ export interface RawItem {
   sourceUrl?: string;
   /** Set if the price is for one physical store. Leave out if it applies to the whole chain. */
   locationId?: string;
+  /**
+   * The store's data for this item exactly as received, before we cleaned it
+   * (for example Walmart's "$5.47" text and its "was" price). Every connector
+   * should set this, so the per-store layer keeps the untouched original and
+   * we can re-check or re-read it later. It is saved in its own column, apart
+   * from the cleaned item.
+   */
+  original?: Record<string, unknown>;
 }
 
 /**
@@ -102,7 +116,15 @@ export interface PriceRow {
   sku: string;
   name: string;
   brand?: string;
+  /** The size as the store wrote it, e.g. "2 x 4 L". Show this one to people. */
   size?: string;
+  /** Amount in one pack, in `sizeUnit`: 4 for "2 x 4 L". Missing when the size can't be read. */
+  sizeAmount?: number;
+  sizeUnit?: SizeUnit;
+  /** How many packs are bundled: 2 for "2 x 4 L". 1 for a single pack. Bulk packs often cost less per unit but more up front, so show both prices. */
+  packCount: number;
+  /** True when the price is per unit of weight ("per lb", "per kg") rather than for a package, so show it as "$/lb". */
+  pricedByWeight: boolean;
   /** One of our shared categories, set once each store's own category names have been combined. */
   category?: ProductCategory;
   imageUrl?: string;
@@ -129,16 +151,9 @@ export interface PriceRow {
   unitLabel?: string;
   /**
    * `priceCents` converted to a standard unit (per 100 g, per 100 ml or per item), worked out
-   * from `size`. Compare these across stores. Build it with comparableUnitPrice() in units.ts.
-   * Missing when the size is missing or can't be read.
+   * from the size. Compare these across stores. Missing when the size is missing or can't be read.
    */
   comparableUnitPrice?: ComparableUnitPrice;
-  /**
-   * How many packs are bundled when the size is written "N x size" (a "2 x 4 L" is 2). Only set
-   * for multi-packs. Bulk packs often cost less per unit but more up front, so show both prices.
-   * Comes from parsePackSize() in units.ts.
-   */
-  multipackOf?: number;
   saleEnd?: string;
   sourceUrl?: string;
   /** When the connector last fetched this price. */

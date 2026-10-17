@@ -14,6 +14,8 @@ function finalItem(id: string, overrides: Partial<FinalItem> = {}): FinalItem {
     name: 'Test',
     category: 'pantry',
     storeCategories: ['Pantry'],
+    packCount: 1,
+    pricedByWeight: false,
     regularPriceCents: 100,
     scrapedAt: '2026-10-17T20:00:00.000Z',
     ...overrides,
@@ -35,6 +37,18 @@ describe('MemoryStoreData', () => {
     const loaded = await store.loadRecords('walmart');
     expect(loaded).toHaveLength(1);
     expect(loaded[0]?.payload['name']).toBe('New');
+  });
+
+  it("keeps the store's original data in its own field and replaces it with the record", async () => {
+    const store = new MemoryStoreData();
+    await store.saveRecords('walmart', [{ ...record('walmart', 'A'), original: { price: '$5.47', wasPrice: '$5.97' } }]);
+
+    const loaded = await store.loadRecords('walmart');
+    expect(loaded[0]?.original).toEqual({ price: '$5.47', wasPrice: '$5.97' });
+    expect(loaded[0]?.payload).not.toHaveProperty('original');
+
+    await store.saveRecords('walmart', [record('walmart', 'A')]);
+    expect((await store.loadRecords('walmart'))[0]).not.toHaveProperty('original');
   });
 
   it("keeps each store's records apart", async () => {

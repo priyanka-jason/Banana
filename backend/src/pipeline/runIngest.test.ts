@@ -38,6 +38,33 @@ describe('runIngest', () => {
     expect(await final.listLocations()).toHaveLength(6);
   });
 
+  it("saves the store's original data in its own field, apart from the cleaned item", async () => {
+    const { storeData, final } = setup();
+    const result = await runIngest({ connectors: sampleConnectors, storeData, final });
+
+    expect(result.missingOriginal).toBe(0);
+    const record = (await storeData.loadRecords('walmart')).find((candidate) => candidate.sku === 'W-2002');
+    expect(record?.original).toMatchObject({ price: '$5.47', wasPrice: '$5.97' });
+    expect(record?.payload).not.toHaveProperty('original');
+    expect(record?.payload).toMatchObject({ regularPriceCents: 597, salePriceCents: 547 });
+  });
+
+  it('counts items that came without original data, and still saves them', async () => {
+    const { storeData, final } = setup();
+    const withOriginal: RawItem = { sku: 'A', name: 'A', storeCategories: [], regularPriceCents: 100, original: { raw: true } };
+    const without: RawItem = { sku: 'B', name: 'B', storeCategories: [], regularPriceCents: 100 };
+    const result = await runIngest({ connectors: [connectorReturning([withOriginal, without])], storeData, final });
+
+    expect(result.missingOriginal).toBe(1);
+    expect(result.savedItems).toBe(2);
+  });
+
+  it('does not put the original data into the final layer', async () => {
+    const { storeData, final } = setup();
+    await runIngest({ connectors: sampleConnectors, storeData, final });
+    expect((await final.listItems()).some((item) => 'original' in item)).toBe(false);
+  });
+
   it('stamps everything with the time it was given', async () => {
     const { storeData, final } = setup();
     await runIngest({ connectors: sampleConnectors, storeData, final, now: () => NOW });

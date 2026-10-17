@@ -70,6 +70,8 @@ export function parseCostcoItem(raw: CostcoRawItem): RawItem {
     saleStart: salePriceCents !== undefined ? toIsoDate(raw.savingsStart) : undefined,
     saleEnd: salePriceCents !== undefined ? toIsoDate(raw.savingsEnd) : undefined,
     sourceUrl: cleanText(raw.url),
+    // The store's data untouched, kept alongside the cleaned item.
+    original: { ...raw },
   };
 }
 

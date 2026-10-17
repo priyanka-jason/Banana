@@ -50,6 +50,21 @@ export function formatIngestSummary(result: IngestResult, options: { sampleRows?
     lines.push(`  ...and ${result.combine.rejected.length - 10} more`);
   }
 
+  if (result.missingOriginal > 0) {
+    lines.push(
+      `Warning: ${result.missingOriginal} items had no original store data. Connectors should set \`original\` on every item.`,
+    );
+  }
+
+  const unreadable = result.combine.unreadableSizes;
+  if (unreadable.length > 0) {
+    lines.push(`Sizes that could not be read (${unreadable.length}), their size columns are left empty:`);
+    for (const entry of unreadable.slice(0, 10)) {
+      lines.push(`  ${entry.chainSlug}:${entry.sku}  "${entry.size}"`);
+    }
+    if (unreadable.length > 10) lines.push(`  ...and ${unreadable.length - 10} more`);
+  }
+
   lines.push(
     ...listNotes(
       `Categories guessed from keywords (${result.combine.guessedCategories.length}), please review:`,

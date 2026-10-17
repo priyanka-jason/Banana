@@ -2,9 +2,21 @@ import { assertValidItem } from '../connectors/normalize';
 import type { RawItem } from '../types';
 import type { StoreRecord } from './types';
 
-/** Turn a connector's items into records for the per-store layer. */
+/**
+ * Turn a connector's items into records for the per-store layer. The store's
+ * untouched data (`original`) goes in its own field, apart from the cleaned item.
+ */
 export function recordsFromItems(chainSlug: string, items: RawItem[], scrapedAt: string): StoreRecord[] {
-  return items.map((item) => ({ chainSlug, sku: item.sku, scrapedAt, payload: { ...item } }));
+  return items.map((item) => {
+    const { original, ...cleaned } = item;
+    return {
+      chainSlug,
+      sku: item.sku,
+      scrapedAt,
+      payload: { ...cleaned },
+      ...(original !== undefined ? { original } : {}),
+    };
+  });
 }
 
 /**
