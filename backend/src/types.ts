@@ -9,6 +9,8 @@
  * Dates are ISO text: "2026-10-17" for a day, "2026-10-17T21:28:35Z" for a moment.
  */
 
+import type { ProductCategory } from './categories';
+
 /** One store brand, e.g. Save-On-Foods. Many physical stores belong to one chain. */
 export interface Chain {
   /** Short lowercase id used everywhere, e.g. "save-on-foods". */
@@ -20,8 +22,12 @@ export interface Chain {
   hasMemberPricing: boolean;
 }
 
-/** One physical store. Used for the distance filter and "select on map". */
+/**
+ * One physical store. Used for the distance filter and for showing stores on
+ * a map (lat and lng are what map markers need).
+ */
 export interface StoreLocation {
+  /** Stable text id the connector supplies, e.g. "costco-123" (chain + the chain's own store number). */
   id: string;
   chainSlug: string;
   name: string;
@@ -49,14 +55,14 @@ export interface RawItem {
   /** Package size as printed, e.g. "500 g" or "12 ct". */
   size?: string;
   upc?: string;
-  category?: string;
+  category?: ProductCategory;
   imageUrl?: string;
   regularPriceCents: number;
   salePriceCents?: number;
   /** Price only members get, when it differs from the regular price. */
   memberPriceCents?: number;
   unitPriceCents?: number;
-  /** What the unit price is per, e.g. "100 g" or "each". */
+  /** What the unit price is per, e.g. "100g" or "ea". */
   unitLabel?: string;
   saleStart?: string;
   saleEnd?: string;
@@ -75,7 +81,7 @@ export interface PriceRow {
   name: string;
   brand?: string;
   size?: string;
-  category?: string;
+  category?: ProductCategory;
   imageUrl?: string;
   /**
    * The price to compare, after applying the `memberPricing` filter.
@@ -109,12 +115,20 @@ export interface PriceFilters {
   parentCompanies?: string[];
   /** Specific physical stores, e.g. picked on a map. */
   locationIds?: string[];
-  /** Only stores within `radiusKm` of this point. */
+  /**
+   * Only stores within `radiusKm` of this point.
+   *
+   * The point comes from the browser's location request, and the user can say
+   * no. So this is always optional and the website must still work without it
+   * (for example by falling back to picking stores or chains by hand).
+   * It is personal data: use it for the search only, and never store or log it.
+   */
   near?: { lat: number; lng: number; radiusKm: number };
   onSaleOnly?: boolean;
   /** Which price to compare. Default: 'non-member', what an anonymous visitor sees. */
   memberPricing?: MemberPricing;
-  category?: string;
+  /** Only items in these categories, e.g. ['fruits', 'vegetables']. */
+  categories?: ProductCategory[];
   /** Default: 'price', cheapest first. */
   sortBy?: PriceSort;
   /** Default: 50. */

@@ -19,9 +19,12 @@ create table chains (
   has_member_pricing boolean not null default false
 );
 
--- One physical store. "location" holds longitude and latitude for distance searches.
+-- One physical store. "id" is a stable text id the connector supplies, e.g.
+-- 'costco-123' (chain + the chain's own store number), so prices and stores
+-- can be matched without the database inventing ids the connector can't know.
+-- "location" holds longitude and latitude for distance searches and map markers.
 create table store_locations (
-  id          uuid primary key default gen_random_uuid(),
+  id          text primary key,
   chain_slug  text not null references chains (slug),
   name        text not null,
   address     text,
@@ -33,6 +36,7 @@ create index store_locations_location_idx on store_locations using gist (locatio
 create index store_locations_chain_idx on store_locations (chain_slug);
 
 -- An item as one chain sells it. The same product at two chains is two rows.
+-- "category" must match PRODUCT_CATEGORIES in backend/src/categories.ts.
 create table products (
   id         bigint generated always as identity primary key,
   chain_slug text not null references chains (slug),
@@ -41,11 +45,15 @@ create table products (
   brand      text,
   size       text,
   upc        text,
-  category   text,
+  category   text check (category in (
+    'fruits', 'vegetables', 'meat', 'seafood', 'dairy-eggs', 'bakery',
+    'frozen', 'beverages', 'snacks', 'pantry', 'household', 'other'
+  )),
   image_url  text,
   unique (chain_slug, sku)
 );
 create index products_name_trgm_idx on products using gin (name gin_trgm_ops);
+create index products_category_idx on products (category);
 
 -- The latest price for a product. This draft keeps only the newest price
 -- (saving again overwrites). Keep history later if the team wants price trends.
@@ -53,7 +61,7 @@ create index products_name_trgm_idx on products using gin (name gin_trgm_ops);
 create table prices (
   id                  bigint generated always as identity primary key,
   product_id          bigint not null references products (id) on delete cascade,
-  location_id         uuid references store_locations (id),
+  location_id         text references store_locations (id),
   regular_price_cents integer not null check (regular_price_cents >= 0),
   sale_price_cents    integer check (sale_price_cents >= 0),
   member_price_cents  integer check (member_price_cents >= 0),
@@ -69,13 +77,15 @@ create index prices_location_idx on prices (location_id);
 
 -- Physical stores within a radius of a point, nearest first.
 -- The website calls it with: supabase.rpc('stores_within_radius', { user_lat, user_lng, radius_km })
+-- The point comes from the visitor's browser location request, which they can
+-- refuse, so the website must work without calling this.
 create or replace function stores_within_radius(
   user_lat  double precision,
   user_lng  double precision,
   radius_km double precision
 )
 returns table (
-  id          uuid,
+  id          text,
   chain_slug  text,
   name        text,
   address     text,
