@@ -1,11 +1,16 @@
+import { useEffect, useState } from 'react'
 import { CheckIcon } from '@phosphor-icons/react/dist/csr/Check'
 import { HandHeartIcon } from '@phosphor-icons/react/dist/csr/HandHeart'
 import { useAuth } from '../data/authState'
+import { fetchMySubscription } from '../data/subscriptionApi'
 import {
   FOOD_BANK_SHARE,
   plans,
+  portalUrl,
+  premiumStatus,
   subscribeUrl,
   type Plan,
+  type PremiumStatus,
 } from '../lib/membership'
 import './MembershipPage.css'
 
@@ -13,8 +18,40 @@ import './MembershipPage.css'
 // Stripe's own checkout page. Until it is set, Subscribe stays switched off.
 const paymentLink = import.meta.env.VITE_STRIPE_PAYMENT_LINK as
   string | undefined
+// Stripe's customer portal (https://billing.stripe.com/...), where subscribers
+// cancel or change their card.
+const manageLink = portalUrl(
+  import.meta.env.VITE_STRIPE_PORTAL_LINK as string | undefined,
+)
 
-function PremiumAction() {
+/** The signed-in person's Premium status. After checkout (#/plans?subscribed=1)
+ * it checks again for a little while, until Stripe's webhook has recorded it. */
+function usePremiumStatus(userId: string | undefined) {
+  const [status, setStatus] = useState<PremiumStatus | null>(null)
+  const justSubscribed = /[?&]subscribed=1\b/.test(window.location.hash)
+  useEffect(() => {
+    if (!userId) return
+    let current = true
+    let tries = 0
+    let timer: number | undefined
+    const check = () =>
+      fetchMySubscription().then((row) => {
+        if (!current) return
+        const next = premiumStatus(row)
+        setStatus(next)
+        if (justSubscribed && !next.premium && ++tries < 10)
+          timer = window.setTimeout(check, 3000)
+      })
+    void check()
+    return () => {
+      current = false
+      window.clearTimeout(timer)
+    }
+  }, [userId, justSubscribed])
+  return { status: userId ? status : null, justSubscribed }
+}
+
+function PremiumAction({ status }: { status: PremiumStatus | null }) {
   const { user, loading, openAuthModal } = useAuth()
   if (loading) return null
   if (!user)
@@ -26,6 +63,23 @@ function PremiumAction() {
         <p className="plan-fine-print">
           You need a free Banana account to subscribe.
         </p>
+      </>
+    )
+  if (status?.premium)
+    return (
+      <>
+        <p className="plan-current">
+          You’re on Premium{status.note ? ` · ${status.note}` : ''}
+        </p>
+        {manageLink && (
+          <a
+            className="text-button plan-action"
+            href={manageLink}
+            rel="noopener"
+          >
+            Manage subscription
+          </a>
+        )}
       </>
     )
   const href = subscribeUrl(paymentLink, user.id)
@@ -52,7 +106,13 @@ function PremiumAction() {
   )
 }
 
-function PlanCard({ plan }: { plan: Plan }) {
+function PlanCard({
+  plan,
+  status,
+}: {
+  plan: Plan
+  status: PremiumStatus | null
+}) {
   const { user, openAuthModal } = useAuth()
   const premium = plan.id === 'premium'
   return (
@@ -75,8 +135,8 @@ function PlanCard({ plan }: { plan: Plan }) {
         ))}
       </ul>
       {premium ? (
-        <PremiumAction />
-      ) : user ? (
+        <PremiumAction status={status} />
+      ) : status?.premium ? null : user ? (
         <p className="plan-current">You’re on Free</p>
       ) : (
         <button className="text-button plan-action" onClick={openAuthModal}>
@@ -88,16 +148,23 @@ function PlanCard({ plan }: { plan: Plan }) {
 }
 
 export function MembershipPage() {
+  const { user } = useAuth()
+  const { status, justSubscribed } = usePremiumStatus(user?.id)
   return (
     <main id="main-content" tabIndex={-1} className="shell membership-page">
-      <h1 className="page-title">Membership</h1>
+      <h1 className="page-title">Plans</h1>
       <p className="membership-intro">
         Banana is free to use. Premium gets you fresher prices, so you catch
         every sale the day it starts.
       </p>
+      {justSubscribed && user && !status?.premium && (
+        <p className="plan-thanks" role="status">
+          Thanks for subscribing! Your Premium plan will show here in a moment.
+        </p>
+      )}
       <div className="plan-grid">
         {plans.map((plan) => (
-          <PlanCard key={plan.id} plan={plan} />
+          <PlanCard key={plan.id} plan={plan} status={status} />
         ))}
       </div>
       <section className="food-bank-note" aria-labelledby="food-bank-heading">

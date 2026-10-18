@@ -2,7 +2,7 @@ export type AreaId = 'mount-pleasant' | 'kitsilano' | 'downtown'
 export type Category = string
 export type SortOrder =
   'recommended' | 'price' | 'price-desc' | 'distance' | 'discount'
-export type Page = 'home' | 'items' | 'locations' | 'membership'
+export type Page = 'home' | 'items' | 'locations' | 'plans'
 
 export interface Store {
   id: string

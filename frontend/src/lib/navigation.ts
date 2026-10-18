@@ -18,8 +18,8 @@ export function useRoute() {
       ? 'items'
       : path === '/locations'
         ? 'locations'
-        : path === '/membership'
-          ? 'membership'
+        : path === '/plans' || path === '/membership'
+          ? 'plans'
           : 'home') as Page,
     params: new URLSearchParams(query),
   }

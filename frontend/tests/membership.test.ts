@@ -1,6 +1,11 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { plans, subscribeUrl } from '../src/lib/membership.ts'
+import {
+  plans,
+  portalUrl,
+  premiumStatus,
+  subscribeUrl,
+} from '../src/lib/membership.ts'
 
 test('Free refreshes every 3-4 days, Premium every day at $4.99 with 20% to food banks', () => {
   const [free, premium] = plans
@@ -28,4 +33,41 @@ test('no link, or a link that is not a Stripe Payment Link, keeps the button off
   assert.equal(subscribeUrl('not a url', 'user-1'), '')
   assert.equal(subscribeUrl('http://buy.stripe.com/x', 'user-1'), '')
   assert.equal(subscribeUrl('https://example.com/pay', 'user-1'), '')
+})
+
+test('Premium only while the subscription is active or trialing', () => {
+  const base = {
+    current_period_end: '2026-11-17T20:00:00Z',
+    cancel_at_period_end: false,
+  }
+  assert.deepEqual(premiumStatus({ ...base, status: 'active' }), {
+    premium: true,
+    note: 'renews Nov 17, 2026',
+  })
+  assert.equal(
+    premiumStatus({ ...base, status: 'trialing', cancel_at_period_end: true })
+      .note,
+    'ends Nov 17, 2026',
+  )
+  for (const status of ['past_due', 'canceled', 'unpaid', 'incomplete'])
+    assert.equal(premiumStatus({ ...base, status }).premium, false)
+  assert.equal(premiumStatus(null).premium, false)
+  assert.deepEqual(
+    premiumStatus({
+      status: 'active',
+      current_period_end: null,
+      cancel_at_period_end: false,
+    }),
+    { premium: true, note: '' },
+  )
+})
+
+test('Manage subscription only links to Stripe’s customer portal', () => {
+  assert.equal(
+    portalUrl('https://billing.stripe.com/p/login/test_abc'),
+    'https://billing.stripe.com/p/login/test_abc',
+  )
+  assert.equal(portalUrl(undefined), '')
+  assert.equal(portalUrl('https://example.com/portal'), '')
+  assert.equal(portalUrl('http://billing.stripe.com/p/login/x'), '')
 })
