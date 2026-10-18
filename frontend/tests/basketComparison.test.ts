@@ -141,7 +141,7 @@ test('incomplete low subtotals never compete with complete baskets', () => {
   assert.equal(incomplete.complete, false)
   assert.equal(incomplete.missing[0].name, 'Large eggs')
 })
-test('mixed-store additions consolidate exact packages at the preferred chain when possible', () => {
+test('mixed-store additions preserve the selected stores until a manual swap', () => {
   const aMilk = milk('a', 2000, 4)
   const bEggs = {
     ...milk('b', 12, 5, { comparisonGroupId: 'eggs', sizeKind: 'count' }),
@@ -162,9 +162,9 @@ test('mixed-store additions consolidate exact packages at the preferred chain wh
   )
   assert.deepEqual(
     result.requested.picks.map((p) => p.store.id),
-    ['a', 'a'],
+    ['a', 'b'],
   )
-  assert.equal(result.requested.totalCents, 1000)
+  assert.equal(result.requested.totalCents, 900)
 })
 test('when a chain lacks an item, split-store exact basket names both stores', () => {
   const a = milk('a', 2000, 4)

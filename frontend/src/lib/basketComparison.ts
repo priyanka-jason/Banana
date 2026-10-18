@@ -160,13 +160,12 @@ export function compareBasket(
         return pick ? [pick] : []
       })
       .sort(byCost)
-  const preferred = list[0]?.storeId
   const basePicks = currentLines.flatMap((line) => {
-    const choice =
-      pickFor(line, preferred)[0] ??
-      pickFor(line, line.storeId)[0] ??
-      pickFor(line)[0]
-    return choice ? [choice] : []
+    const offer = usable.find((offer) => offer.id === line.offerId)
+    const store = stores.find((store) => store.id === line.storeId)
+    return offer && store && samePackage(line, productRequest(offer))
+      ? [exactPick(line, offer, store)]
+      : []
   })
   const requested = plan(
     'requested',

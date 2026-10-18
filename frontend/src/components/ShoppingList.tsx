@@ -13,8 +13,8 @@ import { useCatalogue } from '../data/catalogueState'
 import { currency } from '../lib/catalogue'
 import { MAX_QUANTITY, itemCount } from '../lib/shoppingList'
 import { productRequest, samePackage } from '../lib/basketIdentity'
-import { compareBasket } from '../lib/basketComparison'
-import { BasketOptions, BasketPlanDetails } from './BasketComparison'
+import { amountLabel, compareBasket } from '../lib/basketComparison'
+import { BasketOptions } from './BasketComparison'
 import type { NearbyOffer } from '../types'
 
 export function AddToListButton({ offer }: { offer: NearbyOffer }) {
@@ -38,7 +38,6 @@ function ListDialog({ onClose }: { onClose: () => void }) {
   const choice = useBasketChoice()
   const { data, loading, error, retry } = useCatalogue()
   const ref = useRef<HTMLDialogElement>(null)
-  const selectedRef = useRef<HTMLElement>(null)
   useEffect(() => {
     ref.current?.showModal()
   }, [])
@@ -60,11 +59,7 @@ function ListDialog({ onClose }: { onClose: () => void }) {
   function chooseBasket(id: string) {
     shoppingList.choose(id)
     requestAnimationFrame(() => {
-      selectedRef.current?.focus({ preventScroll: true })
-      selectedRef.current?.scrollIntoView({
-        block: 'start',
-        behavior: 'instant',
-      })
+      ref.current?.scrollTo({ top: 0, behavior: 'smooth' })
     })
   }
   return (
@@ -100,10 +95,45 @@ function ListDialog({ onClose }: { onClose: () => void }) {
                   <li key={item.offerId}>
                     <div className="list-item-text">
                       <strong>{item.name}</strong>
-                      <span>
-                        {item.quantity} ×{' '}
-                        {item.pack || 'Package size unavailable'}
-                      </span>
+                      {(() => {
+                        const pick = selected?.picks.find(
+                          (pick) => pick.lineId === item.offerId,
+                        )
+                        return (
+                          <>
+                            <a
+                              href={`#/locations?store=${encodeURIComponent(pick?.store.id ?? item.storeId)}`}
+                              onClick={onClose}
+                            >
+                              {pick?.store.name ?? item.storeName} · Locations
+                            </a>
+                            <span>
+                              {pick?.units ?? item.quantity} ×{' '}
+                              {pick?.offer.pack ||
+                                item.pack ||
+                                'Package size unavailable'}
+                            </span>
+                            {pick && (
+                              <strong>{currency(pick.lineCents / 100)}</strong>
+                            )}
+                            {pick && pick.change !== 'exact' && (
+                              <span>
+                                Different pack · requested {item.quantity} ×{' '}
+                                {item.pack}
+                              </span>
+                            )}
+                            {pick && (pick.extraBase ?? 0) > 0.000001 && (
+                              <span>
+                                +{amountLabel(pick.extraBase!, pick.sizeKind)}{' '}
+                                extra
+                              </span>
+                            )}
+                            {selected?.missing.some(
+                              (line) => line.offerId === item.offerId,
+                            ) && <span>Price unavailable</span>}
+                          </>
+                        )
+                      })()}
                     </div>
                     <div className="list-stepper">
                       <button
@@ -140,6 +170,12 @@ function ListDialog({ onClose }: { onClose: () => void }) {
                   </li>
                 ))}
               </ul>
+              {selected && !loading && !error && (
+                <p className="list-total">
+                  <span>{selected.complete ? 'Total' : 'Subtotal'}</span>
+                  <strong>{currency(selected.totalCents / 100)}</strong>
+                </p>
+              )}
             </section>
             {loading ? (
               <p role="status">Updating prices…</p>
@@ -157,51 +193,17 @@ function ListDialog({ onClose }: { onClose: () => void }) {
                     Previous option unavailable. Choose again.
                   </p>
                 )}
-                <section
-                  ref={selectedRef}
-                  tabIndex={-1}
-                  className="chosen-basket"
-                  aria-label="Selected basket"
-                >
-                  <div className="basket-option-heading">
-                    <div>
-                      <h3>
-                        {selected.kind === 'requested'
-                          ? 'Original basket'
-                          : `Selected: ${selected.name}`}
-                      </h3>
-                      <p>
-                        {selected.kind === 'alternative'
-                          ? 'Different packaging'
-                          : new Set(selected.picks.map((pick) => pick.store.id))
-                                .size > 1
-                            ? 'Split across stores'
-                            : 'Exact match'}
-                      </p>
-                    </div>
-                    <strong className="chosen-total">
-                      {selected.picks.length
-                        ? currency(selected.totalCents / 100)
-                        : 'Unavailable'}
-                      {!selected.complete && <small>Subtotal</small>}
-                    </strong>
-                  </div>
-                  <details open={selected.kind === 'alternative'}>
-                    <summary>View items</summary>
-                    <BasketPlanDetails plan={selected} />
-                  </details>
-                  {selected.id !== 'requested' && (
-                    <button
-                      className="text-button"
-                      onClick={() => shoppingList.choose('requested')}
-                    >
-                      Use original basket
-                    </button>
-                  )}
-                </section>
+                {choice && (
+                  <button
+                    className="text-button"
+                    onClick={() => shoppingList.choose(null)}
+                  >
+                    Use items as added
+                  </button>
+                )}
                 <BasketOptions
                   comparison={comparison}
-                  selectedId={selected.id}
+                  selectedId={choice ?? ''}
                   onChoose={chooseBasket}
                 />
                 <p className="list-note">
