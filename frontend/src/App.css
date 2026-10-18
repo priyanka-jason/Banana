@@ -5,6 +5,8 @@
 }
 .site-header {
   background: var(--warm);
+  /* Installed app on a notched phone: keep the header below the status bar. */
+  padding-top: env(safe-area-inset-top);
 }
 .header-inner {
   height: 90px;
@@ -830,7 +832,8 @@ dialog::backdrop {
     padding-bottom: calc(74px + env(safe-area-inset-bottom));
   }
   .shell {
-    padding-inline: 22px;
+    padding-inline: max(22px, env(safe-area-inset-left))
+      max(22px, env(safe-area-inset-right));
   }
   .header-inner {
     height: 70px;

@@ -1,12 +1,17 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl =
+export const supabaseUrl =
   import.meta.env.VITE_SUPABASE_URL ||
   'https://wkqxnxjsvrnnpikibrfh.supabase.co'
-const supabaseAnonKey =
+export const supabaseAnonKey =
   import.meta.env.VITE_SUPABASE_ANON_KEY ||
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcXhueGpzdnJubnBpa2licmZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyNjc4MjksImV4cCI6MjEwNzg0MzgyOX0.HLI_rOYsA1JQChB06UcaBosoaQmLsnBKppoieyAwd3c'
+
+// The price catalogue and search read with the publishable key when one is set.
+export const catalogueUrl = supabaseUrl
+export const catalogueKey =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || supabaseAnonKey
 
 export const supabase: SupabaseClient = createClient(
   supabaseUrl,
