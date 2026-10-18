@@ -7,6 +7,18 @@
       "hasMemberPricing": false
     },
     {
+      "slug": "no-frills",
+      "name": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "hasMemberPricing": false
+    },
+    {
+      "slug": "real-canadian-superstore",
+      "name": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "hasMemberPricing": false
+    },
+    {
       "slug": "save-on-foods",
       "name": "Save-On-Foods",
       "parentCompany": "Pattison Food Group",

@@ -3,6 +3,52 @@
   "updatedAt": "2026-10-17T13:00:00.000Z",
   "rows": [
     {
+      "id": "no-frills:sim-milk-1-2l",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-milk-1-2l",
+      "name": "1% Milk",
+      "size": "2 L",
+      "sizeAmount": 2,
+      "sizeUnit": "l",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 349,
+      "regularPriceCents": 349,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 17.45
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-milk-1-2l",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-milk-1-2l",
+      "name": "1% Milk",
+      "size": "2 L",
+      "sizeAmount": 2,
+      "sizeUnit": "l",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 328,
+      "regularPriceCents": 448,
+      "discountCents": 120,
+      "discountPercent": 27,
+      "salePriceCents": 328,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 16.4
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-milk-1-2l",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -50,6 +96,52 @@
         "cents": 9.36
       },
       "saleEnd": "2026-11-01",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-milk-2-4l",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-milk-2-4l",
+      "name": "2% Milk",
+      "size": "4 L",
+      "sizeAmount": 4,
+      "sizeUnit": "l",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 629,
+      "regularPriceCents": 629,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 15.73
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-milk-2-4l",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-milk-2-4l",
+      "name": "2% Milk",
+      "size": "4 L",
+      "sizeAmount": 4,
+      "sizeUnit": "l",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 548,
+      "regularPriceCents": 648,
+      "discountCents": 100,
+      "discountPercent": 15,
+      "salePriceCents": 548,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 13.7
+      },
+      "saleEnd": "2026-10-22",
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
@@ -120,6 +212,31 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-atlantic-salmon",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-atlantic-salmon",
+      "name": "Atlantic Salmon Fillet",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "seafood",
+      "priceCents": 2048,
+      "regularPriceCents": 2548,
+      "discountCents": 500,
+      "discountPercent": 20,
+      "salePriceCents": 2048,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 204.8
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-atlantic-salmon",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -158,6 +275,48 @@
       "comparableUnitPrice": {
         "per": "each",
         "cents": 141.5
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-avocados",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-avocados",
+      "name": "Avocados",
+      "size": "4 ct",
+      "sizeAmount": 4,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "fruits",
+      "priceCents": 449,
+      "regularPriceCents": 449,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 112.25
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-avocados",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-avocados",
+      "name": "Avocados",
+      "size": "4 ct",
+      "sizeAmount": 4,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "fruits",
+      "priceCents": 448,
+      "regularPriceCents": 448,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 112
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -208,6 +367,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-baby-bok-choy",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-baby-bok-choy",
+      "name": "Baby Bok Choy",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "vegetables",
+      "priceCents": 398,
+      "regularPriceCents": 398,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 39.8
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-baby-bok-choy",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -250,6 +430,48 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-baby-spinach",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-baby-spinach",
+      "name": "Baby Spinach",
+      "size": "312 g",
+      "sizeAmount": 312,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 499,
+      "regularPriceCents": 499,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 159.94
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-baby-spinach",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-baby-spinach",
+      "name": "Baby Spinach",
+      "size": "312 g",
+      "sizeAmount": 312,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 498,
+      "regularPriceCents": 498,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 159.62
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-baby-spinach",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -288,6 +510,52 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 145.93
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-bacon",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-bacon",
+      "name": "Bacon",
+      "size": "375 g",
+      "sizeAmount": 375,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "meat",
+      "priceCents": 549,
+      "regularPriceCents": 629,
+      "discountCents": 80,
+      "discountPercent": 13,
+      "salePriceCents": 549,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 146.4
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-bacon",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-bacon",
+      "name": "Bacon",
+      "size": "375 g",
+      "sizeAmount": 375,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "meat",
+      "priceCents": 628,
+      "regularPriceCents": 628,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 167.47
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -357,6 +625,48 @@
         "cents": 13.89
       },
       "saleEnd": "2026-11-01",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-bananas",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-bananas",
+      "name": "Bananas",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "fruits",
+      "priceCents": 149,
+      "regularPriceCents": 149,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 14.9
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-bananas",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-bananas",
+      "name": "Bananas",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "fruits",
+      "priceCents": 148,
+      "regularPriceCents": 148,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 14.8
+      },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
@@ -469,6 +779,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-blueberries",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-blueberries",
+      "name": "Blueberries",
+      "size": "510 g",
+      "sizeAmount": 510,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "fruits",
+      "priceCents": 549,
+      "regularPriceCents": 549,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 107.65
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-blueberries",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -536,6 +867,48 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 139.9
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-chicken-breast",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-chicken-breast",
+      "name": "Boneless Skinless Chicken Breast",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "meat",
+      "priceCents": 1449,
+      "regularPriceCents": 1449,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 144.9
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-chicken-breast",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-chicken-breast",
+      "name": "Boneless Skinless Chicken Breast",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "meat",
+      "priceCents": 1598,
+      "regularPriceCents": 1598,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 159.8
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -645,6 +1018,48 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-broccoli",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-broccoli",
+      "name": "Broccoli Crowns",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "vegetables",
+      "priceCents": 499,
+      "regularPriceCents": 499,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 49.9
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-broccoli",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-broccoli",
+      "name": "Broccoli Crowns",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "vegetables",
+      "priceCents": 498,
+      "regularPriceCents": 498,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 49.8
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-broccoli",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -708,6 +1123,48 @@
       "comparableUnitPrice": {
         "per": "each",
         "cents": 79.08
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-croissants",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-croissants",
+      "name": "Butter Croissants",
+      "size": "6 ct",
+      "sizeAmount": 6,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "bakery",
+      "priceCents": 499,
+      "regularPriceCents": 499,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 83.17
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-croissants",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-croissants",
+      "name": "Butter Croissants",
+      "size": "6 ct",
+      "sizeAmount": 6,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "bakery",
+      "priceCents": 498,
+      "regularPriceCents": 498,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 83
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -783,6 +1240,31 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-canola-oil",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-canola-oil",
+      "name": "Canola Oil",
+      "size": "3 L",
+      "sizeAmount": 3,
+      "sizeUnit": "l",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "pantry",
+      "priceCents": 748,
+      "regularPriceCents": 948,
+      "discountCents": 200,
+      "discountPercent": 21,
+      "salePriceCents": 748,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 24.93
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-canola-oil",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -850,6 +1332,52 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-carrots",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-carrots",
+      "name": "Carrots",
+      "size": "907 g",
+      "sizeAmount": 907,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 249,
+      "regularPriceCents": 249,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 27.45
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-carrots",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-carrots",
+      "name": "Carrots",
+      "size": "907 g",
+      "sizeAmount": 907,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 198,
+      "regularPriceCents": 248,
+      "discountCents": 50,
+      "discountPercent": 20,
+      "salePriceCents": 198,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 21.83
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-carrots",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -910,6 +1438,52 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 93.61
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-cherry-tomatoes",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-cherry-tomatoes",
+      "name": "Cherry Tomatoes",
+      "size": "283 g",
+      "sizeAmount": 283,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 229,
+      "regularPriceCents": 329,
+      "discountCents": 100,
+      "discountPercent": 30,
+      "salePriceCents": 229,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 80.92
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-cherry-tomatoes",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-cherry-tomatoes",
+      "name": "Cherry Tomatoes",
+      "size": "283 g",
+      "sizeAmount": 283,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 348,
+      "regularPriceCents": 348,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 122.97
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -977,6 +1551,52 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-canned-tuna",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-canned-tuna",
+      "name": "Chunk Light Tuna",
+      "size": "170 g",
+      "sizeAmount": 170,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "seafood",
+      "priceCents": 149,
+      "regularPriceCents": 149,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 87.65
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-canned-tuna",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-canned-tuna",
+      "name": "Chunk Light Tuna",
+      "size": "170 g",
+      "sizeAmount": 170,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "seafood",
+      "priceCents": 148,
+      "regularPriceCents": 198,
+      "discountCents": 50,
+      "discountPercent": 25,
+      "salePriceCents": 148,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 87.06
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-canned-tuna",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -1016,6 +1636,52 @@
         "per": "100g",
         "cents": 115.88
       },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-diced-tomatoes",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-diced-tomatoes",
+      "name": "Diced Tomatoes",
+      "size": "796 ml",
+      "sizeAmount": 796,
+      "sizeUnit": "ml",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "pantry",
+      "priceCents": 199,
+      "regularPriceCents": 199,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 25
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-diced-tomatoes",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-diced-tomatoes",
+      "name": "Diced Tomatoes",
+      "size": "796 ml",
+      "sizeAmount": 796,
+      "sizeUnit": "ml",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "pantry",
+      "priceCents": 148,
+      "regularPriceCents": 198,
+      "discountCents": 50,
+      "discountPercent": 25,
+      "salePriceCents": 148,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 18.59
+      },
+      "saleEnd": "2026-10-22",
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
@@ -1061,6 +1727,48 @@
       "comparableUnitPrice": {
         "per": "100ml",
         "cents": 24.75
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-dish-soap",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-dish-soap",
+      "name": "Dish Soap",
+      "size": "709 ml",
+      "sizeAmount": 709,
+      "sizeUnit": "ml",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "household",
+      "priceCents": 349,
+      "regularPriceCents": 349,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 49.22
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-dish-soap",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-dish-soap",
+      "name": "Dish Soap",
+      "size": "709 ml",
+      "sizeAmount": 709,
+      "sizeUnit": "ml",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "household",
+      "priceCents": 398,
+      "regularPriceCents": 398,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 56.14
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -1111,6 +1819,48 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-english-cucumber",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-english-cucumber",
+      "name": "English Cucumber",
+      "size": "1 each",
+      "sizeAmount": 1,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 149,
+      "regularPriceCents": 149,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 149
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-english-cucumber",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-english-cucumber",
+      "name": "English Cucumber",
+      "size": "1 each",
+      "sizeAmount": 1,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 148,
+      "regularPriceCents": 148,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 148
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-english-cucumber",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -1150,6 +1900,52 @@
       "comparableUnitPrice": {
         "per": "each",
         "cents": 147
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-extra-lean-ground-beef",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-extra-lean-ground-beef",
+      "name": "Extra Lean Ground Beef",
+      "size": "454 g",
+      "sizeAmount": 454,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "meat",
+      "priceCents": 549,
+      "regularPriceCents": 749,
+      "discountCents": 200,
+      "discountPercent": 27,
+      "salePriceCents": 549,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 120.93
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-extra-lean-ground-beef",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-extra-lean-ground-beef",
+      "name": "Extra Lean Ground Beef",
+      "size": "454 g",
+      "sizeAmount": 454,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "meat",
+      "priceCents": 798,
+      "regularPriceCents": 798,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 175.77
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -1196,6 +1992,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-firm-tofu",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-firm-tofu",
+      "name": "Firm Tofu",
+      "size": "454 g",
+      "sizeAmount": 454,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 298,
+      "regularPriceCents": 298,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 65.64
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-firm-tofu",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -1234,6 +2051,27 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 54.41
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-gai-lan",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-gai-lan",
+      "name": "Gai Lan (Chinese Broccoli)",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "vegetables",
+      "priceCents": 629,
+      "regularPriceCents": 629,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 62.9
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -1284,6 +2122,48 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-gala-apples",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-gala-apples",
+      "name": "Gala Apples",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "fruits",
+      "priceCents": 349,
+      "regularPriceCents": 349,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 34.9
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-gala-apples",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-gala-apples",
+      "name": "Gala Apples",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "fruits",
+      "priceCents": 398,
+      "regularPriceCents": 398,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 39.8
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-gala-apples",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -1324,6 +2204,52 @@
         "per": "100g",
         "cents": 39.7
       },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-frozen-peas",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-frozen-peas",
+      "name": "Green Peas, Frozen",
+      "size": "750 g",
+      "sizeAmount": 750,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "frozen",
+      "priceCents": 349,
+      "regularPriceCents": 349,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 46.53
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-frozen-peas",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-frozen-peas",
+      "name": "Green Peas, Frozen",
+      "size": "750 g",
+      "sizeAmount": 750,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "frozen",
+      "priceCents": 248,
+      "regularPriceCents": 328,
+      "discountCents": 80,
+      "discountPercent": 24,
+      "salePriceCents": 248,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 33.07
+      },
+      "saleEnd": "2026-10-22",
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
@@ -1394,6 +2320,48 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-green-grapes",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-green-grapes",
+      "name": "Green Seedless Grapes",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "fruits",
+      "priceCents": 699,
+      "regularPriceCents": 699,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 69.9
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-green-grapes",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-green-grapes",
+      "name": "Green Seedless Grapes",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "fruits",
+      "priceCents": 748,
+      "regularPriceCents": 748,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 74.8
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-green-grapes",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -1432,6 +2400,48 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 79.7
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-honeycrisp-apples",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-honeycrisp-apples",
+      "name": "Honeycrisp Apples",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "fruits",
+      "priceCents": 599,
+      "regularPriceCents": 599,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 59.9
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-honeycrisp-apples",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-honeycrisp-apples",
+      "name": "Honeycrisp Apples",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "fruits",
+      "priceCents": 628,
+      "regularPriceCents": 628,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 62.8
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -1503,6 +2513,48 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-jasmine-rice",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-jasmine-rice",
+      "name": "Jasmine Rice",
+      "size": "8 kg",
+      "sizeAmount": 8,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "pantry",
+      "priceCents": 2099,
+      "regularPriceCents": 2099,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 26.24
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-jasmine-rice",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-jasmine-rice",
+      "name": "Jasmine Rice",
+      "size": "8 kg",
+      "sizeAmount": 8,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "pantry",
+      "priceCents": 2148,
+      "regularPriceCents": 2148,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 26.85
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-jasmine-rice",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -1542,6 +2594,77 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 27.46
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-large-eggs-12",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-large-eggs-12",
+      "name": "Large Eggs",
+      "size": "12 ct",
+      "sizeAmount": 12,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 349,
+      "regularPriceCents": 449,
+      "discountCents": 100,
+      "discountPercent": 22,
+      "salePriceCents": 349,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 29.08
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-large-eggs-12",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-large-eggs-12",
+      "name": "Large Eggs",
+      "size": "12 ct",
+      "sizeAmount": 12,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 348,
+      "regularPriceCents": 448,
+      "discountCents": 100,
+      "discountPercent": 22,
+      "salePriceCents": 348,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 29
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-large-eggs-30",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-large-eggs-30",
+      "name": "Large Eggs",
+      "size": "30 ct",
+      "sizeAmount": 30,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 998,
+      "regularPriceCents": 998,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 33.27
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -1651,6 +2774,31 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-lean-ground-beef",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-lean-ground-beef",
+      "name": "Lean Ground Beef",
+      "size": "454 g",
+      "sizeAmount": 454,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "meat",
+      "priceCents": 598,
+      "regularPriceCents": 748,
+      "discountCents": 150,
+      "discountPercent": 20,
+      "salePriceCents": 598,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 131.72
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-lean-ground-beef",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -1693,6 +2841,48 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 164.54
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-lemons",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-lemons",
+      "name": "Lemons",
+      "size": "1 each",
+      "sizeAmount": 1,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "fruits",
+      "priceCents": 99,
+      "regularPriceCents": 99,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 99
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-lemons",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-lemons",
+      "name": "Lemons",
+      "size": "1 each",
+      "sizeAmount": 1,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "fruits",
+      "priceCents": 98,
+      "regularPriceCents": 98,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 98
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -1740,6 +2930,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-sparkling-water",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-sparkling-water",
+      "name": "Lime Sparkling Water",
+      "size": "12 x 355 ml",
+      "sizeAmount": 355,
+      "sizeUnit": "ml",
+      "packCount": 12,
+      "pricedByWeight": false,
+      "category": "beverages",
+      "priceCents": 698,
+      "regularPriceCents": 698,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 16.38
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-sparkling-water",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -1783,6 +2994,27 @@
         "cents": 37.22
       },
       "saleEnd": "2026-11-01",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-laundry-detergent",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-laundry-detergent",
+      "name": "Liquid Laundry Detergent",
+      "size": "2.95 L",
+      "sizeAmount": 2.95,
+      "sizeUnit": "l",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "household",
+      "priceCents": 1199,
+      "regularPriceCents": 1199,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 40.64
+      },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
@@ -1845,6 +3077,48 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 50.66
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-mandarins",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-mandarins",
+      "name": "Mandarin Oranges",
+      "size": "2 lb",
+      "sizeAmount": 2,
+      "sizeUnit": "lb",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "fruits",
+      "priceCents": 529,
+      "regularPriceCents": 529,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 58.31
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-mandarins",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-mandarins",
+      "name": "Mandarin Oranges",
+      "size": "2 lb",
+      "sizeAmount": 2,
+      "sizeUnit": "lb",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "fruits",
+      "priceCents": 548,
+      "regularPriceCents": 548,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 60.41
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -1912,6 +3186,31 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-cheddar",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-cheddar",
+      "name": "Medium Cheddar Cheese",
+      "size": "400 g",
+      "sizeAmount": 400,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 549,
+      "regularPriceCents": 649,
+      "discountCents": 100,
+      "discountPercent": 15,
+      "salePriceCents": 549,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 137.25
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "costco:sim-ground-coffee",
       "chainSlug": "costco",
       "chainName": "Costco",
@@ -1929,6 +3228,27 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 143.31
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-ground-coffee",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-ground-coffee",
+      "name": "Medium Roast Ground Coffee",
+      "size": "920 g",
+      "sizeAmount": 920,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "beverages",
+      "priceCents": 1429,
+      "regularPriceCents": 1429,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 155.33
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -2001,6 +3321,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-mini-cucumbers",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-mini-cucumbers",
+      "name": "Mini Cucumbers",
+      "size": "397 g",
+      "sizeAmount": 397,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 348,
+      "regularPriceCents": 348,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 87.66
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-mini-cucumbers",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -2064,6 +3405,31 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-frozen-berries",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-frozen-berries",
+      "name": "Mixed Berries, Frozen",
+      "size": "600 g",
+      "sizeAmount": 600,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "frozen",
+      "priceCents": 528,
+      "regularPriceCents": 648,
+      "discountCents": 120,
+      "discountPercent": 19,
+      "salePriceCents": 528,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 88
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-frozen-berries",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -2107,6 +3473,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-frozen-mixed-veg",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-frozen-mixed-veg",
+      "name": "Mixed Vegetables, Frozen",
+      "size": "1 kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "frozen",
+      "priceCents": 428,
+      "regularPriceCents": 428,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 42.8
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "walmart:sim-frozen-mixed-veg",
       "chainSlug": "walmart",
       "chainName": "Walmart",
@@ -2125,6 +3512,31 @@
         "per": "100g",
         "cents": 39.7
       },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-navel-oranges",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-navel-oranges",
+      "name": "Navel Oranges",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "fruits",
+      "priceCents": 198,
+      "regularPriceCents": 298,
+      "discountCents": 100,
+      "discountPercent": 34,
+      "salePriceCents": 198,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 19.8
+      },
+      "saleEnd": "2026-10-22",
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
@@ -2166,6 +3578,27 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 29.7
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-oat-milk",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-oat-milk",
+      "name": "Oat Beverage",
+      "size": "1.89 L",
+      "sizeAmount": 1.89,
+      "sizeUnit": "l",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 498,
+      "regularPriceCents": 498,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 26.35
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -2213,6 +3646,48 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-orange-juice",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-orange-juice",
+      "name": "Orange Juice",
+      "size": "1.75 L",
+      "sizeAmount": 1.75,
+      "sizeUnit": "l",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "beverages",
+      "priceCents": 499,
+      "regularPriceCents": 499,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 28.51
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-orange-juice",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-orange-juice",
+      "name": "Orange Juice",
+      "size": "1.75 L",
+      "sizeAmount": 1.75,
+      "sizeUnit": "l",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "beverages",
+      "priceCents": 448,
+      "regularPriceCents": 448,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 25.6
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-orange-juice",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -2252,6 +3727,27 @@
       "comparableUnitPrice": {
         "per": "100ml",
         "cents": 28.4
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-organic-bananas",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-organic-bananas",
+      "name": "Organic Bananas",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "fruits",
+      "priceCents": 198,
+      "regularPriceCents": 198,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 19.8
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -2319,6 +3815,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-paper-towels",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-paper-towels",
+      "name": "Paper Towels",
+      "size": "6 rolls",
+      "sizeAmount": 6,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "household",
+      "priceCents": 1028,
+      "regularPriceCents": 1028,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 171.33
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-paper-towels",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -2361,6 +3878,48 @@
       "comparableUnitPrice": {
         "per": "each",
         "cents": 149.5
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-penne",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-penne",
+      "name": "Penne",
+      "size": "900 g",
+      "sizeAmount": 900,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "pantry",
+      "priceCents": 229,
+      "regularPriceCents": 229,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 25.44
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-penne",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-penne",
+      "name": "Penne",
+      "size": "900 g",
+      "sizeAmount": 900,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "pantry",
+      "priceCents": 228,
+      "regularPriceCents": 228,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 25.33
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -2408,6 +3967,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-frozen-pizza",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-frozen-pizza",
+      "name": "Pepperoni Pizza, Frozen",
+      "size": "850 g",
+      "sizeAmount": 850,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "frozen",
+      "priceCents": 728,
+      "regularPriceCents": 728,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 85.65
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "costco:sim-bagels",
       "chainSlug": "costco",
       "chainName": "Costco",
@@ -2425,6 +4005,52 @@
       "comparableUnitPrice": {
         "per": "each",
         "cents": 70.75
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-bagels",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-bagels",
+      "name": "Plain Bagels",
+      "size": "6 ct",
+      "sizeAmount": 6,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "bakery",
+      "priceCents": 299,
+      "regularPriceCents": 399,
+      "discountCents": 100,
+      "discountPercent": 25,
+      "salePriceCents": 299,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 49.83
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-bagels",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-bagels",
+      "name": "Plain Bagels",
+      "size": "6 ct",
+      "sizeAmount": 6,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "bakery",
+      "priceCents": 398,
+      "regularPriceCents": 398,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 66.33
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -2454,6 +4080,52 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-greek-yogurt",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-greek-yogurt",
+      "name": "Plain Greek Yogurt",
+      "size": "750 g",
+      "sizeAmount": 750,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 449,
+      "regularPriceCents": 549,
+      "discountCents": 100,
+      "discountPercent": 18,
+      "salePriceCents": 449,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 59.87
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-greek-yogurt",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-greek-yogurt",
+      "name": "Plain Greek Yogurt",
+      "size": "750 g",
+      "sizeAmount": 750,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 598,
+      "regularPriceCents": 598,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 79.73
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-greek-yogurt",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -2472,6 +4144,73 @@
         "per": "100g",
         "cents": 86.53
       },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-frozen-dumplings",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-frozen-dumplings",
+      "name": "Pork & Chive Dumplings, Frozen",
+      "size": "1 kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "frozen",
+      "priceCents": 898,
+      "regularPriceCents": 898,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 89.8
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-pork-chops",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-pork-chops",
+      "name": "Pork Loin Chops",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "meat",
+      "priceCents": 899,
+      "regularPriceCents": 899,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 89.9
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-pork-chops",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-pork-chops",
+      "name": "Pork Loin Chops",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "meat",
+      "priceCents": 698,
+      "regularPriceCents": 898,
+      "discountCents": 200,
+      "discountPercent": 22,
+      "salePriceCents": 698,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 69.8
+      },
+      "saleEnd": "2026-10-22",
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
@@ -2534,6 +4273,27 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 220.4
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-raw-shrimp",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-raw-shrimp",
+      "name": "Raw Shrimp 31/40",
+      "size": "680 g",
+      "sizeAmount": 680,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "seafood",
+      "priceCents": 1448,
+      "regularPriceCents": 1448,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 212.94
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -2605,6 +4365,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-red-peppers",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-red-peppers",
+      "name": "Red Bell Peppers",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "vegetables",
+      "priceCents": 898,
+      "regularPriceCents": 898,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 89.8
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-red-peppers",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -2643,6 +4424,48 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 84.7
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-red-grapes",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-red-grapes",
+      "name": "Red Seedless Grapes",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "fruits",
+      "priceCents": 649,
+      "regularPriceCents": 649,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 64.9
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-red-grapes",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-red-grapes",
+      "name": "Red Seedless Grapes",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "fruits",
+      "priceCents": 748,
+      "regularPriceCents": 748,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 74.8
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -2686,6 +4509,48 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 74.7
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-mixed-nuts",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-mixed-nuts",
+      "name": "Roasted Mixed Nuts",
+      "size": "600 g",
+      "sizeAmount": 600,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "snacks",
+      "priceCents": 1249,
+      "regularPriceCents": 1249,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 208.17
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-mixed-nuts",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-mixed-nuts",
+      "name": "Roasted Mixed Nuts",
+      "size": "600 g",
+      "sizeAmount": 600,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "snacks",
+      "priceCents": 1198,
+      "regularPriceCents": 1198,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 199.67
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -2736,6 +4601,52 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-roma-tomatoes",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-roma-tomatoes",
+      "name": "Roma Tomatoes",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "vegetables",
+      "priceCents": 329,
+      "regularPriceCents": 429,
+      "discountCents": 100,
+      "discountPercent": 23,
+      "salePriceCents": 329,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 32.9
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-roma-tomatoes",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-roma-tomatoes",
+      "name": "Roma Tomatoes",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "vegetables",
+      "priceCents": 428,
+      "regularPriceCents": 428,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 42.8
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "walmart:sim-roma-tomatoes",
       "chainSlug": "walmart",
       "chainName": "Walmart",
@@ -2782,6 +4693,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-romaine-hearts",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-romaine-hearts",
+      "name": "Romaine Hearts",
+      "size": "3 ct",
+      "sizeAmount": 3,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 399,
+      "regularPriceCents": 399,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 133
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "walmart:sim-romaine-hearts",
       "chainSlug": "walmart",
       "chainName": "Walmart",
@@ -2821,6 +4753,31 @@
         "per": "100g",
         "cents": 12.67
       },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-russet-potatoes",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-russet-potatoes",
+      "name": "Russet Potatoes",
+      "size": "4.54 kg",
+      "sizeAmount": 4.54,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 628,
+      "regularPriceCents": 698,
+      "discountCents": 70,
+      "discountPercent": 10,
+      "salePriceCents": 628,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 13.83
+      },
+      "saleEnd": "2026-10-22",
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
@@ -2870,6 +4827,48 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-butter",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-butter",
+      "name": "Salted Butter",
+      "size": "454 g",
+      "sizeAmount": 454,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 549,
+      "regularPriceCents": 549,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 120.93
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-butter",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-butter",
+      "name": "Salted Butter",
+      "size": "454 g",
+      "sizeAmount": 454,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 628,
+      "regularPriceCents": 628,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 138.33
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-butter",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -2913,6 +4912,52 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-potato-chips",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-potato-chips",
+      "name": "Sea Salt Potato Chips",
+      "size": "200 g",
+      "sizeAmount": 200,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "snacks",
+      "priceCents": 299,
+      "regularPriceCents": 399,
+      "discountCents": 100,
+      "discountPercent": 25,
+      "salePriceCents": 299,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 149.5
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-potato-chips",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-potato-chips",
+      "name": "Sea Salt Potato Chips",
+      "size": "200 g",
+      "sizeAmount": 200,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "snacks",
+      "priceCents": 448,
+      "regularPriceCents": 448,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 224
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-potato-chips",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -2951,6 +4996,27 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 223.5
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-mozzarella",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-mozzarella",
+      "name": "Shredded Mozzarella",
+      "size": "320 g",
+      "sizeAmount": 320,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "dairy-eggs",
+      "priceCents": 628,
+      "regularPriceCents": 628,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 196.25
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -3022,6 +5088,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-peanut-butter",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-peanut-butter",
+      "name": "Smooth Peanut Butter",
+      "size": "1 kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "pantry",
+      "priceCents": 598,
+      "regularPriceCents": 598,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 59.8
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-peanut-butter",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -3060,6 +5147,48 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 59.7
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-soy-sauce",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-soy-sauce",
+      "name": "Soy Sauce",
+      "size": "500 ml",
+      "sizeAmount": 500,
+      "sizeUnit": "ml",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "pantry",
+      "priceCents": 329,
+      "regularPriceCents": 329,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 65.8
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-soy-sauce",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-soy-sauce",
+      "name": "Soy Sauce",
+      "size": "500 ml",
+      "sizeAmount": 500,
+      "sizeUnit": "ml",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "pantry",
+      "priceCents": 348,
+      "regularPriceCents": 348,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 69.6
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -3114,6 +5243,52 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-spaghetti",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-spaghetti",
+      "name": "Spaghetti",
+      "size": "900 g",
+      "sizeAmount": 900,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "pantry",
+      "priceCents": 149,
+      "regularPriceCents": 199,
+      "discountCents": 50,
+      "discountPercent": 25,
+      "salePriceCents": 149,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 16.56
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-spaghetti",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-spaghetti",
+      "name": "Spaghetti",
+      "size": "900 g",
+      "sizeAmount": 900,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "pantry",
+      "priceCents": 248,
+      "regularPriceCents": 248,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 27.56
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "walmart:sim-spaghetti",
       "chainSlug": "walmart",
       "chainName": "Walmart",
@@ -3156,6 +5331,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-spring-water",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-spring-water",
+      "name": "Spring Water",
+      "size": "24 x 500 ml",
+      "sizeAmount": 500,
+      "sizeUnit": "ml",
+      "packCount": 24,
+      "pricedByWeight": false,
+      "category": "beverages",
+      "priceCents": 448,
+      "regularPriceCents": 448,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 3.73
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "costco:sim-strawberries",
       "chainSlug": "costco",
       "chainName": "Costco",
@@ -3173,6 +5369,27 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 88.09
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-strawberries",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-strawberries",
+      "name": "Strawberries",
+      "size": "454 g",
+      "sizeAmount": 454,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "fruits",
+      "priceCents": 528,
+      "regularPriceCents": 528,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 116.3
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -3240,6 +5457,52 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-toilet-paper",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-toilet-paper",
+      "name": "Toilet Paper, Double Rolls",
+      "size": "12 rolls",
+      "sizeAmount": 12,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "household",
+      "priceCents": 899,
+      "regularPriceCents": 899,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 74.92
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-toilet-paper",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-toilet-paper",
+      "name": "Toilet Paper, Double Rolls",
+      "size": "12 rolls",
+      "sizeAmount": 12,
+      "sizeUnit": "ct",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "household",
+      "priceCents": 748,
+      "regularPriceCents": 928,
+      "discountCents": 180,
+      "discountPercent": 19,
+      "salePriceCents": 748,
+      "comparableUnitPrice": {
+        "per": "each",
+        "cents": 62.33
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-toilet-paper",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -3303,6 +5566,52 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-tortilla-chips",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-tortilla-chips",
+      "name": "Tortilla Chips",
+      "size": "300 g",
+      "sizeAmount": 300,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "snacks",
+      "priceCents": 429,
+      "regularPriceCents": 429,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 143
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-tortilla-chips",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-tortilla-chips",
+      "name": "Tortilla Chips",
+      "size": "300 g",
+      "sizeAmount": 300,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "snacks",
+      "priceCents": 328,
+      "regularPriceCents": 448,
+      "discountCents": 120,
+      "discountPercent": 27,
+      "salePriceCents": 328,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 109.33
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-tortilla-chips",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -3321,6 +5630,31 @@
         "per": "100g",
         "cents": 149.67
       },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-ice-cream",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-ice-cream",
+      "name": "Vanilla Ice Cream",
+      "size": "1.5 L",
+      "sizeAmount": 1.5,
+      "sizeUnit": "l",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "frozen",
+      "priceCents": 498,
+      "regularPriceCents": 698,
+      "discountCents": 200,
+      "discountPercent": 29,
+      "salePriceCents": 498,
+      "comparableUnitPrice": {
+        "per": "100ml",
+        "cents": 33.2
+      },
+      "saleEnd": "2026-10-22",
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
@@ -3391,6 +5725,52 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-white-mushrooms",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-white-mushrooms",
+      "name": "White Mushrooms",
+      "size": "227 g",
+      "sizeAmount": 227,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 249,
+      "regularPriceCents": 249,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 109.69
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-white-mushrooms",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-white-mushrooms",
+      "name": "White Mushrooms",
+      "size": "227 g",
+      "sizeAmount": 227,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 248,
+      "regularPriceCents": 298,
+      "discountCents": 50,
+      "discountPercent": 17,
+      "salePriceCents": 248,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 109.25
+      },
+      "saleEnd": "2026-10-22",
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-white-mushrooms",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -3430,6 +5810,48 @@
       "comparableUnitPrice": {
         "per": "100g",
         "cents": 108.81
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-white-bread",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-white-bread",
+      "name": "White Sandwich Bread",
+      "size": "675 g",
+      "sizeAmount": 675,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "bakery",
+      "priceCents": 299,
+      "regularPriceCents": 299,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 44.3
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-white-bread",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-white-bread",
+      "name": "White Sandwich Bread",
+      "size": "675 g",
+      "sizeAmount": 675,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "bakery",
+      "priceCents": 298,
+      "regularPriceCents": 298,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 44.15
       },
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
@@ -3476,6 +5898,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "no-frills:sim-whole-chicken",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-whole-chicken",
+      "name": "Whole Chicken",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "meat",
+      "priceCents": 749,
+      "regularPriceCents": 749,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 74.9
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-whole-chicken",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -3515,6 +5958,52 @@
         "per": "100g",
         "cents": 48.07
       },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-whole-wheat-bread",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-whole-wheat-bread",
+      "name": "Whole Wheat Bread",
+      "size": "675 g",
+      "sizeAmount": 675,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "bakery",
+      "priceCents": 329,
+      "regularPriceCents": 329,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 48.74
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-whole-wheat-bread",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-whole-wheat-bread",
+      "name": "Whole Wheat Bread",
+      "size": "675 g",
+      "sizeAmount": 675,
+      "sizeUnit": "g",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "bakery",
+      "priceCents": 248,
+      "regularPriceCents": 348,
+      "discountCents": 100,
+      "discountPercent": 29,
+      "salePriceCents": 248,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 36.74
+      },
+      "saleEnd": "2026-10-22",
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
@@ -3561,6 +6050,27 @@
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {
+      "id": "real-canadian-superstore:sim-sockeye-salmon",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-sockeye-salmon",
+      "name": "Wild Sockeye Salmon Fillet",
+      "size": "per kg",
+      "sizeAmount": 1,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": true,
+      "category": "seafood",
+      "priceCents": 3498,
+      "regularPriceCents": 3498,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 349.8
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
       "id": "save-on-foods:sim-sockeye-salmon",
       "chainSlug": "save-on-foods",
       "chainName": "Save-On-Foods",
@@ -3600,6 +6110,52 @@
         "per": "100g",
         "cents": 379.7
       },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "no-frills:sim-yellow-onions",
+      "chainSlug": "no-frills",
+      "chainName": "No Frills",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-yellow-onions",
+      "name": "Yellow Onions",
+      "size": "1.36 kg",
+      "sizeAmount": 1.36,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 329,
+      "regularPriceCents": 329,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 24.19
+      },
+      "scrapedAt": "2026-10-17T13:00:00.000Z"
+    },
+    {
+      "id": "real-canadian-superstore:sim-yellow-onions",
+      "chainSlug": "real-canadian-superstore",
+      "chainName": "Real Canadian Superstore",
+      "parentCompany": "Loblaw Companies",
+      "sku": "sim-yellow-onions",
+      "name": "Yellow Onions",
+      "size": "1.36 kg",
+      "sizeAmount": 1.36,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "vegetables",
+      "priceCents": 248,
+      "regularPriceCents": 328,
+      "discountCents": 80,
+      "discountPercent": 24,
+      "salePriceCents": 248,
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 18.24
+      },
+      "saleEnd": "2026-10-22",
       "scrapedAt": "2026-10-17T13:00:00.000Z"
     },
     {

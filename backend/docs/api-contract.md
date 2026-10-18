@@ -18,8 +18,9 @@ npm --prefix backend run examples
 
 ## Simulated Lower Mainland data (bigger mock set)
 
-[`docs/simulated/`](simulated/) holds a larger **made-up** data set for the demo: Save-On-Foods, Walmart and Costco,
-with 22 stores across Metro Vancouver. Prices, sales and store spots are invented; store spots are rough
+[`docs/simulated/`](simulated/) holds a larger **made-up** data set for the demo: Save-On-Foods, Walmart, Costco, No
+Frills and Real Canadian Superstore, with 37 stores across Metro Vancouver. Each chain has its own per-store table,
+and all five feed the one final layer this API reads. Prices, sales and store spots are invented; store spots are rough
 neighbourhood centres, not real addresses. **Prices are chain-wide:** an item costs the same at every store of a
 chain in the Lower Mainland, so rows have no `locationId`. Each file is the body an endpoint would send:
 `chains.json`, `categories.json`, `stores.json`, and `prices.json` (every `PriceRow`, sorted by name). Regenerate with

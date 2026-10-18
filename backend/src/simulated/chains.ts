@@ -4,10 +4,21 @@ import { saveOnFoodsChain } from '../connectors/saveOnFoods';
 import { walmartChain } from '../connectors/walmart';
 import type { Chain } from '../types';
 
+/** No Frills and Superstore are both Loblaw chains. The team's scrapers should reuse these. */
+export const noFrillsChain: Chain = { slug: 'no-frills', name: 'No Frills', parentCompany: 'Loblaw Companies', hasMemberPricing: false };
+export const superstoreChain: Chain = {
+  slug: 'real-canadian-superstore',
+  name: 'Real Canadian Superstore',
+  parentCompany: 'Loblaw Companies',
+  hasMemberPricing: false,
+};
+
 /**
  * SIMULATED store chains for the hackathon demo.
  *
- * The three chains this part of the backend covers. The chain names are real,
+ * The five chains: Save-On-Foods, Walmart and Costco, plus stand-ins for No
+ * Frills and Real Canadian Superstore until the team's real scrapers for those
+ * two are ready (they should use the same slugs). The chain names are real,
  * but every price, sale and store spot here is made up. Store spots are rough
  * neighbourhood centres, not real store addresses.
  *
@@ -123,6 +134,38 @@ export const SIMULATED_CHAINS: SimulatedChainProfile[] = [
       fruits: 'Fresh Produce', vegetables: 'Fresh Produce', meat: 'Meat & Seafood', seafood: 'Meat & Seafood',
       'dairy-eggs': 'Deli & Dairy', bakery: 'Bakery', frozen: 'Frozen', beverages: 'Beverages', snacks: 'Snacks',
       pantry: 'Pantry & Dry Goods', household: 'Household',
+    },
+  },
+  {
+    chain: superstoreChain,
+    code: 'rcss',
+    areas: ['grandview', 'marpole', 'edmonds', 'richmond-centre', 'port-coquitlam', 'guildford', 'newton', 'maple-ridge'],
+    priceLevel: 0.96,
+    endings: [98, 48, 28],
+    weightUnit: 'kg',
+    carries: 0.85,
+    onSale: 0.2,
+    memberDeals: 0,
+    departments: {
+      fruits: 'Fruits & Vegetables', vegetables: 'Fruits & Vegetables', meat: 'Meat', seafood: 'Fish & Seafood',
+      'dairy-eggs': 'Dairy & Eggs', bakery: 'Bakery', frozen: 'Frozen', beverages: 'Drinks', snacks: 'Snacks, Chips & Candy',
+      pantry: 'Pantry', household: 'Cleaning, Laundry & Paper',
+    },
+  },
+  {
+    chain: noFrillsChain,
+    code: 'nf',
+    areas: ['mount-pleasant', 'hastings-sunrise', 'collingwood', 'edmonds', 'new-westminster', 'north-delta', 'surrey-central'],
+    priceLevel: 0.91,
+    endings: [99, 49, 29],
+    weightUnit: 'kg',
+    carries: 0.7,
+    onSale: 0.15,
+    memberDeals: 0,
+    departments: {
+      fruits: 'Fruits & Vegetables', vegetables: 'Fruits & Vegetables', meat: 'Meat', seafood: 'Fish & Seafood',
+      'dairy-eggs': 'Dairy & Eggs', bakery: 'Bakery', frozen: 'Frozen', beverages: 'Drinks', snacks: 'Snacks, Chips & Candy',
+      pantry: 'Pantry', household: 'Cleaning, Laundry & Paper',
     },
   },
 ];

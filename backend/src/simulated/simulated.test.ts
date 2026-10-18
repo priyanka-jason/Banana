@@ -2,6 +2,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { MemoryFinal, MemoryStoreData } from '../db/memory';
+import { rawTableName } from '../db/storeData';
 import { runIngest } from '../pipeline/runIngest';
 import { parseSize } from '../units';
 import { CATALOG } from './catalog';
@@ -66,6 +67,14 @@ describe('simulated chains', () => {
   });
 });
 
+describe('rawTableName', () => {
+  it('turns a chain slug into its per-store table', () => {
+    expect(rawTableName('real-canadian-superstore')).toBe('raw.real_canadian_superstore');
+    expect(rawTableName('costco')).toBe('raw.costco');
+    expect(() => rawTableName('costco; drop table x')).toThrow('Invalid chain slug');
+  });
+});
+
 describe('roundToEnding', () => {
   it('picks the nearest price with one of the chain’s endings', () => {
     expect(roundToEnding(612, [97, 47])).toBe(597);
@@ -123,9 +132,34 @@ describe('simulated data through the pipeline', () => {
     expect(result.savedItems).toBeLessThanOrEqual(500);
   });
 
-  it('covers Save-On-Foods, Walmart and Costco only', async () => {
+  it('covers the five chains, each in its own per-store table', async () => {
     const { result } = await ingest();
-    expect(result.chains.map((chain) => chain.slug)).toEqual(['save-on-foods', 'walmart', 'costco']);
+    expect(result.chains.map((chain) => chain.slug)).toEqual([
+      'save-on-foods',
+      'walmart',
+      'costco',
+      'real-canadian-superstore',
+      'no-frills',
+    ]);
+    const sql = readFileSync(fileURLToPath(new URL('../../sql/draft-schema.sql', import.meta.url)), 'utf8');
+    for (const chain of result.chains) {
+      expect(sql, rawTableName(chain.slug)).toContain(`create table ${rawTableName(chain.slug)} (`);
+      expect(sql, rawTableName(chain.slug)).toMatch(new RegExp(`alter table ${rawTableName(chain.slug).replace('.', '\\.')}\\s+enable row level security`));
+    }
+  });
+
+  it('keeps each chain in its own per-store layer, all feeding one final layer', async () => {
+    const storeData = new MemoryStoreData();
+    const final = new MemoryFinal();
+    await runIngest({ connectors: simulatedConnectors, storeData, final, categoryMap: SIMULATED_CATEGORY_MAP, now: () => SIMULATED_TIME });
+    let total = 0;
+    for (const profile of SIMULATED_CHAINS) {
+      const records = await storeData.loadRecords(profile.chain.slug);
+      expect(records.length, profile.chain.slug).toBe(simulatedItemsFor(profile).length);
+      expect(records.every((record) => record.chainSlug === profile.chain.slug)).toBe(true);
+      total += records.length;
+    }
+    expect((await final.listItems()).length).toBe(total);
   });
 
   it('has one price per chain: every store of a chain shows the same prices', async () => {

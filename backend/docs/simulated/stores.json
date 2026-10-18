@@ -49,6 +49,126 @@
       "lng": -122.66399
     },
     {
+      "id": "no-frills-sim-collingwood",
+      "chainSlug": "no-frills",
+      "name": "No Frills (simulated, Collingwood)",
+      "city": "Vancouver",
+      "lat": 49.24135,
+      "lng": -123.02527
+    },
+    {
+      "id": "no-frills-sim-edmonds",
+      "chainSlug": "no-frills",
+      "name": "No Frills (simulated, Edmonds)",
+      "city": "Burnaby",
+      "lat": 49.2118,
+      "lng": -122.96015
+    },
+    {
+      "id": "no-frills-sim-hastings-sunrise",
+      "chainSlug": "no-frills",
+      "name": "No Frills (simulated, Hastings-Sunrise)",
+      "city": "Vancouver",
+      "lat": 49.27937,
+      "lng": -123.03732
+    },
+    {
+      "id": "no-frills-sim-mount-pleasant",
+      "chainSlug": "no-frills",
+      "name": "No Frills (simulated, Mount Pleasant)",
+      "city": "Vancouver",
+      "lat": 49.25988,
+      "lng": -123.09799
+    },
+    {
+      "id": "no-frills-sim-new-westminster",
+      "chainSlug": "no-frills",
+      "name": "No Frills (simulated, Uptown New Westminster)",
+      "city": "New Westminster",
+      "lat": 49.20865,
+      "lng": -122.90907
+    },
+    {
+      "id": "no-frills-sim-north-delta",
+      "chainSlug": "no-frills",
+      "name": "No Frills (simulated, North Delta)",
+      "city": "Delta",
+      "lat": 49.15503,
+      "lng": -122.91006
+    },
+    {
+      "id": "no-frills-sim-surrey-central",
+      "chainSlug": "no-frills",
+      "name": "No Frills (simulated, Surrey Central)",
+      "city": "Surrey",
+      "lat": 49.18795,
+      "lng": -122.85043
+    },
+    {
+      "id": "real-canadian-superstore-sim-edmonds",
+      "chainSlug": "real-canadian-superstore",
+      "name": "Real Canadian Superstore (simulated, Edmonds)",
+      "city": "Burnaby",
+      "lat": 49.21033,
+      "lng": -122.96042
+    },
+    {
+      "id": "real-canadian-superstore-sim-grandview",
+      "chainSlug": "real-canadian-superstore",
+      "name": "Real Canadian Superstore (simulated, Grandview-Woodland)",
+      "city": "Vancouver",
+      "lat": 49.26861,
+      "lng": -123.06721
+    },
+    {
+      "id": "real-canadian-superstore-sim-guildford",
+      "chainSlug": "real-canadian-superstore",
+      "name": "Real Canadian Superstore (simulated, Guildford)",
+      "city": "Surrey",
+      "lat": 49.18674,
+      "lng": -122.801
+    },
+    {
+      "id": "real-canadian-superstore-sim-maple-ridge",
+      "chainSlug": "real-canadian-superstore",
+      "name": "Real Canadian Superstore (simulated, Maple Ridge)",
+      "city": "Maple Ridge",
+      "lat": 49.22054,
+      "lng": -122.59768
+    },
+    {
+      "id": "real-canadian-superstore-sim-marpole",
+      "chainSlug": "real-canadian-superstore",
+      "name": "Real Canadian Superstore (simulated, Marpole)",
+      "city": "Vancouver",
+      "lat": 49.21105,
+      "lng": -123.13316
+    },
+    {
+      "id": "real-canadian-superstore-sim-newton",
+      "chainSlug": "real-canadian-superstore",
+      "name": "Real Canadian Superstore (simulated, Newton)",
+      "city": "Surrey",
+      "lat": 49.1342,
+      "lng": -122.84682
+    },
+    {
+      "id": "real-canadian-superstore-sim-port-coquitlam",
+      "chainSlug": "real-canadian-superstore",
+      "name": "Real Canadian Superstore (simulated, Port Coquitlam)",
+      "city": "Port Coquitlam",
+      "lat": 49.25814,
+      "lng": -122.78169
+    },
+    {
+      "id": "real-canadian-superstore-sim-richmond-centre",
+      "chainSlug": "real-canadian-superstore",
+      "name": "Real Canadian Superstore (simulated, Richmond Centre)",
+      "city": "Richmond",
+      "lat": 49.16798,
+      "lng": -123.1331
+    },
+    {
       "id": "save-on-foods-sim-brentwood",
       "chainSlug": "save-on-foods",
       "name": "Save-On-Foods (simulated, Brentwood)",

@@ -15,3 +15,12 @@ export interface StoreDataRepository {
   /** Every record saved for one chain. */
   loadRecords(chainSlug: string): Promise<StoreRecord[]>;
 }
+
+/**
+ * The per-store table for a chain: the slug with "-" turned into "_", in the private "raw"
+ * schema. "real-canadian-superstore" is raw.real_canadian_superstore. Matches sql/draft-schema.sql.
+ */
+export function rawTableName(chainSlug: string): string {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(chainSlug)) throw new Error(`Invalid chain slug: "${chainSlug}"`);
+  return `raw.${chainSlug.replaceAll('-', '_')}`;
+}

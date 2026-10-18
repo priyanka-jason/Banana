@@ -30,8 +30,12 @@ create extension if not exists pg_trgm with schema extensions;   -- fast "contai
 
 create schema if not exists raw;
 
--- One table per store, all the same shape (it matches StoreRecord in
--- backend/src/pipeline/types.ts). To add a store, copy one and change the name.
+-- One table per store chain, all the same shape (it matches StoreRecord in
+-- backend/src/pipeline/types.ts). The table name is the chain slug with "-"
+-- turned into "_" (real-canadian-superstore -> raw.real_canadian_superstore).
+-- To add a store, copy one and change the name. Five today: Save-On-Foods,
+-- Walmart, Costco, No Frills and Real Canadian Superstore. All five feed the one
+-- final layer below.
 --   payload  the cleaned item as the connector saved it: normally a RawItem (without
 --            "original") plus any extra store-specific fields, with the store's own
 --            category names in "storeCategories".
@@ -60,6 +64,20 @@ create table raw.costco (
   original   jsonb check (original is null or jsonb_typeof(original) = 'object')
 );
 
+create table raw.no_frills (
+  sku        text primary key,
+  scraped_at timestamptz not null,
+  payload    jsonb not null check (jsonb_typeof(payload) = 'object'),
+  original   jsonb check (original is null or jsonb_typeof(original) = 'object')
+);
+
+create table raw.real_canadian_superstore (
+  sku        text primary key,
+  scraped_at timestamptz not null,
+  payload    jsonb not null check (jsonb_typeof(payload) = 'object'),
+  original   jsonb check (original is null or jsonb_typeof(original) = 'object')
+);
+
 -- Keep this layer private. Row level security with no policies means the
 -- website's keys can neither read nor write it. Taking away privileges is a
 -- second lock. The service role key skips row level security but still needs
@@ -67,6 +85,8 @@ create table raw.costco (
 alter table raw.save_on_foods enable row level security;
 alter table raw.walmart       enable row level security;
 alter table raw.costco        enable row level security;
+alter table raw.no_frills     enable row level security;
+alter table raw.real_canadian_superstore enable row level security;
 
 revoke all on schema raw from anon, authenticated;
 revoke all on all tables in schema raw from anon, authenticated;
