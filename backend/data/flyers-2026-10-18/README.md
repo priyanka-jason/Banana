@@ -9,12 +9,19 @@ Nothing here is loaded into Supabase. The `backend/sql` folder was not touched.
 
 | Chain (slug) | Flyer read | Valid dates | Items |
 |---|---|---|---|
-| save-on-foods | Yes, image flyer, read from screenshots | Oct 15 to Oct 21, 2026 | 24 |
-| no-frills | Yes, image flyer, read from screenshots, partial | Oct 15 to Oct 21, 2026 | 25 |
-| real-canadian-superstore | Partly. Flyer shown too small to read prices reliably | Oct 15 to Oct 21, 2026 | 0 |
-| walmart | No. Stopped at a bot check ("Robot or human?" press-and-hold) | Not read | 0 |
-| costco | No. The flyer URL in the brief no longer exists, and the homepage has no grocery flyer | Not read | 0 |
-| **Total** | | | **49** |
+| save-on-foods | Yes, image flyer, read from screenshots, both passes | Oct 15 to Oct 21, 2026 | 40 |
+| no-frills | Yes, image flyer, read from screenshots, partial (second pass blocked, see below) | Oct 15 to Oct 21, 2026 | 25 |
+| real-canadian-superstore | No. Flyer prices too small to read; second pass blocked by a store-pickup popup | Oct 15 to Oct 21, 2026 | 0 |
+| walmart | No. Stopped at a bot check ("Robot or human?" press-and-hold). Not revisited, per instructions | Not read | 0 |
+| costco | Partly. Public "Offers Ending Sunday" page, grocery items only, 2 of 13 pages | Oct 18, 2026 (page says "Offers Ending Sunday") | 6 |
+| **Total** | | | **71** |
+
+## Second pass (2026-10-18)
+
+- **Save-On-Foods:** added 16 items from the "$1.49 Day" section and the savings pages. Multi-buy deals are recorded at the per-item price (for example "5 for $1.49" becomes 30 cents) with the original deal in a `note` field. Loyalty-only "My Offers" prices are still left out.
+- **No Frills:** not re-read. A store-pickup popup ("Would you like to pick up here?") covered the flyer and blocked scrolling, and I did not click its "Yes" or "No, change location" buttons. The cookie banner's only button is "Close". I did not click it, because the banner doesn't say whether "Close" accepts cookies. Nothing was added.
+- **Real Canadian Superstore:** not re-read. The same kind of popup blocked the flyer viewer, and changing the viewport did not clear it. Nothing was added.
+- **Costco:** the old page is gone, so I used the public "Offers Ending Sunday" page from the homepage links. I read two of its listing pages. Only grocery items with clear prices are included (6). Members-only items and non-grocery items are left out. The prices are the Richmond BC warehouse prices shown on the page.
 
 Source URLs:
 - Save-On-Foods: https://www.saveonfoods.com/sm/planning/rsid/1982/circular (store 1982, not confirmed as the Cambie store)
