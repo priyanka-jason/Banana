@@ -216,7 +216,7 @@ function ListDialog({ onClose }: { onClose: () => void }) {
               </>
             ) : null}
             <p className="list-note">Before taxes, fees & deposits.</p>
-            <SavedLists />
+            <SavedLists onLeave={onClose} />
             <div className="filter-dialog-actions">
               <button className="text-button" onClick={shoppingList.clear}>
                 Clear list
@@ -233,7 +233,7 @@ function ListDialog({ onClose }: { onClose: () => void }) {
             <button className="flyer-button" onClick={onClose}>
               Keep searching
             </button>
-            <SavedLists />
+            <SavedLists onLeave={onClose} />
           </div>
         )}
       </div>

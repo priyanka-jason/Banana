@@ -19,8 +19,9 @@ import {
 } from '../lib/savedLists'
 import { itemCount } from '../lib/shoppingList'
 
-/** Save My list under a name, and load it again later (signed-in shoppers only). */
-export function SavedLists() {
+/** Save My list under a name, and load it again later (signed-in shoppers only).
+ * onLeave closes My list: it is a modal dialog that would cover the sign-in window. */
+export function SavedLists({ onLeave }: { onLeave: () => void }) {
   const { user, openAuthModal } = useAuth()
   const { data } = useCatalogue()
   const list = useShoppingList()
@@ -54,7 +55,13 @@ export function SavedLists() {
           Buy the same things every week? Sign in to save this list and load it
           again with the latest prices.
         </p>
-        <button className="text-button" onClick={openAuthModal}>
+        <button
+          className="text-button"
+          onClick={() => {
+            onLeave()
+            openAuthModal()
+          }}
+        >
           Sign in to save lists
         </button>
       </section>
