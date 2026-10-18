@@ -20,7 +20,7 @@ const filters: Filters = {
 }
 const point = { latitude: 49.26234, longitude: -123.10567 }
 
-test('default filters ask for everything nearby, cheapest first', () => {
+test('default filters ask for everything nearby, deals first', () => {
   assert.deepEqual(searchOffersBody(filters, point), {
     p_query: null,
     p_categories: null,
@@ -30,7 +30,7 @@ test('default filters ask for everything nearby, cheapest first', () => {
     p_near_lng: -123.11,
     p_radius_km: 5,
     p_on_sale_only: false,
-    p_sort_by: 'price',
+    p_sort_by: 'discount',
     p_sort_order: null,
     p_limit: 50,
     p_offset: 0,
@@ -65,7 +65,7 @@ test('filters, branch and paging map to the function inputs', () => {
 
 test('each sort maps to a sort the database accepts', () => {
   const sorts = {
-    recommended: ['price', null],
+    recommended: ['discount', null],
     price: ['price', null],
     'price-desc': ['price', 'desc'],
     distance: ['distance', null],
