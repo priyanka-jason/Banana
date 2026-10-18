@@ -11,6 +11,8 @@ Store identities use existing logo assets rather than code-drawn substitutes:
   for saveonfoods.com; original horizontal mark from Wikimedia Commons.
 - No Frills: https://upload.wikimedia.org/wikipedia/en/2/23/No_Frills_logo.svg
 - Walmart: https://commons.wikimedia.org/wiki/File:Walmart_spark_(2025).svg
+- Costco: https://commons.wikimedia.org/wiki/File:Costco_Wholesale_logo_2010-10-26.svg
+  (public domain on Commons; trademarked)
 - Superstore: https://upload.wikimedia.org/wikipedia/en/b/bb/Real_Canadian_Superstore_logo.svg
   The compact `superstore-mark.svg` uses a viewBox focused on the existing symbol;
   its source geometry is unchanged.

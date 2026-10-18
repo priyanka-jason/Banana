@@ -73,6 +73,7 @@ const assets: Record<string, string> = {
   'no-frills': '/images/stores/no-frills.svg',
   walmart: '/images/stores/walmart.svg',
   'real-canadian-superstore': '/images/stores/superstore-mark.svg',
+  costco: '/images/stores/costco.svg',
 }
 export function unitPrice(product: ProductRow, cents: number): string {
   const total = Number(product.size_total_base)
