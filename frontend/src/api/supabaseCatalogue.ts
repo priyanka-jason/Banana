@@ -1,5 +1,6 @@
 import type { Offer, Store } from '../types.ts'
 import type { StoreBranch } from '../data/storeLocations.ts'
+import { productImage } from '../lib/productImages.ts'
 
 export const categoryLabels: Record<string, string> = {
   fruits: 'Fruits',
@@ -73,12 +74,6 @@ const assets: Record<string, string> = {
   walmart: '/images/stores/walmart.svg',
   'real-canadian-superstore': '/images/stores/superstore-mark.svg',
 }
-const images: Record<string, string> = {
-  'sim-gala-apples': '/images/gala-apples.webp',
-  'sim-avocados': '/images/avocados.webp',
-  'sim-large-eggs-12': '/images/eggs-v2.webp',
-  'sim-milk-2-4l': '/images/milk.webp',
-}
 export function unitPrice(product: ProductRow, cents: number): string {
   const total = Number(product.size_total_base)
   if (!(total > 0)) return ''
@@ -123,7 +118,7 @@ export function mapPrice(row: PriceRow, now = new Date()): Offer | null {
     name: product.name,
     pack: product.size ?? '',
     category: product.category ?? 'other',
-    image: images[product.sku] ?? '',
+    image: productImage(product.sku, product.size),
     price: cents / 100,
     regularPrice: active ? regular / 100 : undefined,
     unitPrice: unitPrice(product, cents),

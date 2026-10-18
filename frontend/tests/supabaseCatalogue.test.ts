@@ -37,7 +37,7 @@ test('maps stable chain offers, cents, source metadata and local images', () => 
   assert.equal(offer.price, 3.49)
   assert.equal(offer.regularPrice, 4.99)
   assert.equal(offer.saleEnd, '2026-10-22')
-  assert.equal(offer.image, '/images/gala-apples.webp')
+  assert.equal(offer.image, '/images/products/gala-apples-480.webp')
   assert.equal(offer.source, 'supabase')
   assert.equal(offer.updatedAt, row.scraped_at)
   assert.equal(offer.simulated, true)
