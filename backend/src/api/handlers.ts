@@ -11,6 +11,7 @@ import type {
   LookupResponseBody,
   NearbyStoresResponseBody,
   SearchResponseBody,
+  ShoppingListResponseBody,
   StoresResponseBody,
 } from './types';
 import {
@@ -20,6 +21,7 @@ import {
   parseMemberPricingParam,
   parseNearbyBody,
   parseSearchBody,
+  parseShoppingListBody,
 } from './validate';
 
 /**
@@ -126,6 +128,21 @@ export async function handleLookup(
     const missingIds = [...new Set(parsed.value.ids)].filter((id) => !found.has(id));
     return { status: 200, body: { rows, missingIds } };
   });
+}
+
+/**
+ * POST /api/prices/list: price a whole shopping list in the chosen stores. A POST because
+ * the store choice can include the shopper's location.
+ */
+export async function handleShoppingList(
+  repo: PriceRepository,
+  body: unknown,
+  options: HandlerOptions = {},
+): Promise<ApiResult<ShoppingListResponseBody>> {
+  const parsed = parseShoppingListBody(body);
+  if (!parsed.ok) return invalid(parsed.errors);
+
+  return guarded(options, async () => ({ status: 200, body: await repo.priceShoppingList(parsed.value) }));
 }
 
 /** GET /api/chains */

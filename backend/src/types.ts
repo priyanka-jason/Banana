@@ -218,3 +218,68 @@ export interface PriceFilters {
   limit?: number;
   offset?: number;
 }
+
+/**
+ * One line of a shopping list. Either a search, like "milk" (optionally only in some
+ * categories), which is compared across every chain, or one exact item by id, like
+ * "walmart:W-2002", which only that chain sells.
+ */
+export type ShoppingListEntry =
+  | { query: string; categories?: ProductCategory[]; quantity?: number }
+  | { itemId: string; quantity?: number };
+
+/** A shopping list to price, and where the shopper is willing to buy. */
+export interface ShoppingListRequest {
+  items: ShoppingListEntry[];
+  /** The same store choice as a search: chains, owners, picked stores or a radius. */
+  chainSlugs?: string[];
+  parentCompanies?: string[];
+  locationIds?: string[];
+  /** Personal data: use for this request only, never store or log it. */
+  near?: { lat: number; lng: number; radiusKm: number };
+  memberPricing?: MemberPricing;
+  /** How many matches to send back for each entry, cheapest first. Default: 5. Largest allowed: 20. */
+  matchesPerItem?: number;
+}
+
+/** What one entry costs at one place: the cheapest match there, times the quantity. */
+export interface ShoppingListPick {
+  /** Position of the entry in the request, from 0. */
+  index: number;
+  row: PriceRow;
+  /** `row.priceCents` times the quantity. For an item priced by weight that is per lb or kg. */
+  lineCents: number;
+}
+
+export interface ShoppingListEntryResult {
+  /** Position of the entry in the request, from 0. */
+  index: number;
+  quantity: number;
+  /** Cheapest first, at most `matchesPerItem`. Empty when nothing matches in the chosen stores. */
+  matches: PriceRow[];
+  /** How many items match in all. */
+  total: number;
+}
+
+/** Buying the whole list at one chain. */
+export interface ShoppingListChainTotal {
+  chainSlug: string;
+  chainName: string;
+  /** Sum of `lineCents` for the entries this chain has. Compare it only between chains with the same `missingIndexes`. */
+  totalCents: number;
+  /** The cheapest match at this chain for each entry it has. */
+  picks: ShoppingListPick[];
+  /** Entries this chain doesn't have (in the chosen stores). */
+  missingIndexes: number[];
+  /** Only with `near`: distance to this chain's nearest store in range. */
+  distanceKm?: number;
+}
+
+export interface ShoppingListResult {
+  /** One per entry, in the order asked for. */
+  entries: ShoppingListEntryResult[];
+  /** Chains that have at least one entry: the most entries first, then the cheapest. */
+  chains: ShoppingListChainTotal[];
+  /** The cheapest match for each entry at any chain: the lowest total if the shopper splits the list between stores. */
+  cheapestMix: { totalCents: number; picks: ShoppingListPick[]; missingIndexes: number[] };
+}

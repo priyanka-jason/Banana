@@ -37,6 +37,9 @@ const brokenRepo: PriceRepository = {
   getItems: async () => {
     throw new Error(SECRET);
   },
+  priceShoppingList: async () => {
+    throw new Error(SECRET);
+  },
   listChains: async () => {
     throw new Error(SECRET);
   },

@@ -1,0 +1,641 @@
+{
+  "description": "Price a whole shopping list. Each entry is a search (\"milk\") or one exact item (itemId). entries has the cheapest matches for each; chains has the cost of buying everything at one chain (most entries first, then cheapest), with missingIndexes for what it lacks; cheapestMix is the lowest total when splitting the list between chains.",
+  "request": {
+    "method": "POST",
+    "path": "/api/prices/list",
+    "body": {
+      "items": [
+        {
+          "query": "milk",
+          "quantity": 2
+        },
+        {
+          "query": "banana"
+        },
+        {
+          "query": "eggs",
+          "categories": [
+            "dairy-eggs"
+          ]
+        },
+        {
+          "itemId": "walmart:W-2002"
+        }
+      ],
+      "matchesPerItem": 2
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "index": 0,
+          "quantity": 2,
+          "matches": [
+            {
+              "id": "walmart:W-2008",
+              "chainSlug": "walmart",
+              "chainName": "Walmart",
+              "parentCompany": "Walmart",
+              "sku": "W-2008",
+              "name": "2% Milk 4 L",
+              "size": "4 L",
+              "sizeAmount": 4,
+              "sizeUnit": "l",
+              "packCount": 1,
+              "pricedByWeight": false,
+              "category": "dairy-eggs",
+              "priceCents": 597,
+              "regularPriceCents": 597,
+              "unitPriceCents": 15,
+              "unitLabel": "100ml",
+              "comparableUnitPrice": {
+                "per": "100ml",
+                "cents": 14.93
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z"
+            },
+            {
+              "id": "save-on-foods:SOF-1008",
+              "chainSlug": "save-on-foods",
+              "chainName": "Save-On-Foods",
+              "parentCompany": "Pattison Food Group",
+              "sku": "SOF-1008",
+              "name": "2% Milk 4 L",
+              "size": "4 L",
+              "sizeAmount": 4,
+              "sizeUnit": "l",
+              "packCount": 1,
+              "pricedByWeight": false,
+              "category": "dairy-eggs",
+              "priceCents": 629,
+              "regularPriceCents": 629,
+              "memberPriceCents": 599,
+              "unitPriceCents": 16,
+              "unitLabel": "100ml",
+              "comparableUnitPrice": {
+                "per": "100ml",
+                "cents": 15.73
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z"
+            }
+          ],
+          "total": 3
+        },
+        {
+          "index": 1,
+          "quantity": 1,
+          "matches": [
+            {
+              "id": "walmart:W-2001",
+              "chainSlug": "walmart",
+              "chainName": "Walmart",
+              "parentCompany": "Walmart",
+              "sku": "W-2001",
+              "name": "Bananas",
+              "size": "per lb",
+              "sizeAmount": 1,
+              "sizeUnit": "lb",
+              "packCount": 1,
+              "pricedByWeight": true,
+              "category": "fruits",
+              "priceCents": 69,
+              "regularPriceCents": 69,
+              "unitPriceCents": 152,
+              "unitLabel": "kg",
+              "comparableUnitPrice": {
+                "per": "100g",
+                "cents": 15.21
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z"
+            },
+            {
+              "id": "save-on-foods:SOF-1001",
+              "chainSlug": "save-on-foods",
+              "chainName": "Save-On-Foods",
+              "parentCompany": "Pattison Food Group",
+              "sku": "SOF-1001",
+              "name": "Bananas",
+              "size": "per kg",
+              "sizeAmount": 1,
+              "sizeUnit": "kg",
+              "packCount": 1,
+              "pricedByWeight": true,
+              "category": "fruits",
+              "priceCents": 169,
+              "regularPriceCents": 169,
+              "memberPriceCents": 149,
+              "unitPriceCents": 169,
+              "unitLabel": "kg",
+              "comparableUnitPrice": {
+                "per": "100g",
+                "cents": 16.9
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z"
+            }
+          ],
+          "total": 3
+        },
+        {
+          "index": 2,
+          "quantity": 1,
+          "matches": [
+            {
+              "id": "walmart:W-2009",
+              "chainSlug": "walmart",
+              "chainName": "Walmart",
+              "parentCompany": "Walmart",
+              "sku": "W-2009",
+              "name": "Large Eggs 12 ct",
+              "size": "12 ct",
+              "sizeAmount": 12,
+              "sizeUnit": "ct",
+              "packCount": 1,
+              "pricedByWeight": false,
+              "category": "dairy-eggs",
+              "priceCents": 447,
+              "regularPriceCents": 447,
+              "comparableUnitPrice": {
+                "per": "each",
+                "cents": 37.25
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z"
+            },
+            {
+              "id": "save-on-foods:SOF-1009",
+              "chainSlug": "save-on-foods",
+              "chainName": "Save-On-Foods",
+              "parentCompany": "Pattison Food Group",
+              "sku": "SOF-1009",
+              "name": "Large Eggs 12 ct",
+              "size": "12 ct",
+              "sizeAmount": 12,
+              "sizeUnit": "ct",
+              "packCount": 1,
+              "pricedByWeight": false,
+              "category": "dairy-eggs",
+              "priceCents": 499,
+              "regularPriceCents": 499,
+              "memberPriceCents": 449,
+              "comparableUnitPrice": {
+                "per": "each",
+                "cents": 41.58
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z"
+            }
+          ],
+          "total": 3
+        },
+        {
+          "index": 3,
+          "quantity": 1,
+          "matches": [
+            {
+              "id": "walmart:W-2002",
+              "chainSlug": "walmart",
+              "chainName": "Walmart",
+              "parentCompany": "Walmart",
+              "sku": "W-2002",
+              "name": "Gala Apples 1.36 kg",
+              "size": "1.36 kg",
+              "sizeAmount": 1.36,
+              "sizeUnit": "kg",
+              "packCount": 1,
+              "pricedByWeight": false,
+              "category": "fruits",
+              "priceCents": 547,
+              "regularPriceCents": 597,
+              "discountCents": 50,
+              "discountPercent": 8,
+              "salePriceCents": 547,
+              "unitPriceCents": 40,
+              "unitLabel": "100g",
+              "comparableUnitPrice": {
+                "per": "100g",
+                "cents": 40.22
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z"
+            }
+          ],
+          "total": 1
+        }
+      ],
+      "chains": [
+        {
+          "chainSlug": "walmart",
+          "chainName": "Walmart",
+          "totalCents": 2257,
+          "picks": [
+            {
+              "index": 0,
+              "row": {
+                "id": "walmart:W-2008",
+                "chainSlug": "walmart",
+                "chainName": "Walmart",
+                "parentCompany": "Walmart",
+                "sku": "W-2008",
+                "name": "2% Milk 4 L",
+                "size": "4 L",
+                "sizeAmount": 4,
+                "sizeUnit": "l",
+                "packCount": 1,
+                "pricedByWeight": false,
+                "category": "dairy-eggs",
+                "priceCents": 597,
+                "regularPriceCents": 597,
+                "unitPriceCents": 15,
+                "unitLabel": "100ml",
+                "comparableUnitPrice": {
+                  "per": "100ml",
+                  "cents": 14.93
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z"
+              },
+              "lineCents": 1194
+            },
+            {
+              "index": 1,
+              "row": {
+                "id": "walmart:W-2001",
+                "chainSlug": "walmart",
+                "chainName": "Walmart",
+                "parentCompany": "Walmart",
+                "sku": "W-2001",
+                "name": "Bananas",
+                "size": "per lb",
+                "sizeAmount": 1,
+                "sizeUnit": "lb",
+                "packCount": 1,
+                "pricedByWeight": true,
+                "category": "fruits",
+                "priceCents": 69,
+                "regularPriceCents": 69,
+                "unitPriceCents": 152,
+                "unitLabel": "kg",
+                "comparableUnitPrice": {
+                  "per": "100g",
+                  "cents": 15.21
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z"
+              },
+              "lineCents": 69
+            },
+            {
+              "index": 2,
+              "row": {
+                "id": "walmart:W-2009",
+                "chainSlug": "walmart",
+                "chainName": "Walmart",
+                "parentCompany": "Walmart",
+                "sku": "W-2009",
+                "name": "Large Eggs 12 ct",
+                "size": "12 ct",
+                "sizeAmount": 12,
+                "sizeUnit": "ct",
+                "packCount": 1,
+                "pricedByWeight": false,
+                "category": "dairy-eggs",
+                "priceCents": 447,
+                "regularPriceCents": 447,
+                "comparableUnitPrice": {
+                  "per": "each",
+                  "cents": 37.25
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z"
+              },
+              "lineCents": 447
+            },
+            {
+              "index": 3,
+              "row": {
+                "id": "walmart:W-2002",
+                "chainSlug": "walmart",
+                "chainName": "Walmart",
+                "parentCompany": "Walmart",
+                "sku": "W-2002",
+                "name": "Gala Apples 1.36 kg",
+                "size": "1.36 kg",
+                "sizeAmount": 1.36,
+                "sizeUnit": "kg",
+                "packCount": 1,
+                "pricedByWeight": false,
+                "category": "fruits",
+                "priceCents": 547,
+                "regularPriceCents": 597,
+                "discountCents": 50,
+                "discountPercent": 8,
+                "salePriceCents": 547,
+                "unitPriceCents": 40,
+                "unitLabel": "100g",
+                "comparableUnitPrice": {
+                  "per": "100g",
+                  "cents": 40.22
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z"
+              },
+              "lineCents": 547
+            }
+          ],
+          "missingIndexes": []
+        },
+        {
+          "chainSlug": "save-on-foods",
+          "chainName": "Save-On-Foods",
+          "totalCents": 1926,
+          "picks": [
+            {
+              "index": 0,
+              "row": {
+                "id": "save-on-foods:SOF-1008",
+                "chainSlug": "save-on-foods",
+                "chainName": "Save-On-Foods",
+                "parentCompany": "Pattison Food Group",
+                "sku": "SOF-1008",
+                "name": "2% Milk 4 L",
+                "size": "4 L",
+                "sizeAmount": 4,
+                "sizeUnit": "l",
+                "packCount": 1,
+                "pricedByWeight": false,
+                "category": "dairy-eggs",
+                "priceCents": 629,
+                "regularPriceCents": 629,
+                "memberPriceCents": 599,
+                "unitPriceCents": 16,
+                "unitLabel": "100ml",
+                "comparableUnitPrice": {
+                  "per": "100ml",
+                  "cents": 15.73
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z"
+              },
+              "lineCents": 1258
+            },
+            {
+              "index": 1,
+              "row": {
+                "id": "save-on-foods:SOF-1001",
+                "chainSlug": "save-on-foods",
+                "chainName": "Save-On-Foods",
+                "parentCompany": "Pattison Food Group",
+                "sku": "SOF-1001",
+                "name": "Bananas",
+                "size": "per kg",
+                "sizeAmount": 1,
+                "sizeUnit": "kg",
+                "packCount": 1,
+                "pricedByWeight": true,
+                "category": "fruits",
+                "priceCents": 169,
+                "regularPriceCents": 169,
+                "memberPriceCents": 149,
+                "unitPriceCents": 169,
+                "unitLabel": "kg",
+                "comparableUnitPrice": {
+                  "per": "100g",
+                  "cents": 16.9
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z"
+              },
+              "lineCents": 169
+            },
+            {
+              "index": 2,
+              "row": {
+                "id": "save-on-foods:SOF-1009",
+                "chainSlug": "save-on-foods",
+                "chainName": "Save-On-Foods",
+                "parentCompany": "Pattison Food Group",
+                "sku": "SOF-1009",
+                "name": "Large Eggs 12 ct",
+                "size": "12 ct",
+                "sizeAmount": 12,
+                "sizeUnit": "ct",
+                "packCount": 1,
+                "pricedByWeight": false,
+                "category": "dairy-eggs",
+                "priceCents": 499,
+                "regularPriceCents": 499,
+                "memberPriceCents": 449,
+                "comparableUnitPrice": {
+                  "per": "each",
+                  "cents": 41.58
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z"
+              },
+              "lineCents": 499
+            }
+          ],
+          "missingIndexes": [
+            3
+          ]
+        },
+        {
+          "chainSlug": "costco",
+          "chainName": "Costco",
+          "totalCents": 3596,
+          "picks": [
+            {
+              "index": 0,
+              "row": {
+                "id": "costco:C-3008",
+                "chainSlug": "costco",
+                "chainName": "Costco",
+                "parentCompany": "Costco Wholesale",
+                "sku": "C-3008",
+                "name": "2% Milk",
+                "size": "2 x 4 L",
+                "sizeAmount": 4,
+                "sizeUnit": "l",
+                "packCount": 2,
+                "pricedByWeight": false,
+                "category": "dairy-eggs",
+                "priceCents": 1199,
+                "regularPriceCents": 1199,
+                "unitPriceCents": 15,
+                "unitLabel": "100ml",
+                "comparableUnitPrice": {
+                  "per": "100ml",
+                  "cents": 14.99
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z"
+              },
+              "lineCents": 2398
+            },
+            {
+              "index": 1,
+              "row": {
+                "id": "costco:C-3001",
+                "chainSlug": "costco",
+                "chainName": "Costco",
+                "parentCompany": "Costco Wholesale",
+                "sku": "C-3001",
+                "name": "Bananas",
+                "size": "2 kg",
+                "sizeAmount": 2,
+                "sizeUnit": "kg",
+                "packCount": 1,
+                "pricedByWeight": false,
+                "category": "fruits",
+                "priceCents": 299,
+                "regularPriceCents": 299,
+                "unitPriceCents": 15,
+                "unitLabel": "100g",
+                "comparableUnitPrice": {
+                  "per": "100g",
+                  "cents": 14.95
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z"
+              },
+              "lineCents": 299
+            },
+            {
+              "index": 2,
+              "row": {
+                "id": "costco:C-3009",
+                "chainSlug": "costco",
+                "chainName": "Costco",
+                "parentCompany": "Costco Wholesale",
+                "sku": "C-3009",
+                "name": "Large Eggs",
+                "size": "24 ct",
+                "sizeAmount": 24,
+                "sizeUnit": "ct",
+                "packCount": 1,
+                "pricedByWeight": false,
+                "category": "dairy-eggs",
+                "priceCents": 899,
+                "regularPriceCents": 899,
+                "comparableUnitPrice": {
+                  "per": "each",
+                  "cents": 37.46
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z"
+              },
+              "lineCents": 899
+            }
+          ],
+          "missingIndexes": [
+            3
+          ]
+        }
+      ],
+      "cheapestMix": {
+        "totalCents": 2257,
+        "picks": [
+          {
+            "index": 0,
+            "row": {
+              "id": "walmart:W-2008",
+              "chainSlug": "walmart",
+              "chainName": "Walmart",
+              "parentCompany": "Walmart",
+              "sku": "W-2008",
+              "name": "2% Milk 4 L",
+              "size": "4 L",
+              "sizeAmount": 4,
+              "sizeUnit": "l",
+              "packCount": 1,
+              "pricedByWeight": false,
+              "category": "dairy-eggs",
+              "priceCents": 597,
+              "regularPriceCents": 597,
+              "unitPriceCents": 15,
+              "unitLabel": "100ml",
+              "comparableUnitPrice": {
+                "per": "100ml",
+                "cents": 14.93
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z"
+            },
+            "lineCents": 1194
+          },
+          {
+            "index": 1,
+            "row": {
+              "id": "walmart:W-2001",
+              "chainSlug": "walmart",
+              "chainName": "Walmart",
+              "parentCompany": "Walmart",
+              "sku": "W-2001",
+              "name": "Bananas",
+              "size": "per lb",
+              "sizeAmount": 1,
+              "sizeUnit": "lb",
+              "packCount": 1,
+              "pricedByWeight": true,
+              "category": "fruits",
+              "priceCents": 69,
+              "regularPriceCents": 69,
+              "unitPriceCents": 152,
+              "unitLabel": "kg",
+              "comparableUnitPrice": {
+                "per": "100g",
+                "cents": 15.21
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z"
+            },
+            "lineCents": 69
+          },
+          {
+            "index": 2,
+            "row": {
+              "id": "walmart:W-2009",
+              "chainSlug": "walmart",
+              "chainName": "Walmart",
+              "parentCompany": "Walmart",
+              "sku": "W-2009",
+              "name": "Large Eggs 12 ct",
+              "size": "12 ct",
+              "sizeAmount": 12,
+              "sizeUnit": "ct",
+              "packCount": 1,
+              "pricedByWeight": false,
+              "category": "dairy-eggs",
+              "priceCents": 447,
+              "regularPriceCents": 447,
+              "comparableUnitPrice": {
+                "per": "each",
+                "cents": 37.25
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z"
+            },
+            "lineCents": 447
+          },
+          {
+            "index": 3,
+            "row": {
+              "id": "walmart:W-2002",
+              "chainSlug": "walmart",
+              "chainName": "Walmart",
+              "parentCompany": "Walmart",
+              "sku": "W-2002",
+              "name": "Gala Apples 1.36 kg",
+              "size": "1.36 kg",
+              "sizeAmount": 1.36,
+              "sizeUnit": "kg",
+              "packCount": 1,
+              "pricedByWeight": false,
+              "category": "fruits",
+              "priceCents": 547,
+              "regularPriceCents": 597,
+              "discountCents": 50,
+              "discountPercent": 8,
+              "salePriceCents": 547,
+              "unitPriceCents": 40,
+              "unitLabel": "100g",
+              "comparableUnitPrice": {
+                "per": "100g",
+                "cents": 40.22
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z"
+            },
+            "lineCents": 547
+          }
+        ],
+        "missingIndexes": []
+      }
+    }
+  }
+}
