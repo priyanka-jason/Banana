@@ -13,6 +13,7 @@
     "ingest": "tsx src/scripts/ingest.ts",
     "examples": "tsx src/scripts/generateExamples.ts",
     "simulate": "tsx src/scripts/generateSimulated.ts",
+    "seed-sql": "tsx src/scripts/seedSql.ts",
     "api": "tsx src/server/main.ts"
   },
   "devDependencies": {
