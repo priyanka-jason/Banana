@@ -1,20 +1,44 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Header, MobileNav } from './components/Header'
+import { OfferDialog } from './components/OfferDialog'
+import { HomePage } from './features/HomePage'
+import { SearchPage } from './features/SearchPage'
+import { readFilters } from './lib/catalogue'
+import { useRoute } from './lib/navigation'
+import type { NearbyOffer } from './types'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const { page, params } = useRoute()
+  const filters = readFilters(params)
+  const [selected, setSelected] = useState<NearbyOffer | null>(null)
+  useEffect(() => {
+    document.title = `${page === 'home' ? 'Nearby grocery deals' : 'Search groceries'} | Banana`
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [page])
   return (
-    <main>
-      <h1>Banana frontend</h1>
-      <p>The local React + TypeScript starter is ready.</p>
-      <button type="button" onClick={() => setCount((value) => value + 1)}>
-        Count is {count}
-      </button>
-      <p className="hint">
-        Edit <code>src/App.tsx</code> to start building.
-      </p>
-    </main>
+    <>
+      <a
+        className="skip-link"
+        href="#main-content"
+        onClick={(event) => {
+          event.preventDefault()
+          document.getElementById('main-content')?.focus()
+        }}
+      >
+        Skip to content
+      </a>
+      <Header page={page} params={params} area={filters.area} />
+      {page === 'home' ? (
+        <HomePage filters={filters} params={params} onOpen={setSelected} />
+      ) : (
+        <SearchPage filters={filters} params={params} onOpen={setSelected} />
+      )}
+      <MobileNav page={page} params={params} />
+      {selected ? (
+        <OfferDialog offer={selected} onClose={() => setSelected(null)} />
+      ) : null}
+    </>
   )
 }
 
