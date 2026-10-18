@@ -83,6 +83,15 @@ Prices are stored in whole cents. Every item also gets a **comparable unit price
 
 **Quickest way:** open the live site, https://banana-8qk.pages.dev. Nothing to install.
 
+### 📲 Install it on your phone
+
+Banana works as an app on your home screen, with no app store needed.
+
+- **iPhone (Safari):** open https://banana-8qk.pages.dev, tap the **Share** button (the square with an arrow), then **Add to Home Screen**, then **Add**.
+- **Android (Chrome):** open https://banana-8qk.pages.dev, tap the **⋮** menu (top right), then **Add to Home screen** or **Install app**, then **Install**.
+
+Banana then opens from its own icon, without the browser bar, like any other app.
+
 To run it on your own computer, you need **Node.js 24** and **npm**.
 
 ### Backend: data pipeline, search and local API (no keys needed)
