@@ -9,6 +9,10 @@ export interface CatalogueState {
   loading: boolean
   retry: () => void
   connected: boolean
+  /** True when the network failed and the last saved catalogue is shown instead. */
+  offline: boolean
+  /** When the shown catalogue was saved (ISO time), if it is a saved copy. */
+  savedAt: string
 }
 export const CatalogueContext = createContext<CatalogueState | null>(null)
 export function useCatalogue() {

@@ -143,3 +143,28 @@ The request and chosen basket are saved only in this browser, not synced to acco
 See [the backend comparison handoff](docs/basket-comparison-handoff.md) for the proposed
 canonical identities and server comparison RPC. No database migration is executed by the
 frontend, and there is no local mock-price fallback.
+
+## Phone app (installable web app)
+
+Banana can be installed to a phone's home screen. It then opens full screen,
+with its own icon, and still opens with no signal.
+
+- Android (Chrome): an "Install app" button appears on phones, or use the
+  browser menu → Install app.
+- iPhone (Safari): Share → Add to Home Screen. A tip explains this on iPhones.
+- `public/sw.js` (the service worker, a background script) saves the site's own
+  files so it opens offline. It never stores Supabase, Stripe or other sites'
+  responses. Pages always try the network first, so a new deploy shows on the
+  next visit. It only runs in the built site (`npm run build`, then
+  `npm run preview`), not in `npm run dev`.
+- The last price catalogue that loaded is saved in the browser
+  (`src/lib/offlineCatalogue.ts`). With no connection, the site shows it with a
+  banner giving the time it was saved.
+- Offline, signing in and saved lists don't work. Browsing saved prices and My
+  list do.
+
+Search and the Home page's nearby discounts come from the database function
+`banana.search_offers`, so the website and any future phone app return the same
+results in the same order (`src/lib/searchRequest.ts`, `src/data/offerSearch.ts`).
+With no connection they fall back to searching the saved catalogue in the
+browser. The basket comparison still runs in the browser for now.

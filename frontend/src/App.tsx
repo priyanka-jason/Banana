@@ -15,6 +15,7 @@ import { loadSavedOrigin, saveOrigin } from './lib/locations'
 import { useRoute } from './lib/navigation'
 import type { NearbyOffer } from './types'
 import { BackendReadiness } from './components/BackendReadiness'
+import { InstallHint, OfflineBanner } from './components/AppStatus'
 import { ListLauncher } from './components/ShoppingList'
 import './App.css'
 import { useCatalogue } from './data/catalogueState'
@@ -80,6 +81,8 @@ function App() {
         Skip to content
       </a>
       <Header page={page} params={params} />
+      <OfflineBanner />
+      <InstallHint />
       <BackendReadiness />
       {page === 'plans' ? (
         <MembershipPage />

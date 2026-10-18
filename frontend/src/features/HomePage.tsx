@@ -4,8 +4,7 @@ import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/csr/MagnifyingGl
 import { Freshness, SearchForm } from '../components/SearchForm'
 import { RadiusSelect } from '../components/FilterControls'
 import { OfferCard } from '../components/Offer'
-import { isDiscounted, saving } from '../lib/catalogue'
-import { useCatalogue, catalogueOffers } from '../data/catalogueState'
+import { useOfferSearch } from '../data/offerSearch'
 import { pageHref, updateRoute } from '../lib/navigation'
 import type { Filters, NearbyOffer } from '../types'
 import type { SearchOrigin } from '../data/storeLocations'
@@ -22,11 +21,19 @@ export function HomePage({
   origin?: SearchOrigin | null
 }) {
   const [query, setQuery] = useState('')
-  const { data } = useCatalogue()
-  const nearby = catalogueOffers(data!, filters, origin)
-    .filter((offer) => isDiscounted(offer) && offer.distance <= filters.radius)
-    .sort((a, b) => saving(b) - saving(a))
-    .slice(0, 4)
+  const deals = useOfferSearch({
+    filters: {
+      ...filters,
+      query: '',
+      category: 'all',
+      store: 'all',
+      discountsOnly: true,
+      sort: 'discount',
+    },
+    origin,
+    pageSize: 4,
+  })
+  const nearby = deals.items
   const browseParams = new URLSearchParams({
     area: filters.area,
     radius: String(filters.radius),
@@ -82,6 +89,8 @@ export function HomePage({
               <OfferCard key={offer.id} offer={offer} onOpen={onOpen} />
             ))}
           </div>
+        ) : deals.loading ? (
+          <p role="status">Finding nearby discounts…</p>
         ) : (
           <div className="empty-state">
             <MagnifyingGlassIcon size={36} aria-hidden="true" />

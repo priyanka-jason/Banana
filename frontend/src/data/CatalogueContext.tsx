@@ -1,15 +1,18 @@
 import { CatalogueContext } from './catalogueState'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { loadCatalogue, type Catalogue } from '../api/supabaseCatalogue'
+import { catalogueKey, catalogueUrl } from '../lib/supabaseClient'
+import { loadSavedCatalogue, saveCatalogue } from '../lib/offlineCatalogue'
 
 export function CatalogueProvider({ children }: { children: React.ReactNode }) {
-  const url = import.meta.env.VITE_SUPABASE_URL ?? ''
-  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? ''
+  const url = catalogueUrl
+  const key = catalogueKey
   const [revision, setRevision] = useState(0)
   const [result, setResult] = useState<{
     revision: number
     data: Catalogue | null
     error: string
+    savedAt: string
   } | null>(null)
   useEffect(() => {
     const controller = new AbortController()
@@ -29,17 +32,31 @@ export function CatalogueProvider({ children }: { children: React.ReactNode }) {
         return loadCatalogue(url, key, controller.signal)
       })
       .then((data) => {
-        if (!controller.signal.aborted) setResult({ revision, data, error: '' })
+        if (controller.signal.aborted) return
+        setResult({ revision, data, error: '', savedAt: '' })
+        void saveCatalogue(data)
       })
-      .catch((error) => {
+      .catch(async (error) => {
         if (
           controller.signal.aborted &&
           controller.signal.reason?.name === 'AbortError'
         )
           return
+        // No connection (or Supabase down): show the last saved prices, labelled.
+        const saved = await loadSavedCatalogue()
+        if (saved) {
+          setResult({
+            revision,
+            data: saved.catalogue,
+            error: '',
+            savedAt: saved.savedAt,
+          })
+          return
+        }
         setResult({
           revision,
           data: null,
+          savedAt: '',
           error:
             error instanceof Error
               ? error.message
@@ -52,6 +69,7 @@ export function CatalogueProvider({ children }: { children: React.ReactNode }) {
       controller.abort()
     }
   }, [url, key, revision])
+  const retry = useCallback(() => setRevision((value) => value + 1), [])
   const current = result?.revision === revision ? result : null
   return (
     <CatalogueContext.Provider
@@ -59,8 +77,10 @@ export function CatalogueProvider({ children }: { children: React.ReactNode }) {
         data: current?.data ?? null,
         error: current?.error ?? '',
         loading: !current,
-        retry: () => setRevision((value) => value + 1),
+        retry,
         connected: true,
+        offline: Boolean(current?.savedAt),
+        savedAt: current?.savedAt ?? '',
       }}
     >
       {children}

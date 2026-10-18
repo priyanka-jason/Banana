@@ -1,0 +1,32 @@
+.app-status {
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+  line-height: 1.4;
+}
+.app-status p {
+  margin: 0;
+}
+.offline-banner {
+  background: #fff4d1;
+  color: var(--ink);
+}
+.offline-banner p {
+  padding-block: 10px;
+}
+.install-hint {
+  background: var(--warm);
+}
+.install-hint .shell {
+  display: flex;
+  align-items: center;
+  gap: 12px 16px;
+  flex-wrap: wrap;
+  padding-block: 10px;
+}
+.install-hint p {
+  flex: 1 1 220px;
+}
+.install-hint .flyer-button {
+  min-height: 40px;
+  padding-block: 8px;
+}
