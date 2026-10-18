@@ -1,5 +1,5 @@
 {
-  "description": "Bananas at stores within 12 km of the shopper, nearest first. The location is in the POST body, never in the URL. Each row has distanceKm, the distance to that chain's nearest store.",
+  "description": "Bananas at stores within 10 km of the shopper (the most allowed), nearest first. The location is in the POST body, never in the URL. Each row has distanceKm, the distance to that chain's nearest store.",
   "request": {
     "method": "POST",
     "path": "/api/prices/search",
@@ -8,7 +8,7 @@
       "near": {
         "lat": 49.28,
         "lng": -123.12,
-        "radiusKm": 12
+        "radiusKm": 10
       },
       "sortBy": "distance"
     }
@@ -65,33 +65,9 @@
           },
           "scrapedAt": "2026-10-17T20:00:00.000Z",
           "distanceKm": 8
-        },
-        {
-          "id": "walmart:W-2001",
-          "chainSlug": "walmart",
-          "chainName": "Walmart",
-          "parentCompany": "Walmart",
-          "sku": "W-2001",
-          "name": "Bananas",
-          "size": "per lb",
-          "sizeAmount": 1,
-          "sizeUnit": "lb",
-          "packCount": 1,
-          "pricedByWeight": true,
-          "category": "fruits",
-          "priceCents": 69,
-          "regularPriceCents": 69,
-          "unitPriceCents": 152,
-          "unitLabel": "kg",
-          "comparableUnitPrice": {
-            "per": "100g",
-            "cents": 15.21
-          },
-          "scrapedAt": "2026-10-17T20:00:00.000Z",
-          "distanceKm": 10
         }
       ],
-      "total": 3,
+      "total": 2,
       "limit": 50,
       "offset": 0
     }

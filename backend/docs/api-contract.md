@@ -77,7 +77,7 @@ Every field is optional. An empty body searches everything. Unknown fields are *
 | `parentCompanies` | list of text, up to 50 | Only chains owned by these companies, ignoring case. |
 | `categories` | list of category slugs | Only these shared categories. Slugs come from `/api/categories`. |
 | `locationIds` | list of text, up to 50 | Stores picked on a map (ids from `/api/stores`). A chain's prices show if one of its stores is picked. |
-| `near` | `{ lat, lng, radiusKm }` | Only chains with a store within `radiusKm` (more than 0, up to 200). Rows get `distanceKm`. See the location rules above. |
+| `near` | `{ lat, lng, radiusKm }` | Only chains with a store within `radiusKm` (more than 0, up to 10 km). Rows get `distanceKm`. See the location rules above. |
 | `onSaleOnly` | true or false | Only items where the price you pay is below the original price. Depends on `memberPricing`. |
 | `memberPricing` | `"member"` or `"non-member"` | Which price to work with. Default `"non-member"`. A member also gets the member price. |
 | `sortBy` | see below | Default `"price"`. |
@@ -204,7 +204,7 @@ The shopper picks one of three, and can also narrow any of them to some chains:
 the search body, `nearbyStoresBody(...)` the body for `/api/stores/nearby`, and `STORE_RADIUS_SLIDER_KM` the distance
 slider (`{ min: 1, max: 10, step: 1, default: 5 }`). Both builders pass the radius through `clampRadiusKm()`, which
 snaps it to a whole km from 1 to 10, and round the location to 2 decimals. It only imports types, so the website can import
-or copy it. The API itself accepts any radius above 0 and up to 200 km.
+or copy it. The API accepts any radius above 0 and up to 10 km, and rejects anything further with a `400`.
 
 All the filters apply together. Picked stores from a chain that is not chosen find nothing, so offer stores from the
 chosen chains only. Prices are currently the same at every store of a chain, so a row stands for the chain;

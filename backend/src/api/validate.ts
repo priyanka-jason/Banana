@@ -23,7 +23,8 @@ export const MAX_QUERY_LENGTH = 100;
 export const MAX_LIST_ENTRIES = 50;
 export const MAX_LOOKUP_IDS = 100;
 export const MAX_ID_LENGTH = 200;
-export const MAX_RADIUS_KM = 200;
+/** The furthest a shopper can search for stores, in km. Matches the website's 1 to 10 km slider. */
+export const MAX_RADIUS_KM = 10;
 
 const SEARCH_FIELDS = [
   'query',

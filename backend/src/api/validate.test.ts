@@ -111,7 +111,10 @@ describe('parseSearchBody', () => {
   describe('near', () => {
     it('accepts a good location', () => {
       expect(parseSearchBody({ near: { lat: 0, lng: 0, radiusKm: 0.5 } }).ok).toBe(true);
-      expect(parseSearchBody({ near: { lat: -90, lng: 180, radiusKm: 200 } }).ok).toBe(true);
+      expect(parseSearchBody({ near: { lat: -90, lng: 180, radiusKm: 10 } }).ok).toBe(true);
+      expect(problems(parseSearchBody({ near: { lat: 49, lng: -123, radiusKm: 10.5 } }))).toEqual([
+        'near.radiusKm: must be more than 0 and at most 10',
+      ]);
     });
 
     it('rejects something that is not an object', () => {
@@ -149,7 +152,7 @@ describe('parseSearchBody', () => {
       ]);
       for (const radiusKm of [0, -1, 201]) {
         expect(problems(parseSearchBody({ near: { lat: 49, lng: -123, radiusKm } })), String(radiusKm)).toEqual([
-          'near.radiusKm: must be more than 0 and at most 200',
+          'near.radiusKm: must be more than 0 and at most 10',
         ]);
       }
     });
@@ -273,7 +276,7 @@ describe('parseNearbyBody', () => {
 
   it('rejects a place off Earth, a bad radius, extra fields and a non-object', () => {
     expect(problems(parseNearbyBody({ lat: 200, lng: -123, radiusKm: 5 }))).toEqual(['lat: must be at least -90 and at most 90']);
-    expect(problems(parseNearbyBody({ lat: 49, lng: -123, radiusKm: 0 }))).toEqual(['radiusKm: must be more than 0 and at most 200']);
+    expect(problems(parseNearbyBody({ lat: 49, lng: -123, radiusKm: 0 }))).toEqual(['radiusKm: must be more than 0 and at most 10']);
     expect(problems(parseNearbyBody({ lat: 49, lng: -123, radiusKm: 5, extra: 1 }))).toHaveLength(1);
     expect(problems(parseNearbyBody('here'))).toEqual(['(body): must be a JSON object']);
   });

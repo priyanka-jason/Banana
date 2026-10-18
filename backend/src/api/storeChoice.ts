@@ -17,8 +17,8 @@ import type { PriceFilters } from '../types';
 
 /**
  * The "stores near me" distance slider, in km: <input type="range" min max step value>.
- * The API itself accepts any distance above 0 and up to 200, so this range can change
- * without a backend change.
+ * The API accepts any distance above 0 and up to 10 km (MAX_RADIUS_KM in validate.ts),
+ * so a wider slider needs that raised too.
  */
 export const STORE_RADIUS_SLIDER_KM = { min: 1, max: 10, step: 1, default: 5 } as const;
 

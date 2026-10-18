@@ -92,8 +92,8 @@ export async function buildExamples(): Promise<Record<string, ExampleFile>> {
   );
   await search(
     'search-near-me.json',
-    'Bananas at stores within 12 km of the shopper, nearest first. The location is in the POST body, never in the URL. Each row has distanceKm, the distance to that chain\'s nearest store.',
-    { query: 'banana', near: { ...SHOPPER, radiusKm: 12 }, sortBy: 'distance' },
+    'Bananas at stores within 10 km of the shopper (the most allowed), nearest first. The location is in the POST body, never in the URL. Each row has distanceKm, the distance to that chain\'s nearest store.',
+    { query: 'banana', near: { ...SHOPPER, radiusKm: 10 }, sortBy: 'distance' },
   );
   await search(
     'search-within-5km.json',

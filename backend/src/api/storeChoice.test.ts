@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import type { MemoryPriceRepository } from '../db/memoryReader';
 import { loadSimulated } from '../simulated/exportData';
-import { handleNearbyStores, handleSearch } from './handlers';
+import { handleNearbyStores, handleSearch, handleShoppingList } from './handlers';
 import {
   STORE_RADIUS_SLIDER_KM,
   clampRadiusKm,
@@ -133,6 +133,19 @@ describe('store choices through the handlers, on the simulated chains', () => {
     const rows = (await search(storeSelectionFilters({ where: { kind: 'any' }, chainSlugs: ['costco'] }))).rows;
     expect(rows.length).toBeGreaterThan(0);
     expect(chainsOf(rows)).toEqual(['costco']);
+  });
+
+  it('refuses any distance over 10 km on every endpoint', async () => {
+    const near = { lat: 49.2, lng: -122.91, radiusKm: 15 };
+    const results = await Promise.all([
+      handleSearch(repo, { near }),
+      handleShoppingList(repo, { items: [{ query: 'milk' }], near }),
+      handleNearbyStores(repo, near),
+    ]);
+    for (const result of results) {
+      expect(result.status).toBe(400);
+      expect(JSON.stringify(result.body)).toContain('at most 10');
+    }
   });
 
   it('rejects bad chain lists in the nearby body, and never repeats the location', async () => {
