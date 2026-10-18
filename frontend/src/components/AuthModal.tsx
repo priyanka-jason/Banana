@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { XIcon } from '@phosphor-icons/react/dist/csr/X'
 import { WarningIcon } from '@phosphor-icons/react/dist/csr/Warning'
 import { CheckCircleIcon } from '@phosphor-icons/react/dist/csr/CheckCircle'
-import { useAuth } from '../data/AuthContext'
+import { useAuth } from '../data/authState'
 import './AuthModal.css'
 
 export function AuthModal() {
@@ -62,7 +62,11 @@ export function AuthModal() {
         closeAuthModal()
       }
     } else {
-      const { error } = await signUpWithEmail(email.trim(), password, name.trim())
+      const { error } = await signUpWithEmail(
+        email.trim(),
+        password,
+        name.trim(),
+      )
       setLoading(false)
       if (error) {
         setErrorMsg(error)
@@ -81,10 +85,7 @@ export function AuthModal() {
       aria-modal="true"
       aria-labelledby="auth-modal-title"
     >
-      <div
-        className="auth-modal-content"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
         <button
           className="modal-close-btn"
           onClick={closeAuthModal}

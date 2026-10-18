@@ -16,7 +16,7 @@ import { BackendReadiness } from './components/BackendReadiness'
 import { ListLauncher } from './components/ShoppingList'
 import './App.css'
 import { useCatalogue } from './data/catalogueState'
-import { useAuth } from './data/AuthContext'
+import { useAuth } from './data/authState'
 
 function App() {
   const { page, params } = useRoute()
@@ -30,25 +30,36 @@ function App() {
     categories: catalogue.data?.offers.map((offer) => offer.category) ?? [],
   })
   const [selected, setSelected] = useState<NearbyOffer | null>(null)
-  const [origin, setOriginState] = useState<SearchOrigin | null>(
-    loadSavedOrigin,
-  )
-
+  const [savedOrigin] = useState(loadSavedOrigin)
+  const accountLocationKey = JSON.stringify([
+    account?.id,
+    account?.use_location,
+    account?.latitude,
+    account?.longitude,
+    account?.location_label,
+  ])
+  const [originOverride, setOriginOverride] = useState<{
+    key: string
+    value: SearchOrigin | null
+  } | null>(null)
+  const accountOrigin: SearchOrigin | null =
+    account?.use_location &&
+    Number.isFinite(account.latitude) &&
+    Number.isFinite(account.longitude)
+      ? {
+          label: account.location_label || 'Your saved location',
+          latitude: account.latitude!,
+          longitude: account.longitude!,
+        }
+      : null
+  const origin =
+    originOverride?.key === accountLocationKey
+      ? originOverride.value
+      : (accountOrigin ?? savedOrigin)
   const setOrigin = (nextOrigin: SearchOrigin | null) => {
-    setOriginState(nextOrigin)
+    setOriginOverride({ key: accountLocationKey, value: nextOrigin })
     saveOrigin(nextOrigin)
   }
-
-  // Load saved location from account if present
-  useEffect(() => {
-    if (account?.use_location && account.latitude && account.longitude) {
-      setOriginState({
-        label: account.location_label || 'Your saved location',
-        latitude: account.latitude,
-        longitude: account.longitude,
-      })
-    }
-  }, [account?.use_location, account?.latitude, account?.longitude, account?.location_label])
 
   useEffect(() => {
     document.title = `${page === 'home' ? 'Nearby grocery deals' : page === 'locations' ? 'Grocery store locations' : 'Search groceries'} | Banana`

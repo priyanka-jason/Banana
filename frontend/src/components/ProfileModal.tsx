@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { XIcon } from '@phosphor-icons/react/dist/csr/X'
 import { MapPinIcon } from '@phosphor-icons/react/dist/csr/MapPin'
 import { CheckCircleIcon } from '@phosphor-icons/react/dist/csr/CheckCircle'
 import { NavigationArrowIcon } from '@phosphor-icons/react/dist/csr/NavigationArrow'
 import { TrashIcon } from '@phosphor-icons/react/dist/csr/Trash'
-import { useAuth } from '../data/AuthContext'
+import { useAuth } from '../data/authState'
 import './AccountModals.css'
 
 export function ProfileModal() {
@@ -17,17 +17,14 @@ export function ProfileModal() {
     clearSavedLocation,
   } = useAuth()
 
-  const [name, setName] = useState('')
+  const sourceName = account?.name || user?.email?.split('@')[0] || ''
+  const [draft, setDraft] = useState<{ source: string; value: string } | null>(
+    null,
+  )
+  const name = draft?.source === sourceName ? draft.value : sourceName
+  const setName = (value: string) => setDraft({ source: sourceName, value })
   const [saving, setSaving] = useState(false)
   const [feedback, setFeedback] = useState('')
-
-  useEffect(() => {
-    if (account?.name) {
-      setName(account.name)
-    } else if (user?.email) {
-      setName(user.email.split('@')[0])
-    }
-  }, [account, user])
 
   if (!profileModalOpen || !user) return null
 
@@ -114,7 +111,10 @@ export function ProfileModal() {
               className="disabled-input"
             />
             <span className="form-field-hint">
-              Authenticated via {user.app_metadata?.provider === 'google' ? 'Google SSO' : 'Email'}
+              Authenticated via{' '}
+              {user.app_metadata?.provider === 'google'
+                ? 'Google SSO'
+                : 'Email'}
             </span>
           </div>
 
@@ -127,12 +127,15 @@ export function ProfileModal() {
             {account?.use_location && account.latitude && account.longitude ? (
               <div className="location-info-card">
                 <div className="location-card-content">
-                  <span className="location-card-badge">Location Sharing Active</span>
+                  <span className="location-card-badge">
+                    Location Sharing Active
+                  </span>
                   <p className="location-card-label">
                     {account.location_label || 'Your current location'}
                   </p>
                   <p className="location-card-coords">
-                    {account.latitude.toFixed(4)}° N, {account.longitude.toFixed(4)}° W
+                    {account.latitude.toFixed(4)}° N,{' '}
+                    {account.longitude.toFixed(4)}° W
                   </p>
                 </div>
                 <button
@@ -152,7 +155,9 @@ export function ProfileModal() {
                 <div>
                   <p className="location-empty-title">No location saved yet</p>
                   <p className="location-empty-desc">
-                    Go to the <strong>Locations</strong> tab and click "Use my location" to allow sharing and save your position to your account.
+                    Go to the <strong>Locations</strong> tab and click "Use my
+                    location" to allow sharing and save your position to your
+                    account.
                   </p>
                 </div>
               </div>

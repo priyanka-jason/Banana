@@ -25,7 +25,7 @@ import './LocationsPage.css'
 import { useCatalogue, catalogueBranches } from '../data/catalogueState'
 import { ProductImage, StoreLogo } from '../components/ProductImage'
 import { Freshness } from '../components/SearchForm'
-import { useAuth } from '../data/AuthContext'
+import { useAuth } from '../data/authState'
 
 const LocationsMap = lazy(() => import('../components/LocationsMap'))
 

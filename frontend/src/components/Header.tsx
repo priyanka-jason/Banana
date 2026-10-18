@@ -9,7 +9,7 @@ import { CardholderIcon } from '@phosphor-icons/react/dist/csr/Cardholder'
 import { SignOutIcon } from '@phosphor-icons/react/dist/csr/SignOut'
 import { pageHref } from '../lib/navigation'
 import type { Page } from '../types'
-import { useAuth } from '../data/AuthContext'
+import { useAuth } from '../data/authState'
 import './Header.css'
 
 interface Props {
@@ -49,7 +49,8 @@ export function Header({ page, params }: Props) {
     }
   }, [])
 
-  const displayName = account?.name || user?.email?.split('@')[0] || 'My Account'
+  const displayName =
+    account?.name || user?.email?.split('@')[0] || 'My Account'
 
   return (
     <header className="site-header">
@@ -164,7 +165,13 @@ export function Header({ page, params }: Props) {
   )
 }
 
-export function MobileNav({ page, params }: { page: Page; params: URLSearchParams }) {
+export function MobileNav({
+  page,
+  params,
+}: {
+  page: Page
+  params: URLSearchParams
+}) {
   const { user, openAuthModal, openProfileModal } = useAuth()
 
   return (

@@ -1,13 +1,17 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
 const supabaseUrl =
-  import.meta.env.VITE_SUPABASE_URL || 'https://wkqxnxjsvrnnpikibrfh.supabase.co'
+  import.meta.env.VITE_SUPABASE_URL ||
+  'https://wkqxnxjsvrnnpikibrfh.supabase.co'
 const supabaseAnonKey =
   import.meta.env.VITE_SUPABASE_ANON_KEY ||
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcXhueGpzdnJubnBpa2licmZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyNjc4MjksImV4cCI6MjEwNzg0MzgyOX0.HLI_rOYsA1JQChB06UcaBosoaQmLsnBKppoieyAwd3c'
 
-export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase: SupabaseClient = createClient(
+  supabaseUrl,
+  supabaseAnonKey,
+)
 
 export interface UserAccountRecord {
   id: string

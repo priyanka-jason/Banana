@@ -3,7 +3,7 @@ import { XIcon } from '@phosphor-icons/react/dist/csr/X'
 import { CheckCircleIcon } from '@phosphor-icons/react/dist/csr/CheckCircle'
 import { ShieldCheckIcon } from '@phosphor-icons/react/dist/csr/ShieldCheck'
 import { CardholderIcon } from '@phosphor-icons/react/dist/csr/Cardholder'
-import { useAuth } from '../data/AuthContext'
+import { useAuth } from '../data/authState'
 import './AccountModals.css'
 
 interface MembershipProgram {
@@ -20,32 +20,37 @@ const MEMBERSHIPS: MembershipProgram[] = [
     name: 'PC Optimum™',
     store: 'No Frills & Real Canadian Superstore',
     color: '#d32f2f',
-    description: 'Earn points and unlock member-only flyer discounts across Loblaws banner stores.',
+    description:
+      'Earn points and unlock member-only flyer discounts across Loblaws banner stores.',
   },
   {
     id: 'more-rewards',
     name: 'More Rewards®',
     store: 'Save-On-Foods',
     color: '#006837',
-    description: 'Special member price deals and points on every item at Save-On-Foods.',
+    description:
+      'Special member price deals and points on every item at Save-On-Foods.',
   },
   {
     id: 'walmart-rewards',
     name: 'Walmart Rewards',
     store: 'Walmart Canada',
     color: '#0071ce',
-    description: 'Earn digital rewards on Rollback offers and everyday low prices.',
+    description:
+      'Earn digital rewards on Rollback offers and everyday low prices.',
   },
 ]
 
 export function MembershipsModal() {
   const { user, membershipsModalOpen, closeMembershipsModal } = useAuth()
 
-  const [activePrograms, setActivePrograms] = useState<Record<string, boolean>>({
-    'pc-optimum': true,
-    'more-rewards': true,
-    'walmart-rewards': false,
-  })
+  const [activePrograms, setActivePrograms] = useState<Record<string, boolean>>(
+    {
+      'pc-optimum': true,
+      'more-rewards': true,
+      'walmart-rewards': false,
+    },
+  )
 
   const [feedback, setFeedback] = useState('')
 
@@ -86,7 +91,8 @@ export function MembershipsModal() {
             <h2 id="memberships-modal-title">My Memberships</h2>
           </div>
           <p className="account-modal-subtitle">
-            Link your store loyalty programs to unlock member prices and tailored local offer alerts.
+            Link your store loyalty programs to unlock member prices and
+            tailored local offer alerts.
           </p>
         </div>
 
@@ -103,7 +109,8 @@ export function MembershipsModal() {
             <span className="perk-badge">Banana Pro Account Active</span>
             <p className="perk-title">Free Member Benefits Included</p>
             <p className="perk-desc">
-              Your account grants access to real-time price comparisons and saved location search across all major Vancouver grocery stores.
+              Your account grants access to real-time price comparisons and
+              saved location search across all major Vancouver grocery stores.
             </p>
           </div>
         </div>
