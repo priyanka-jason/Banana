@@ -4,6 +4,7 @@ import { MemoryFinal, MemoryStoreData } from './db/memory';
 import { MemoryPriceRepository } from './db/memoryReader';
 import type { PriceRepository } from './db/repository';
 import type { StoreDataRepository } from './db/storeData';
+import { MemoryListRepository, type ListRepository } from './lists/lists';
 import { runIngest, type IngestResult } from './pipeline/runIngest';
 import { SIMULATED_CATEGORY_MAP, simulatedConnectors } from './simulated/generate';
 
@@ -25,6 +26,11 @@ export interface Backend {
   prices: PriceRepository;
   /** What the ingest run did, so a caller can report failures. */
   ingest: IngestResult;
+  /**
+   * Saved shopping lists. In memory for now, so they are lost when the server stops.
+   * SUPABASE GOES HERE too: banana.shopping_lists (backend/sql/accounts-setup.sql).
+   */
+  lists: ListRepository;
 }
 
 /**
@@ -54,5 +60,5 @@ export async function createBackend(options: BackendOptions = {}): Promise<Backe
     now: options.now,
   });
 
-  return { prices, ingest };
+  return { prices, ingest, lists: new MemoryListRepository({ now: options.now }) };
 }

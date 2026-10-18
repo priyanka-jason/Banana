@@ -39,7 +39,7 @@ export interface HandlerOptions {
   onError?: (error: unknown) => void;
 }
 
-function invalid(errors: ApiErrorDetail[]): ApiResult<never> {
+export function invalid(errors: ApiErrorDetail[]): ApiResult<never> {
   return {
     status: 400,
     body: {
@@ -57,7 +57,7 @@ const INTERNAL_ERROR: ApiErrorBody = {
 };
 
 /** Turns any unexpected failure into a plain 500 that doesn't leak details to the website. */
-async function guarded<T>(options: HandlerOptions, work: () => Promise<ApiResult<T>>): Promise<ApiResult<T>> {
+export async function guarded<T>(options: HandlerOptions, work: () => Promise<ApiResult<T>>): Promise<ApiResult<T>> {
   try {
     return await work();
   } catch (error) {

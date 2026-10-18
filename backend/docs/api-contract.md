@@ -262,6 +262,12 @@ Examples: [within 5 km](examples/search-within-5km.json),
 - When `packCount` is more than 1, say so ("2-pack") so nobody is surprised by a bigger bill.
 - Some items have no size, so `comparableUnitPrice` can be missing.
 
+## Accounts and saved lists
+
+Signing in with Google or Apple and the `/api/lists` endpoints (save, rename, delete and price a
+shopping list) are described in [`accounts.md`](accounts.md). They need a login token; nothing else
+in this contract does.
+
 ## Errors
 
 Every error has the same shape:
@@ -283,6 +289,8 @@ Every error has the same shape:
 | `404` | `not_found` | `GET /api/prices/{id}` for an id that doesn't exist, or a path that isn't an endpoint. |
 | `405` | `invalid_request` | The wrong method for an endpoint, like `GET /api/prices/search`. The `Allow` header says which one to use. |
 | `413` | `invalid_request` | The body is over 64 KB (field `(body)`). |
+| `401` | `unauthorized` | Only `/api/lists`: the login token is missing, expired or not valid. Sign in again. |
+| `503` | `unavailable` | Only `/api/lists`: accounts aren't switched on for this server. |
 | `500` | `internal_error` | Something broke on our side. The message is always the same plain text and never includes internal details. |
 
 Error messages never repeat a coordinate that was sent.

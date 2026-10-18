@@ -13,8 +13,18 @@ import {
   handleStores,
   type HandlerOptions,
 } from '../api/handlers';
+import {
+  handleCreateList,
+  handleDeleteList,
+  handleGetList,
+  handleListLists,
+  handlePriceSavedList,
+  handleReplaceList,
+} from '../api/lists';
 import type { ApiErrorBody, ApiErrorDetail } from '../api/types';
+import { bearerToken, type SignedInUser, type TokenVerifier } from '../auth/tokens';
 import type { PriceRepository } from '../db/repository';
+import type { ListRepository } from '../lists/lists';
 
 /**
  * A small local web server for docs/api-contract.md, built on node:http only, because the
@@ -22,7 +32,11 @@ import type { PriceRepository } from '../db/repository';
  * handlers in api/handlers.ts and sends back what they return.
  *
  * Privacy: a visitor's location only ever arrives in a POST body. This file never logs a
- * body, a query string or anything parsed from them. A log line is method, path, status, time.
+ * body, a query string, a header or anything parsed from them (so never a login token).
+ * A log line is method, path, status, time.
+ *
+ * Accounts: /api/lists needs "Authorization: Bearer <login token>" from Supabase Auth.
+ * Without `tokens` and `lists` those routes answer 503, and everything else still works.
  */
 
 /** Requests with a bigger body than this get a 413. 64 KB is far more than any real request needs. */
@@ -52,6 +66,10 @@ export const consoleLogger: ServerLogger = {
 
 export interface ServerOptions {
   prices: PriceRepository;
+  /** Saved lists. Leave out (with `tokens`) to run without accounts. */
+  lists?: ListRepository;
+  /** Checks login tokens. Leave out to run without accounts. */
+  tokens?: TokenVerifier;
   logger?: ServerLogger;
   maxBodyBytes?: number;
 }
@@ -65,12 +83,14 @@ interface JsonReply {
 /** Everything a route needs from the request, already pulled apart. */
 interface RouteContext {
   params: URLSearchParams;
-  /** The id from /api/prices/{id}, URL-decoded. */
+  /** The id from /api/prices/{id} or /api/lists/{id}, URL-decoded. */
   id: string;
+  /** The Authorization header, only ever handed to the token check. */
+  authorization: string | undefined;
   readJson: () => Promise<{ ok: true; value: unknown } | { ok: false; reply: JsonReply }>;
 }
 
-type Method = 'GET' | 'POST';
+type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 type Route = Partial<Record<Method, (ctx: RouteContext) => Promise<JsonReply>>>;
 
 function errorReply(status: number, code: ApiErrorBody['error']['code'], message: string, details?: ApiErrorDetail[]): JsonReply {
@@ -114,7 +134,11 @@ function isJsonContentType(header: string | undefined): boolean {
   return mediaType === 'application/json';
 }
 
-function routesFor(prices: PriceRepository, handlerOptions: HandlerOptions): Record<string, Route> {
+function routesFor(
+  prices: PriceRepository,
+  accounts: { lists: ListRepository; tokens: TokenVerifier } | undefined,
+  handlerOptions: HandlerOptions,
+): Record<string, Route> {
   /** POST routes: check the body, then pass the parsed JSON to the handler. */
   const withBody =
     (handler: (body: unknown) => Promise<JsonReply>) =>
@@ -122,6 +146,31 @@ function routesFor(prices: PriceRepository, handlerOptions: HandlerOptions): Rec
       const body = await ctx.readJson();
       return body.ok ? handler(body.value) : body.reply;
     };
+
+  /** List routes: only for a signed-in user, checked from the login token before anything else. */
+  const signedIn =
+    (handler: (user: SignedInUser, lists: ListRepository, ctx: RouteContext) => Promise<JsonReply>) =>
+    async (ctx: RouteContext): Promise<JsonReply> => {
+      if (accounts === undefined) {
+        return errorReply(503, 'unavailable', 'Accounts are not switched on for this server yet.');
+      }
+      const token = bearerToken(ctx.authorization);
+      const user = token === undefined ? undefined : await accounts.tokens.verify(token);
+      if (user === undefined) {
+        return {
+          ...errorReply(401, 'unauthorized', 'Please sign in again. The login token is missing, expired or not valid.'),
+          headers: { 'WWW-Authenticate': 'Bearer' },
+        };
+      }
+      return handler(user, accounts.lists, ctx);
+    };
+
+  /** A signed-in route that also reads a JSON body. */
+  const signedInWithBody = (handler: (user: SignedInUser, lists: ListRepository, ctx: RouteContext, body: unknown) => Promise<JsonReply>) =>
+    signedIn(async (user, lists, ctx) => {
+      const body = await ctx.readJson();
+      return body.ok ? handler(user, lists, ctx, body.value) : body.reply;
+    });
 
   return {
     '/api/prices/search': { POST: withBody((body) => handleSearch(prices, body, handlerOptions)) },
@@ -135,17 +184,37 @@ function routesFor(prices: PriceRepository, handlerOptions: HandlerOptions): Rec
     '/api/stores': { GET: (ctx) => handleStores(prices, { chain: paramValue(ctx.params, 'chain') }, handlerOptions) },
     '/api/stores/nearby': { POST: withBody((body) => handleNearbyStores(prices, body, handlerOptions)) },
     '/api/health': { GET: () => handleHealth() },
+    '/api/lists': {
+      GET: signedIn((user, lists) => handleListLists(lists, user, handlerOptions)),
+      POST: signedInWithBody((user, lists, _ctx, body) => handleCreateList(lists, user, body, handlerOptions)),
+    },
+    '/api/lists/{id}': {
+      GET: signedIn((user, lists, ctx) => handleGetList(lists, user, ctx.id, handlerOptions)),
+      PUT: signedInWithBody((user, lists, ctx, body) => handleReplaceList(lists, user, ctx.id, body, handlerOptions)),
+      DELETE: signedIn((user, lists, ctx) => handleDeleteList(lists, user, ctx.id, handlerOptions)),
+    },
+    '/api/lists/{id}/prices': {
+      POST: signedInWithBody((user, lists, ctx, body) => handlePriceSavedList(prices, lists, user, ctx.id, body, handlerOptions)),
+    },
   };
 }
 
 const ITEM_PREFIX = '/api/prices/';
+const LIST_PREFIX = '/api/lists/';
 
 /**
  * Which route a path belongs to. Fixed paths win, so /api/prices/search is never read as an
  * item id. An item id must be one path segment; a "/" inside an id is sent as %2F.
  */
 function matchRoute(routes: Record<string, Route>, pathname: string): { key: string; rawId: string } | undefined {
-  if (routes[pathname] !== undefined && pathname !== '/api/prices/{id}') return { key: pathname, rawId: '' };
+  if (routes[pathname] !== undefined && !pathname.includes('{')) return { key: pathname, rawId: '' };
+  if (pathname.startsWith(LIST_PREFIX)) {
+    const [rawId = '', action, ...rest] = pathname.slice(LIST_PREFIX.length).split('/');
+    if (rawId === '' || rest.length > 0) return undefined;
+    if (action === undefined) return { key: '/api/lists/{id}', rawId };
+    if (action === 'prices') return { key: '/api/lists/{id}/prices', rawId };
+    return undefined;
+  }
   if (pathname.startsWith(ITEM_PREFIX)) {
     const rawId = pathname.slice(ITEM_PREFIX.length);
     if (rawId !== '' && !rawId.includes('/')) return { key: '/api/prices/{id}', rawId };
@@ -169,7 +238,9 @@ function send(res: ServerResponse, reply: JsonReply): void {
 export function createApiServer(options: ServerOptions): Server {
   const logger = options.logger ?? consoleLogger;
   const maxBodyBytes = options.maxBodyBytes ?? MAX_BODY_BYTES;
-  const routes = routesFor(options.prices, { onError: (error) => logger.error(error) });
+  const accounts =
+    options.lists !== undefined && options.tokens !== undefined ? { lists: options.lists, tokens: options.tokens } : undefined;
+  const routes = routesFor(options.prices, accounts, { onError: (error) => logger.error(error) });
 
   async function respond(req: IncomingMessage, url: URL): Promise<JsonReply> {
     const match = matchRoute(routes, url.pathname);
@@ -192,6 +263,7 @@ export function createApiServer(options: ServerOptions): Server {
     return handler({
       params: url.searchParams,
       id,
+      authorization: req.headers.authorization,
       readJson: async () => {
         if (!isJsonContentType(req.headers['content-type'])) {
           return { ok: false, reply: bodyProblem(400, 'must be sent with Content-Type: application/json') };

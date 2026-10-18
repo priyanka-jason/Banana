@@ -1,4 +1,5 @@
 import type { ProductCategory } from '../categories';
+import type { SavedListSummary } from '../lists/lists';
 import type { Chain, NearbyStore, PriceRow, ShoppingListResult, StoreLocation } from '../types';
 
 /**
@@ -6,7 +7,11 @@ import type { Chain, NearbyStore, PriceRow, ShoppingListResult, StoreLocation } 
  * A web server just turns each HTTP request into one of these calls and sends the result.
  */
 
-export type ApiErrorCode = 'invalid_request' | 'not_found' | 'internal_error';
+/**
+ * unauthorized: no valid login token (only the /api/lists endpoints need one).
+ * unavailable: accounts aren't switched on for this server (no SUPABASE_URL).
+ */
+export type ApiErrorCode = 'invalid_request' | 'unauthorized' | 'not_found' | 'internal_error' | 'unavailable';
 
 /** One thing wrong with a request, pointing at the field. */
 export interface ApiErrorDetail {
@@ -25,7 +30,7 @@ export interface ApiErrorBody {
 }
 
 /** What a handler returns: an HTTP status and a JSON body. */
-export type ApiResult<T> = { status: 200; body: T } | { status: 400 | 404 | 500; body: ApiErrorBody };
+export type ApiResult<T> = { status: 200 | 201; body: T } | { status: 400 | 401 | 404 | 500 | 503; body: ApiErrorBody };
 
 export interface SearchResponseBody {
   rows: PriceRow[];
@@ -64,4 +69,12 @@ export interface NearbyStoresResponseBody {
 
 export interface HealthResponseBody {
   status: 'ok';
+}
+
+export interface ListsResponseBody {
+  lists: SavedListSummary[];
+}
+
+export interface DeletedResponseBody {
+  deleted: true;
 }
