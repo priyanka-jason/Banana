@@ -1,4 +1,10 @@
-import type { NearbyOffer } from '../types.ts'
+import {
+  enrichSpec,
+  productRequest,
+  requestKey,
+  samePackage,
+} from './basketIdentity.ts'
+import type { NearbyOffer, Offer, ProductSpec } from '../types.ts'
 
 export interface ListItem {
   offerId: string
@@ -8,14 +14,16 @@ export interface ListItem {
   storeName: string
   price: number
   quantity: number
+  spec?: ProductSpec
 }
 
 export const MAX_QUANTITY = 99
 export const STORAGE_KEY = 'banana.shoppingList.v1'
 
 export function addToList(list: ListItem[], offer: NearbyOffer): ListItem[] {
-  const existing = list.find((item) => item.offerId === offer.id)
-  if (existing) return setQuantity(list, offer.id, existing.quantity + 1)
+  const existing = list.find((item) => samePackage(item, productRequest(offer)))
+  if (existing)
+    return setQuantity(list, existing.offerId, existing.quantity + 1)
   return [
     ...list,
     {
@@ -26,6 +34,7 @@ export function addToList(list: ListItem[], offer: NearbyOffer): ListItem[] {
       storeName: offer.store.name,
       price: offer.price,
       quantity: 1,
+      ...(offer.spec ? { spec: offer.spec } : {}),
     },
   ]
 }
@@ -85,10 +94,32 @@ export function groupByStore(list: ListItem[]): StoreGroup[] {
     .sort((a, b) => a.storeName.localeCompare(b.storeName))
 }
 
+function isSpec(value: unknown): value is ProductSpec {
+  if (!value || typeof value !== 'object') return false
+  const spec = value as Record<string, unknown>
+  return (
+    typeof spec.sku === 'string' &&
+    ['comparisonGroupId', 'brand', 'upc', 'sizeKind'].every(
+      (key) => spec[key] === undefined || typeof spec[key] === 'string',
+    ) &&
+    (spec.totalBase === undefined ||
+      (typeof spec.totalBase === 'number' &&
+        Number.isFinite(spec.totalBase) &&
+        spec.totalBase > 0)) &&
+    (spec.packCount === undefined ||
+      (typeof spec.packCount === 'number' &&
+        Number.isInteger(spec.packCount) &&
+        spec.packCount > 0)) &&
+    (spec.pricedByWeight === undefined ||
+      typeof spec.pricedByWeight === 'boolean')
+  )
+}
+
 function isListItem(value: unknown): value is ListItem {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
   return (
+    (item.spec === undefined || isSpec(item.spec)) &&
     typeof item.offerId === 'string' &&
     typeof item.name === 'string' &&
     typeof item.pack === 'string' &&
@@ -96,6 +127,7 @@ function isListItem(value: unknown): value is ListItem {
     typeof item.storeName === 'string' &&
     typeof item.price === 'number' &&
     Number.isFinite(item.price) &&
+    item.price >= 0 &&
     typeof item.quantity === 'number' &&
     Number.isInteger(item.quantity) &&
     item.quantity >= 1 &&
@@ -123,4 +155,23 @@ export function saveList(
   } catch {
     // Private mode or a full disk: the list still works for this visit.
   }
+}
+
+// Migrate old browser lists with current Supabase metadata and merge cross-chain duplicates.
+// Source prices are retained only as historical selections; comparison uses current catalogue prices.
+export function reconcileList(list: ListItem[], offers: Offer[]): ListItem[] {
+  const result: ListItem[] = []
+  for (const item of list) {
+    const current = offers.find((offer) => offer.id === item.offerId)
+    const hydrated = current
+      ? { ...item, spec: enrichSpec(item.spec, current.spec) }
+      : item
+    const existing = result.find(
+      (line) => requestKey(line) === requestKey(hydrated),
+    )
+    if (existing && existing.quantity + hydrated.quantity <= MAX_QUANTITY)
+      existing.quantity += hydrated.quantity
+    else result.push({ ...hydrated })
+  }
+  return result
 }

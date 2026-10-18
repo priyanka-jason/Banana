@@ -11,6 +11,17 @@ export interface Store {
   website: string
 }
 
+export interface ProductSpec {
+  sku: string
+  comparisonGroupId?: string
+  brand?: string
+  upc?: string
+  packCount?: number
+  sizeKind?: string
+  totalBase?: number
+  pricedByWeight?: boolean
+}
+
 export interface Offer {
   id: string
   name: string
@@ -22,6 +33,7 @@ export interface Offer {
   unitPrice: string
   storeId: string
   distances: Record<AreaId, number>
+  spec?: ProductSpec
   featured?: boolean
   saleEnd?: string
   updatedAt?: string
