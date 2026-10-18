@@ -71,6 +71,7 @@ Banana compares grocery prices across five chains in Metro Vancouver: **Save-On-
 | Database and sign-in | Supabase: Postgres with row-level security, Google and email sign-in |
 | Maps | MapLibre GL with OpenFreeMap tiles (no API key) |
 | Address search | BC Address Geocoder (public) |
+| Mobile Application | PWA |
 | Payments | Stripe Payment Links |
 | Data pipeline and API | TypeScript on Node 24: one connector per chain, then cleaning, unit conversion and matching |
 | Tests | Vitest (backend), Node's built-in test runner (frontend) |
