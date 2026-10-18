@@ -1657,9 +1657,11 @@ dialog::backdrop {
     right: 12px;
     bottom: calc(77px + env(safe-area-inset-bottom));
   }
+  /* Line up with the text column: past the product image (124px box + 12px
+     gap) and short of the chevron (16px + 12px gap). */
   .result-row > .list-add-button {
-    margin-left: 0;
-    width: 100%;
+    margin: 0 0 12px 136px;
+    width: calc(100% - 136px - 28px);
   }
 }
 
