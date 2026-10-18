@@ -90,15 +90,11 @@ function ListDialog({ onClose }: { onClose: () => void }) {
         </div>
         {list.length ? (
           <>
-            <p className="list-note">
-              One requested list. Compare the total at each chain, or review
-              different packaging before choosing.
-            </p>
             <section
               className="requested-basket"
               aria-labelledby="requested-basket-title"
             >
-              <h3 id="requested-basket-title">Your requested items</h3>
+              <h3 id="requested-basket-title">Your items</h3>
               <ul>
                 {list.map((item) => (
                   <li key={item.offerId}>
@@ -146,13 +142,10 @@ function ListDialog({ onClose }: { onClose: () => void }) {
               </ul>
             </section>
             {loading ? (
-              <p role="status">Refreshing Supabase prices…</p>
+              <p role="status">Updating prices…</p>
             ) : error ? (
               <div role="alert">
-                <p>
-                  Basket prices could not be loaded. No saved prices are being
-                  substituted.
-                </p>
+                <p>Couldn’t load prices.</p>
                 <button className="flyer-button" onClick={retry}>
                   Retry prices
                 </button>
@@ -161,8 +154,7 @@ function ListDialog({ onClose }: { onClose: () => void }) {
               <>
                 {choice && selected.id !== choice && (
                   <p className="basket-notice" role="status">
-                    Your previous basket option changed or is no longer
-                    available. Review the current options before choosing again.
+                    Previous option unavailable. Choose again.
                   </p>
                 )}
                 <section
@@ -175,29 +167,27 @@ function ListDialog({ onClose }: { onClose: () => void }) {
                     <div>
                       <h3>
                         {selected.kind === 'requested'
-                          ? 'Your requested basket'
+                          ? 'Original basket'
                           : `Selected: ${selected.name}`}
                       </h3>
                       <p>
                         {selected.kind === 'alternative'
-                          ? 'Different packages — original request preserved'
+                          ? 'Different packaging'
                           : new Set(selected.picks.map((pick) => pick.store.id))
                                 .size > 1
                             ? 'Split across stores'
-                            : 'Exact requested packages'}
+                            : 'Exact match'}
                       </p>
                     </div>
                     <strong className="chosen-total">
                       {selected.picks.length
                         ? currency(selected.totalCents / 100)
                         : 'Unavailable'}
-                      {!selected.complete && (
-                        <small>Matched-items subtotal</small>
-                      )}
+                      {!selected.complete && <small>Subtotal</small>}
                     </strong>
                   </div>
                   <details open={selected.kind === 'alternative'}>
-                    <summary>Review selected basket</summary>
+                    <summary>View items</summary>
                     <BasketPlanDetails plan={selected} />
                   </details>
                   {selected.id !== 'requested' && (
@@ -205,7 +195,7 @@ function ListDialog({ onClose }: { onClose: () => void }) {
                       className="text-button"
                       onClick={() => shoppingList.choose('requested')}
                     >
-                      Return to requested basket
+                      Use original basket
                     </button>
                   )}
                 </section>
@@ -215,19 +205,14 @@ function ListDialog({ onClose }: { onClose: () => void }) {
                   onChoose={chooseBasket}
                 />
                 <p className="list-note">
-                  {data?.simulated ? 'Simulated Supabase prices. ' : ''}
-                  Catalogue prices, not live stock confirmation. Comparisons
-                  cover all catalogue chains.{' '}
+                  {data?.simulated ? 'Sample prices · ' : ''}{' '}
                   <button className="text-button" onClick={retry}>
                     Refresh prices
                   </button>
                 </p>
               </>
             ) : null}
-            <p className="list-note">
-              Total doesn’t include taxes or other fees, such as environmental
-              handling fees (EHF) or container deposits.
-            </p>
+            <p className="list-note">Before taxes, fees & deposits.</p>
             <div className="filter-dialog-actions">
               <button className="text-button" onClick={shoppingList.clear}>
                 Clear list
@@ -240,10 +225,7 @@ function ListDialog({ onClose }: { onClose: () => void }) {
         ) : (
           <div className="list-empty">
             <BasketIcon size={38} aria-hidden="true" />
-            <p>
-              Your list is empty. Search groceries and press “Add to list” to
-              compare whole-basket costs.
-            </p>
+            <p>Your list is empty.</p>
             <button className="flyer-button" onClick={onClose}>
               Keep searching
             </button>
