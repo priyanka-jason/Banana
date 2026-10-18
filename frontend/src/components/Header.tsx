@@ -163,6 +163,19 @@ export function Header({ page, params }: Props) {
                     <CardholderIcon size={20} aria-hidden="true" />
                     <span>Memberships</span>
                   </button>
+                  <button
+                    className="account-menu-item"
+                    role="menuitem"
+                    onClick={() => {
+                      setDropdownOpen(false)
+                      // The Plans page shows Free or Premium, with Subscribe or
+                      // Stripe's "Manage subscription" link.
+                      window.location.hash = pageHref('plans', params)
+                    }}
+                  >
+                    <CrownSimpleIcon size={20} aria-hidden="true" />
+                    <span>Manage plan</span>
+                  </button>
                   <div className="account-dropdown-divider" />
                   <button
                     className="account-menu-item sign-out"
