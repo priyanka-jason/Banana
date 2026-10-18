@@ -31,7 +31,7 @@ export function HomePage({
       sort: 'discount',
     },
     origin,
-    pageSize: 4,
+    pageSize: 8,
   })
   const nearby = deals.items
   const browseParams = new URLSearchParams({
