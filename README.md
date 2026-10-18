@@ -24,37 +24,37 @@ Banana compares grocery prices across five chains in Metro Vancouver: **Save-On-
 
 ## Key features
 
-**Search and compare**
+🔍 **Search and compare**
 - One search across all five chains, by item name.
 - Filter by category, store, distance, and discounts only.
 - Sort by lowest price, highest price, nearest first, or biggest discount.
 - Each offer shows the price, any discount, package size, the store, and the distance to the nearest branch.
 - Searches and filters are saved in the URL, so a results page can be shared and the Back button works.
 
-**Nearby discounts**
+🏷️ **Nearby discounts**
 - The home page shows the best discounts close to you right away.
 - Banana remembers your neighbourhood.
 
-**My basket: whole-list comparison**
+🧺 **My basket: whole-list comparison**
 - Add items to **My basket** while you search.
 - See your **whole basket's total at every chain**, plus the cheapest split across stores.
 - Exact matches (same product and size) are shown separately from cheaper alternatives (a different size or pack count).
 - If a chain is missing items, Banana names them instead of quietly showing a lower total.
 
-**Store locations and map**
+🗺️ **Store locations and map**
 - Live map of nearby stores beside a list (List and Map tabs on phones).
 - Search any Metro Vancouver address with suggestions as you type, or tap **Use my location**.
 - Choose a 1, 3, 5 or 10 km radius, then tap a store to see its offers
 
-**Accounts and saved lists**
+👤 **Accounts and saved lists**
 - Sign in with Google, or with email and password.
 - Save a basket under a name and reload it later, on any device.
 
-**Plans**
+💳 **Plans**
 - **Free:** prices refreshed every 3–4 days, full search and comparison, map, and basket totals.
 - **Premium ($4.99/month):** daily prices, and 20% goes to local food banks. Checkout runs through Stripe.
 
-**Works on any device**
+📱 **Works on any device**
 - Responsive design with bottom navigation and a filter panel on phones, plus home-screen app icons.
 
 ## Future Roadmap
