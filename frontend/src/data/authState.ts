@@ -9,12 +9,15 @@ export interface AuthContextType {
   authModalOpen: boolean
   profileModalOpen: boolean
   membershipsModalOpen: boolean
+  savedListsModalOpen: boolean
   openAuthModal: () => void
   closeAuthModal: () => void
   openProfileModal: () => void
   closeProfileModal: () => void
   openMembershipsModal: () => void
   closeMembershipsModal: () => void
+  openSavedListsModal: () => void
+  closeSavedListsModal: () => void
   signInWithGoogle: () => Promise<{ error: string | null }>
   signInWithEmail: (e: string, p: string) => Promise<{ error: string | null }>
   signUpWithEmail: (

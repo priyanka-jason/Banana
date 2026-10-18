@@ -76,3 +76,13 @@ test('saved list survives a reload, and bad saved data is ignored', () => {
   assert.deepEqual(loadList(storage), [])
   assert.deepEqual(loadList(undefined), [])
 })
+
+test('corrupted optional product metadata is ignored safely', () => {
+  const base = addToList([], offer('milk', 4))[0]
+  const invalid = [
+    { ...base, spec: { sku: 'milk', upc: 42 } },
+    { ...base, spec: { sku: 'milk', totalBase: -1 } },
+    { ...base, price: -1 },
+  ]
+  assert.deepEqual(loadList({ getItem: () => JSON.stringify(invalid) }), [])
+})

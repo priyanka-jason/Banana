@@ -4,9 +4,11 @@ import { OfferDialog } from './components/OfferDialog'
 import { AuthModal } from './components/AuthModal'
 import { ProfileModal } from './components/ProfileModal'
 import { MembershipsModal } from './components/MembershipsModal'
+import { SavedListsModal } from './components/SavedLists'
 import { HomePage } from './features/HomePage'
 import { SearchPage } from './features/SearchPage'
 import { LocationsPage } from './features/LocationsPage'
+import { MembershipPage } from './features/MembershipPage'
 import type { SearchOrigin } from './data/storeLocations'
 import { readFilters } from './lib/catalogue'
 import { loadSavedOrigin, saveOrigin } from './lib/locations'
@@ -62,7 +64,7 @@ function App() {
   }
 
   useEffect(() => {
-    document.title = `${page === 'home' ? 'Nearby grocery deals' : page === 'locations' ? 'Grocery store locations' : 'Search groceries'} | Banana`
+    document.title = `${page === 'home' ? 'Nearby grocery deals' : page === 'locations' ? 'Grocery store locations' : page === 'plans' ? 'Plans' : 'Search groceries'} | Banana`
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [page])
   return (
@@ -79,7 +81,9 @@ function App() {
       </a>
       <Header page={page} params={params} />
       <BackendReadiness />
-      {catalogue.loading || catalogue.error ? (
+      {page === 'plans' ? (
+        <MembershipPage />
+      ) : catalogue.loading || catalogue.error ? (
         <main
           id="main-content"
           tabIndex={-1}
@@ -132,6 +136,7 @@ function App() {
       <AuthModal />
       <ProfileModal />
       <MembershipsModal />
+      <SavedListsModal />
     </>
   )
 }

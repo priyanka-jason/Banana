@@ -3,20 +3,49 @@ import {
   addToList,
   loadList,
   removeFromList,
+  reconcileList,
   saveList,
   setQuantity,
   type ListItem,
 } from '../lib/shoppingList.ts'
-import type { NearbyOffer } from '../types.ts'
+import type { NearbyOffer, Offer } from '../types.ts'
 
 // One list shared by every page, kept in this browser so it survives new
 // searches, page changes and reloads.
 const storage = typeof localStorage === 'undefined' ? undefined : localStorage
 let list: ListItem[] = loadList(storage)
 const listeners = new Set<() => void>()
+const CHOICE_KEY = 'banana.basketChoice.v1'
+let choice: string | null = null
+try {
+  choice = storage?.getItem(CHOICE_KEY) ?? null
+} catch {
+  /* Storage is optional. */
+}
+function choose(id: string | null) {
+  choice = id
+  try {
+    if (id) storage?.setItem(CHOICE_KEY, id)
+    else storage?.removeItem(CHOICE_KEY)
+  } catch {
+    /* Keep selection for this visit. */
+  }
+  listeners.forEach((listener) => listener())
+}
+
+// The saved list now in the basket, if any, so "Update" saves back to it.
+let loaded: { id: string; name: string } | null = null
+function setLoaded(next: { id: string; name: string } | null) {
+  loaded = next
+  listeners.forEach((listener) => listener())
+}
 
 function update(next: ListItem[]) {
   list = next
+  if (!next.length) {
+    choose(null)
+    loaded = null
+  }
   saveList(storage, list)
   listeners.forEach((listener) => listener())
 }
@@ -29,13 +58,37 @@ function subscribe(listener: () => void) {
 }
 
 export const shoppingList = {
-  add: (offer: NearbyOffer) => update(addToList(list, offer)),
+  add: (offer: NearbyOffer, offers: Offer[] = []) =>
+    update(addToList(reconcileList(list, offers), offer)),
+  reconcile: (offers: Offer[]) => {
+    const next = reconcileList(list, offers)
+    if (JSON.stringify(next) !== JSON.stringify(list)) update(next)
+  },
+  choose,
   setQuantity: (offerId: string, quantity: number) =>
     update(setQuantity(list, offerId, quantity)),
   remove: (offerId: string) => update(removeFromList(list, offerId)),
+  // Swap in a saved list; it's priced from the current catalogue like any other list.
+  load: (
+    saved: { id: string; name: string; items: ListItem[] },
+    offers: Offer[] = [],
+  ) => {
+    choose(null)
+    update(reconcileList(saved.items, offers))
+    setLoaded({ id: saved.id, name: saved.name })
+  },
+  setLoaded,
   clear: () => update([]),
 }
 
 export function useShoppingList(): ListItem[] {
   return useSyncExternalStore(subscribe, () => list)
+}
+
+export function useLoadedList(): { id: string; name: string } | null {
+  return useSyncExternalStore(subscribe, () => loaded)
+}
+
+export function useBasketChoice(): string | null {
+  return useSyncExternalStore(subscribe, () => choice)
 }

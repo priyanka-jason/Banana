@@ -2,10 +2,12 @@ import { useState, useRef, useEffect } from 'react'
 import { HouseIcon } from '@phosphor-icons/react/dist/csr/House'
 import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/csr/MagnifyingGlass'
 import { MapPinIcon } from '@phosphor-icons/react/dist/csr/MapPin'
+import { CrownSimpleIcon } from '@phosphor-icons/react/dist/csr/CrownSimple'
 import { CaretDownIcon } from '@phosphor-icons/react/dist/csr/CaretDown'
 import { UserCircleIcon } from '@phosphor-icons/react/dist/csr/UserCircle'
 import { IdentificationCardIcon } from '@phosphor-icons/react/dist/csr/IdentificationCard'
 import { CardholderIcon } from '@phosphor-icons/react/dist/csr/Cardholder'
+import { BookmarkSimpleIcon } from '@phosphor-icons/react/dist/csr/BookmarkSimple'
 import { SignOutIcon } from '@phosphor-icons/react/dist/csr/SignOut'
 import { pageHref } from '../lib/navigation'
 import type { Page } from '../types'
@@ -24,6 +26,7 @@ export function Header({ page, params }: Props) {
     openAuthModal,
     openProfileModal,
     openMembershipsModal,
+    openSavedListsModal,
     signOut,
   } = useAuth()
 
@@ -81,6 +84,12 @@ export function Header({ page, params }: Props) {
           >
             Locations
           </a>
+          <a
+            href={pageHref('plans', params)}
+            aria-current={page === 'plans' ? 'page' : undefined}
+          >
+            Plans
+          </a>
         </nav>
 
         <div className="header-auth-control" ref={menuRef}>
@@ -131,6 +140,17 @@ export function Header({ page, params }: Props) {
                   >
                     <IdentificationCardIcon size={20} aria-hidden="true" />
                     <span>Profile</span>
+                  </button>
+                  <button
+                    className="account-menu-item"
+                    role="menuitem"
+                    onClick={() => {
+                      setDropdownOpen(false)
+                      openSavedListsModal()
+                    }}
+                  >
+                    <BookmarkSimpleIcon size={20} aria-hidden="true" />
+                    <span>Saved lists</span>
                   </button>
                   <button
                     className="account-menu-item"
@@ -204,6 +224,17 @@ export function MobileNav({
           aria-hidden="true"
         />
         <span>Locations</span>
+      </a>
+      <a
+        href={pageHref('plans', params)}
+        aria-current={page === 'plans' ? 'page' : undefined}
+      >
+        <CrownSimpleIcon
+          size={25}
+          weight={page === 'plans' ? 'fill' : 'regular'}
+          aria-hidden="true"
+        />
+        <span>Plans</span>
       </a>
       <button
         type="button"

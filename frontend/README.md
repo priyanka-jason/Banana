@@ -118,3 +118,28 @@ RPC using a fixed public city point. Search and distance filtering use those Sup
 records locally, with origins rounded to two decimals for consistent approximate distances.
 Replace this bootstrap with paginated database search before exceeding these limits.
 See [the direct Supabase handoff](docs/supabase-direct-handoff.md) for contracts and gaps.
+
+## Shopping-list basket comparison
+
+My list keeps a store-independent request for each product/package and quantity, plus
+an optional explicitly selected purchase basket. It merges identical packages added at
+different chains, calculates full-basket costs using the current Supabase catalogue,
+and keeps exact-package baskets separate from cheaper package/quantity alternatives.
+Same-chain alternatives and split-store exact matches are included. Incomplete baskets
+show missing items and are never ranked as complete low totals. Source prices saved in
+old browser lists are not substituted for missing live catalogue prices.
+
+Matching requires a canonical comparison group or a shared UPC; the documented shared
+simulated SKU families also work for the current demo. Names alone do not establish a
+match. Optional `comparison_group_id` metadata is read when the backend adds it; product
+size, pack count, brand and UPC come from Supabase. Requested package specifications stay
+preserved when selecting alternatives. Changing an alternative's actual picks invalidates
+the old selection so the customer must review it again. Exact-chain choices survive quantity
+changes while a complete exact basket remains available.
+
+The comparison currently runs over the same bounded Supabase snapshot used by the pages,
+not the broad-text `price_shopping_list` RPC, which cannot guarantee this matching contract.
+The request and chosen basket are saved only in this browser, not synced to account lists.
+See [the backend comparison handoff](docs/basket-comparison-handoff.md) for the proposed
+canonical identities and server comparison RPC. No database migration is executed by the
+frontend, and there is no local mock-price fallback.

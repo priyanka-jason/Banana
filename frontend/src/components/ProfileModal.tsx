@@ -4,6 +4,7 @@ import { MapPinIcon } from '@phosphor-icons/react/dist/csr/MapPin'
 import { CheckCircleIcon } from '@phosphor-icons/react/dist/csr/CheckCircle'
 import { NavigationArrowIcon } from '@phosphor-icons/react/dist/csr/NavigationArrow'
 import { TrashIcon } from '@phosphor-icons/react/dist/csr/Trash'
+import { BookmarkSimpleIcon } from '@phosphor-icons/react/dist/csr/BookmarkSimple'
 import { useAuth } from '../data/authState'
 import './AccountModals.css'
 
@@ -15,6 +16,7 @@ export function ProfileModal() {
     closeProfileModal,
     updateProfileName,
     clearSavedLocation,
+    openSavedListsModal,
   } = useAuth()
 
   const sourceName = account?.name || user?.email?.split('@')[0] || ''
@@ -162,6 +164,20 @@ export function ProfileModal() {
                 </div>
               </div>
             )}
+          </div>
+
+          <div className="account-section">
+            <button
+              type="button"
+              className="account-link-btn"
+              onClick={() => {
+                closeProfileModal()
+                openSavedListsModal()
+              }}
+            >
+              <BookmarkSimpleIcon size={20} aria-hidden="true" />
+              Saved lists
+            </button>
           </div>
 
           <div className="account-actions">

@@ -17,6 +17,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [profileModalOpen, setProfileModalOpen] = useState(false)
   const [membershipsModalOpen, setMembershipsModalOpen] = useState(false)
+  const [savedListsModalOpen, setSavedListsModalOpen] = useState(false)
 
   // Initialize Auth & Subscribe to changes
   useEffect(() => {
@@ -153,6 +154,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setAccount(null)
     setProfileModalOpen(false)
     setMembershipsModalOpen(false)
+    setSavedListsModalOpen(false)
   }
 
   const updateProfileName = async (newName: string): Promise<boolean> => {
@@ -220,12 +222,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         authModalOpen,
         profileModalOpen,
         membershipsModalOpen,
+        savedListsModalOpen,
         openAuthModal: () => setAuthModalOpen(true),
         closeAuthModal: () => setAuthModalOpen(false),
         openProfileModal: () => setProfileModalOpen(true),
         closeProfileModal: () => setProfileModalOpen(false),
         openMembershipsModal: () => setMembershipsModalOpen(true),
         closeMembershipsModal: () => setMembershipsModalOpen(false),
+        openSavedListsModal: () => setSavedListsModalOpen(true),
+        closeSavedListsModal: () => setSavedListsModalOpen(false),
         signInWithGoogle,
         signInWithEmail,
         signUpWithEmail,

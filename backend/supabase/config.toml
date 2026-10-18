@@ -1,0 +1,7 @@
+# Supabase CLI settings for this folder (run the CLI from backend/).
+project_id = "wkqxnxjsvrnnpikibrfh"
+
+# Stripe can't send a Supabase login token; the function checks Stripe's
+# signature instead.
+[functions.stripe-webhook]
+verify_jwt = false
