@@ -1,0 +1,92 @@
+{
+  "description": "A saved shopping list: look up many items at once. Rows come back in the order asked for, and ids that no longer exist are in missingIds.",
+  "request": {
+    "method": "POST",
+    "path": "/api/prices/lookup",
+    "body": {
+      "ids": [
+        "walmart:W-2009",
+        "costco:C-3009",
+        "save-on-foods:SOF-1009",
+        "walmart:GONE-1"
+      ],
+      "memberPricing": "member"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "id": "walmart:W-2009",
+          "chainSlug": "walmart",
+          "chainName": "Walmart",
+          "parentCompany": "Walmart",
+          "sku": "W-2009",
+          "name": "Large Eggs 12 ct",
+          "size": "12 ct",
+          "sizeAmount": 12,
+          "sizeUnit": "ct",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "dairy-eggs",
+          "priceCents": 447,
+          "regularPriceCents": 447,
+          "comparableUnitPrice": {
+            "per": "each",
+            "cents": 37.25
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "costco:C-3009",
+          "chainSlug": "costco",
+          "chainName": "Costco",
+          "parentCompany": "Costco Wholesale",
+          "sku": "C-3009",
+          "name": "Large Eggs",
+          "size": "24 ct",
+          "sizeAmount": 24,
+          "sizeUnit": "ct",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "dairy-eggs",
+          "priceCents": 899,
+          "regularPriceCents": 899,
+          "comparableUnitPrice": {
+            "per": "each",
+            "cents": 37.46
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "save-on-foods:SOF-1009",
+          "chainSlug": "save-on-foods",
+          "chainName": "Save-On-Foods",
+          "parentCompany": "Pattison Food Group",
+          "sku": "SOF-1009",
+          "name": "Large Eggs 12 ct",
+          "size": "12 ct",
+          "sizeAmount": 12,
+          "sizeUnit": "ct",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "dairy-eggs",
+          "priceCents": 449,
+          "regularPriceCents": 499,
+          "discountCents": 50,
+          "discountPercent": 10,
+          "memberPriceCents": 449,
+          "comparableUnitPrice": {
+            "per": "each",
+            "cents": 37.42
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        }
+      ],
+      "missingIds": [
+        "walmart:GONE-1"
+      ]
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "description": "Filter by shared categories and ask for the second page of 4. \"total\" is the number of matches before paging.",
+  "request": {
+    "method": "POST",
+    "path": "/api/prices/search",
+    "body": {
+      "categories": [
+        "fruits",
+        "vegetables"
+      ],
+      "sortBy": "name",
+      "limit": 4,
+      "offset": 4
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "id": "save-on-foods:SOF-1004",
+          "chainSlug": "save-on-foods",
+          "chainName": "Save-On-Foods",
+          "parentCompany": "Pattison Food Group",
+          "sku": "SOF-1004",
+          "name": "Broccoli Crowns",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "vegetables",
+          "priceCents": 349,
+          "regularPriceCents": 349,
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "walmart:W-2004",
+          "chainSlug": "walmart",
+          "chainName": "Walmart",
+          "parentCompany": "Walmart",
+          "sku": "W-2004",
+          "name": "Broccoli Crowns",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "vegetables",
+          "priceCents": 297,
+          "regularPriceCents": 297,
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "costco:C-3002",
+          "chainSlug": "costco",
+          "chainName": "Costco",
+          "parentCompany": "Costco Wholesale",
+          "sku": "C-3002",
+          "name": "Gala Apples",
+          "size": "3.63 kg",
+          "sizeAmount": 3.63,
+          "sizeUnit": "kg",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "fruits",
+          "priceCents": 999,
+          "regularPriceCents": 1199,
+          "discountCents": 200,
+          "discountPercent": 17,
+          "salePriceCents": 999,
+          "unitPriceCents": 28,
+          "unitLabel": "100g",
+          "comparableUnitPrice": {
+            "per": "100g",
+            "cents": 27.52
+          },
+          "saleEnd": "2026-10-25",
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "walmart:W-2002",
+          "chainSlug": "walmart",
+          "chainName": "Walmart",
+          "parentCompany": "Walmart",
+          "sku": "W-2002",
+          "name": "Gala Apples 1.36 kg",
+          "size": "1.36 kg",
+          "sizeAmount": 1.36,
+          "sizeUnit": "kg",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "fruits",
+          "priceCents": 547,
+          "regularPriceCents": 597,
+          "discountCents": 50,
+          "discountPercent": 8,
+          "salePriceCents": 547,
+          "unitPriceCents": 40,
+          "unitLabel": "100g",
+          "comparableUnitPrice": {
+            "per": "100g",
+            "cents": 40.22
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        }
+      ],
+      "total": 12,
+      "limit": 4,
+      "offset": 4
+    }
+  }
+}

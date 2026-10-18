@@ -1,0 +1,24 @@
+{
+  "name": "banana-backend",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Banana backend: store connectors, database layer and search filters",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "ingest": "tsx src/scripts/ingest.ts",
+    "examples": "tsx src/scripts/generateExamples.ts",
+    "simulate": "tsx src/scripts/generateSimulated.ts",
+    "api": "tsx src/server/main.ts"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  }
+}

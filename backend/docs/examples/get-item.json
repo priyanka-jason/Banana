@@ -1,0 +1,36 @@
+{
+  "description": "One item by id. The id has a colon, so it is URL-encoded in the path (use encodeURIComponent).",
+  "request": {
+    "method": "GET",
+    "path": "/api/prices/walmart%3AW-2002"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "walmart:W-2002",
+      "chainSlug": "walmart",
+      "chainName": "Walmart",
+      "parentCompany": "Walmart",
+      "sku": "W-2002",
+      "name": "Gala Apples 1.36 kg",
+      "size": "1.36 kg",
+      "sizeAmount": 1.36,
+      "sizeUnit": "kg",
+      "packCount": 1,
+      "pricedByWeight": false,
+      "category": "fruits",
+      "priceCents": 547,
+      "regularPriceCents": 597,
+      "discountCents": 50,
+      "discountPercent": 8,
+      "salePriceCents": 547,
+      "unitPriceCents": 40,
+      "unitLabel": "100g",
+      "comparableUnitPrice": {
+        "per": "100g",
+        "cents": 40.22
+      },
+      "scrapedAt": "2026-10-17T20:00:00.000Z"
+    }
+  }
+}

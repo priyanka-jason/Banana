@@ -1,0 +1,30 @@
+{
+  "description": "Physical stores for map markers, here only Walmart's. Leave out ?chain= for all stores. No visitor location is involved.",
+  "request": {
+    "method": "GET",
+    "path": "/api/stores?chain=walmart"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "stores": [
+        {
+          "id": "walmart-sample-1",
+          "chainSlug": "walmart",
+          "name": "Walmart (sample, Burnaby)",
+          "city": "Burnaby",
+          "lat": 49.2276,
+          "lng": -123.0076
+        },
+        {
+          "id": "walmart-sample-2",
+          "chainSlug": "walmart",
+          "name": "Walmart (sample, Richmond)",
+          "city": "Richmond",
+          "lat": 49.1666,
+          "lng": -123.1336
+        }
+      ]
+    }
+  }
+}

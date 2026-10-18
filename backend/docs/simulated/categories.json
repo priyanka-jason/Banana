@@ -1,0 +1,52 @@
+{
+  "categories": [
+    {
+      "slug": "fruits",
+      "label": "Fruits"
+    },
+    {
+      "slug": "vegetables",
+      "label": "Vegetables"
+    },
+    {
+      "slug": "meat",
+      "label": "Meat"
+    },
+    {
+      "slug": "seafood",
+      "label": "Seafood"
+    },
+    {
+      "slug": "dairy-eggs",
+      "label": "Dairy & Eggs"
+    },
+    {
+      "slug": "bakery",
+      "label": "Bakery"
+    },
+    {
+      "slug": "frozen",
+      "label": "Frozen"
+    },
+    {
+      "slug": "beverages",
+      "label": "Beverages"
+    },
+    {
+      "slug": "snacks",
+      "label": "Snacks"
+    },
+    {
+      "slug": "pantry",
+      "label": "Pantry"
+    },
+    {
+      "slug": "household",
+      "label": "Household"
+    },
+    {
+      "slug": "other",
+      "label": "Other"
+    }
+  ]
+}

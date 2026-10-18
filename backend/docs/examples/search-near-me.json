@@ -1,0 +1,75 @@
+{
+  "description": "Bananas at stores within 10 km of the shopper (the most allowed), nearest first. The location is in the POST body, never in the URL. Each row has distanceKm, the distance to that chain's nearest store.",
+  "request": {
+    "method": "POST",
+    "path": "/api/prices/search",
+    "body": {
+      "query": "banana",
+      "near": {
+        "lat": 49.28,
+        "lng": -123.12,
+        "radiusKm": 10
+      },
+      "sortBy": "distance"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "id": "save-on-foods:SOF-1001",
+          "chainSlug": "save-on-foods",
+          "chainName": "Save-On-Foods",
+          "parentCompany": "Pattison Food Group",
+          "sku": "SOF-1001",
+          "name": "Bananas",
+          "size": "per kg",
+          "sizeAmount": 1,
+          "sizeUnit": "kg",
+          "packCount": 1,
+          "pricedByWeight": true,
+          "category": "fruits",
+          "priceCents": 169,
+          "regularPriceCents": 169,
+          "memberPriceCents": 149,
+          "unitPriceCents": 169,
+          "unitLabel": "kg",
+          "comparableUnitPrice": {
+            "per": "100g",
+            "cents": 16.9
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z",
+          "distanceKm": 0.3
+        },
+        {
+          "id": "costco:C-3001",
+          "chainSlug": "costco",
+          "chainName": "Costco",
+          "parentCompany": "Costco Wholesale",
+          "sku": "C-3001",
+          "name": "Bananas",
+          "size": "2 kg",
+          "sizeAmount": 2,
+          "sizeUnit": "kg",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "fruits",
+          "priceCents": 299,
+          "regularPriceCents": 299,
+          "unitPriceCents": 15,
+          "unitLabel": "100g",
+          "comparableUnitPrice": {
+            "per": "100g",
+            "cents": 14.95
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z",
+          "distanceKm": 8
+        }
+      ],
+      "total": 2,
+      "limit": 50,
+      "offset": 0
+    }
+  }
+}

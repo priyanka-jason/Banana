@@ -1,0 +1,32 @@
+{
+  "description": "All store chains, for the list of available stores and the store filters.",
+  "request": {
+    "method": "GET",
+    "path": "/api/chains"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "chains": [
+        {
+          "slug": "costco",
+          "name": "Costco",
+          "parentCompany": "Costco Wholesale",
+          "hasMemberPricing": false
+        },
+        {
+          "slug": "save-on-foods",
+          "name": "Save-On-Foods",
+          "parentCompany": "Pattison Food Group",
+          "hasMemberPricing": true
+        },
+        {
+          "slug": "walmart",
+          "name": "Walmart",
+          "parentCompany": "Walmart",
+          "hasMemberPricing": false
+        }
+      ]
+    }
+  }
+}
