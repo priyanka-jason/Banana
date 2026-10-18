@@ -64,14 +64,19 @@ function StoreRow({
   const uniqueOffers = [
     ...new Map(linkedOffers.map((offer) => [offer.name, offer])).values(),
   ]
+  // Four examples: the first product, a dairy item if there is one, then the next ones.
+  const dairy = uniqueOffers.find(
+    (offer) =>
+      offer.id !== uniqueOffers[0]?.id &&
+      ['Dairy', 'dairy-eggs'].includes(offer.category),
+  )
   const previews = [
-    uniqueOffers[0],
-    uniqueOffers.find(
-      (offer) =>
-        offer.id !== uniqueOffers[0]?.id &&
-        ['Dairy', 'dairy-eggs'].includes(offer.category),
-    ) ?? uniqueOffers[1],
-  ].filter((offer): offer is NearbyOffer => Boolean(offer))
+    ...new Set(
+      [uniqueOffers[0], dairy, ...uniqueOffers.slice(1)].filter(
+        (offer): offer is NearbyOffer => Boolean(offer),
+      ),
+    ),
+  ].slice(0, 4)
   return (
     <article
       id={`store-${branch.id}`}
