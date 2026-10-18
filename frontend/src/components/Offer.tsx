@@ -3,6 +3,7 @@ import { CaretRightIcon } from '@phosphor-icons/react/dist/csr/CaretRight'
 import { currency, isDiscounted } from '../lib/catalogue'
 import { ProductImage, StoreLogo } from './ProductImage'
 import type { NearbyOffer } from '../types'
+import { AddToListButton } from './ShoppingList'
 
 export function MissingOfferData({ offer }: { offer: NearbyOffer }) {
   if (!offer.missingFields?.length) return null
@@ -133,6 +134,7 @@ export function OfferCard({
       <Merchant offer={offer} />
       <Expiry offer={offer} />
       <FlyerButton offer={offer} onOpen={onOpen} />
+      <AddToListButton offer={offer} />
     </article>
   )
 }
@@ -200,7 +202,10 @@ export function OfferTable({
                 <Expiry offer={offer} />
               </td>
               <td>
-                <FlyerButton offer={offer} onOpen={onOpen} />
+                <div className="table-actions">
+                  <FlyerButton offer={offer} onOpen={onOpen} />
+                  <AddToListButton offer={offer} />
+                </div>
               </td>
             </tr>
           ))}
@@ -238,6 +243,7 @@ export function OfferTable({
                 aria-hidden="true"
               />
             </button>
+            <AddToListButton offer={offer} />
           </article>
         ))}
       </div>
