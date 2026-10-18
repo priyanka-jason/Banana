@@ -79,6 +79,7 @@ The website only gets a visitor's location if they click "Allow" in the browser,
 | POST | `/api/prices/search` | Search and filter prices | [`search-bananas.json`](examples/search-bananas.json) and others |
 | GET | `/api/prices/{id}` | One item (`?memberPricing=member`) | [`get-item.json`](examples/get-item.json) |
 | POST | `/api/prices/lookup` | Many items by id, for a saved shopping list | [`lookup-shopping-list.json`](examples/lookup-shopping-list.json) |
+| POST | `/api/prices/list` | Price a whole shopping list in the chosen stores | [`shopping-list.json`](examples/shopping-list.json) |
 | GET | `/api/chains` | All store chains | [`chains.json`](examples/chains.json) |
 | GET | `/api/categories` | The shared categories | [`categories.json`](examples/categories.json) |
 | GET | `/api/stores` | Physical stores for map markers (`?chain=walmart`, repeatable) | [`stores.json`](examples/stores.json) |
@@ -97,7 +98,7 @@ Every field is optional. An empty body searches everything. Unknown fields are *
 | `parentCompanies` | list of text, up to 50 | Only chains owned by these companies, ignoring case. |
 | `categories` | list of category slugs | Only these shared categories. Slugs come from `/api/categories`. |
 | `locationIds` | list of text, up to 50 | Stores picked on a map (ids from `/api/stores`). A chain's prices show if one of its stores is picked. |
-| `near` | `{ lat, lng, radiusKm }` | Only chains with a store within `radiusKm` (more than 0, up to 200). Rows get `distanceKm`. See the location rules above. |
+| `near` | `{ lat, lng, radiusKm }` | Only chains with a store within `radiusKm` (more than 0, up to 10 km). Rows get `distanceKm`. See the location rules above. |
 | `onSaleOnly` | true or false | Only items where the price you pay is below the original price. Depends on `memberPricing`. |
 | `memberPricing` | `"member"` or `"non-member"` | Which price to work with. Default `"non-member"`. A member also gets the member price. |
 | `sortBy` | see below | Default `"price"`. |
@@ -156,6 +157,44 @@ For a saved shopping list. Body: `{ "ids": ["walmart:W-2009", "costco:C-3009"], 
 the order asked for. Ids that no longer exist are listed in `missingIds` instead of causing an error.
 Example: [lookup-shopping-list.json](examples/lookup-shopping-list.json).
 
+### `POST /api/prices/list`
+
+Prices a whole shopping list at once, within the shopper's store choice. Body:
+
+```json
+{
+  "items": [
+    { "query": "milk", "quantity": 2 },
+    { "query": "eggs", "categories": ["dairy-eggs"] },
+    { "itemId": "walmart:W-2002" }
+  ],
+  "near": { "lat": 49.28, "lng": -123.12, "radiusKm": 10 },
+  "chainSlugs": ["walmart", "costco"],
+  "matchesPerItem": 5
+}
+```
+
+| Field | Type | Meaning |
+|---|---|---|
+| `items` | list, 1 to 50 entries | **Required.** Each entry is either a search (`query`, optional `categories`), matched like the search `query`, or one exact item (`itemId`). Not both. |
+| `items[].quantity` | whole number, 1 to 99 | Default 1. For an item priced by weight (`pricedByWeight`), it counts lb or kg. |
+| `chainSlugs`, `parentCompanies`, `locationIds`, `near`, `memberPricing` | | The same as in a search. `storeSelectionFilters()` builds them. |
+| `matchesPerItem` | whole number, 1 to 20 | How many matches to send back per entry. Default 5. |
+
+**Response** (`200`):
+
+- `entries`: one per list entry, in order: `{ index, quantity, matches: [PriceRow, cheapest first], total }`. `matches`
+  is empty when nothing matches in the chosen stores.
+- `chains`: buying everything at one chain: `{ chainSlug, chainName, totalCents, picks, missingIndexes, distanceKm? }`.
+  `picks` holds that chain's cheapest match for each entry it has, as `{ index, row, lineCents }`, where `lineCents`
+  is the price times the quantity. `missingIndexes` lists the entries it lacks. The chains with the most entries come
+  first, then the cheapest. Only compare `totalCents` between chains with the same `missingIndexes`.
+- `cheapestMix`: `{ totalCents, picks, missingIndexes }`, the cheapest match for each entry at any chain. This is the
+  lowest total if the shopper splits the list between stores.
+
+An `itemId` entry only counts for its own chain, so to compare an item across chains use a `query` entry.
+Examples: [a list](examples/shopping-list.json), [within 10 km](examples/shopping-list-within-10km.json).
+
 ### `GET /api/chains`, `GET /api/categories`
 
 `{ "chains": [{ slug, name, parentCompany, hasMemberPricing }] }` sorted by name, and
@@ -179,13 +218,14 @@ The shopper picks one of three, and can also narrow any of them to some chains:
 |---|---|---|
 | Any store | none | |
 | Specific stores | `locationIds` | `GET /api/stores` (map or list), or `POST /api/stores/nearby` |
-| Any store within 5 km or 10 km | `near: { lat, lng, radiusKm }` | needs the browser's location |
+| Any store within 1 to 10 km (a slider) | `near: { lat, lng, radiusKm }` | needs the browser's location |
 | ...only these chains | `chainSlugs`, added to any of the above | `GET /api/chains` |
 
 `backend/src/api/storeChoice.ts` does this conversion: `storeSelectionFilters(selection)` gives the store fields of
-the search body, `nearbyStoresBody(...)` the body for `/api/stores/nearby`, and `STORE_RADIUS_OPTIONS_KM` the radius
-choices (`[5, 10]`, default 5). It rounds the location to 2 decimals. It only imports types, so the website can import
-or copy it. The API itself accepts any radius above 0 and up to 200 km.
+the search body, `nearbyStoresBody(...)` the body for `/api/stores/nearby`, and `STORE_RADIUS_SLIDER_KM` the distance
+slider (`{ min: 1, max: 10, step: 1, default: 5 }`). Both builders pass the radius through `clampRadiusKm()`, which
+snaps it to a whole km from 1 to 10, and round the location to 2 decimals. It only imports types, so the website can import
+or copy it. The API accepts any radius above 0 and up to 10 km, and rejects anything further with a `400`.
 
 All the filters apply together. Picked stores from a chain that is not chosen find nothing, so offer stores from the
 chosen chains only. Prices are currently the same at every store of a chain, so a row stands for the chain;
@@ -253,7 +293,9 @@ Error messages never repeat a coordinate that was sent.
   Someone still needs to pick a real setup (Express, Hono, a serverless function...), host it, and decide between a
   same-origin deploy and CORS. The handlers stay the same whichever is picked.
 - **Login and accounts**, saved shopping lists, and purchase history ("Records" on the whiteboard) are not in this contract.
-- **Shopping-list totals per store** ("where is my whole list cheapest?") are not built. `lookup` returns rows only.
+- **Matching the same product across chains** is by search words only. Two chains' "2% milk 4 L" are not linked as
+  the same product, so a `query` entry's cheapest match can be a different size or brand. Use `categories` or more
+  specific words to narrow it.
 - **Price history** is not stored.
 - **Website vs flyer prices** are undecided. A `source` field may be added later.
 - **A deeper type tree** (for example Meat, then Red meat, then Beef) is planned. Today `category` is one of 12

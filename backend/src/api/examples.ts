@@ -10,6 +10,7 @@ import {
   handleLookup,
   handleNearbyStores,
   handleSearch,
+  handleShoppingList,
   handleStores,
 } from './handlers';
 import { nearbyStoresBody, storeSelectionFilters } from './storeChoice';
@@ -91,12 +92,12 @@ export async function buildExamples(): Promise<Record<string, ExampleFile>> {
   );
   await search(
     'search-near-me.json',
-    'Bananas at stores within 12 km of the shopper, nearest first. The location is in the POST body, never in the URL. Each row has distanceKm, the distance to that chain\'s nearest store.',
-    { query: 'banana', near: { ...SHOPPER, radiusKm: 12 }, sortBy: 'distance' },
+    'Bananas at stores within 10 km of the shopper (the most allowed), nearest first. The location is in the POST body, never in the URL. Each row has distanceKm, the distance to that chain\'s nearest store.',
+    { query: 'banana', near: { ...SHOPPER, radiusKm: 10 }, sortBy: 'distance' },
   );
   await search(
     'search-within-5km.json',
-    'Milk at any store within 5 km of the shopper (one of the radius choices, 5 or 10 km). Only chains with a store that close show up. Built with storeSelectionFilters() from src/api/storeChoice.ts.',
+    'Milk at any store within 5 km of the shopper (the distance slider goes from 1 to 10 km). Only chains with a store that close show up. Built with storeSelectionFilters() from src/api/storeChoice.ts.',
     { query: 'milk', ...storeSelectionFilters({ where: { kind: 'nearby', ...SHOPPER, radiusKm: 5 } }) },
   );
   await search(
@@ -137,6 +138,31 @@ export async function buildExamples(): Promise<Record<string, ExampleFile>> {
     'A saved shopping list: look up many items at once. Rows come back in the order asked for, and ids that no longer exist are in missingIds.',
     { method: 'POST', path: '/api/prices/lookup', body: lookupBody },
     await handleLookup(repo, lookupBody),
+  );
+
+  const listBody = {
+    items: [
+      { query: 'milk', quantity: 2 },
+      { query: 'banana' },
+      { query: 'eggs', categories: ['dairy-eggs'] },
+      { itemId: 'walmart:W-2002' },
+    ],
+    matchesPerItem: 2,
+  };
+  files['shopping-list.json'] = example(
+    'Price a whole shopping list. Each entry is a search ("milk") or one exact item (itemId). entries has the cheapest matches for each; chains has the cost of buying everything at one chain (most entries first, then cheapest), with missingIndexes for what it lacks; cheapestMix is the lowest total when splitting the list between chains.',
+    { method: 'POST', path: '/api/prices/list', body: listBody },
+    await handleShoppingList(repo, listBody),
+  );
+  const nearListBody = {
+    items: [{ query: 'milk', quantity: 2 }, { query: 'banana' }],
+    matchesPerItem: 1,
+    ...storeSelectionFilters({ where: { kind: 'nearby', ...SHOPPER, radiusKm: 10 } }),
+  };
+  files['shopping-list-within-10km.json'] = example(
+    'The same idea for stores within 10 km of the shopper. Add chainSlugs or locationIds the same way as in a search. The location goes in the body only.',
+    { method: 'POST', path: '/api/prices/list', body: nearListBody },
+    await handleShoppingList(repo, nearListBody),
   );
 
   files['chains.json'] = example(

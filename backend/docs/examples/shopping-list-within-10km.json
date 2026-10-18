@@ -1,0 +1,293 @@
+{
+  "description": "The same idea for stores within 10 km of the shopper. Add chainSlugs or locationIds the same way as in a search. The location goes in the body only.",
+  "request": {
+    "method": "POST",
+    "path": "/api/prices/list",
+    "body": {
+      "items": [
+        {
+          "query": "milk",
+          "quantity": 2
+        },
+        {
+          "query": "banana"
+        }
+      ],
+      "matchesPerItem": 1,
+      "near": {
+        "lat": 49.28,
+        "lng": -123.12,
+        "radiusKm": 10
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "index": 0,
+          "quantity": 2,
+          "matches": [
+            {
+              "id": "save-on-foods:SOF-1008",
+              "chainSlug": "save-on-foods",
+              "chainName": "Save-On-Foods",
+              "parentCompany": "Pattison Food Group",
+              "sku": "SOF-1008",
+              "name": "2% Milk 4 L",
+              "size": "4 L",
+              "sizeAmount": 4,
+              "sizeUnit": "l",
+              "packCount": 1,
+              "pricedByWeight": false,
+              "category": "dairy-eggs",
+              "priceCents": 629,
+              "regularPriceCents": 629,
+              "memberPriceCents": 599,
+              "unitPriceCents": 16,
+              "unitLabel": "100ml",
+              "comparableUnitPrice": {
+                "per": "100ml",
+                "cents": 15.73
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z",
+              "distanceKm": 0.3
+            }
+          ],
+          "total": 2
+        },
+        {
+          "index": 1,
+          "quantity": 1,
+          "matches": [
+            {
+              "id": "save-on-foods:SOF-1001",
+              "chainSlug": "save-on-foods",
+              "chainName": "Save-On-Foods",
+              "parentCompany": "Pattison Food Group",
+              "sku": "SOF-1001",
+              "name": "Bananas",
+              "size": "per kg",
+              "sizeAmount": 1,
+              "sizeUnit": "kg",
+              "packCount": 1,
+              "pricedByWeight": true,
+              "category": "fruits",
+              "priceCents": 169,
+              "regularPriceCents": 169,
+              "memberPriceCents": 149,
+              "unitPriceCents": 169,
+              "unitLabel": "kg",
+              "comparableUnitPrice": {
+                "per": "100g",
+                "cents": 16.9
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z",
+              "distanceKm": 0.3
+            }
+          ],
+          "total": 2
+        }
+      ],
+      "chains": [
+        {
+          "chainSlug": "save-on-foods",
+          "chainName": "Save-On-Foods",
+          "totalCents": 1427,
+          "picks": [
+            {
+              "index": 0,
+              "row": {
+                "id": "save-on-foods:SOF-1008",
+                "chainSlug": "save-on-foods",
+                "chainName": "Save-On-Foods",
+                "parentCompany": "Pattison Food Group",
+                "sku": "SOF-1008",
+                "name": "2% Milk 4 L",
+                "size": "4 L",
+                "sizeAmount": 4,
+                "sizeUnit": "l",
+                "packCount": 1,
+                "pricedByWeight": false,
+                "category": "dairy-eggs",
+                "priceCents": 629,
+                "regularPriceCents": 629,
+                "memberPriceCents": 599,
+                "unitPriceCents": 16,
+                "unitLabel": "100ml",
+                "comparableUnitPrice": {
+                  "per": "100ml",
+                  "cents": 15.73
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z",
+                "distanceKm": 0.3
+              },
+              "lineCents": 1258
+            },
+            {
+              "index": 1,
+              "row": {
+                "id": "save-on-foods:SOF-1001",
+                "chainSlug": "save-on-foods",
+                "chainName": "Save-On-Foods",
+                "parentCompany": "Pattison Food Group",
+                "sku": "SOF-1001",
+                "name": "Bananas",
+                "size": "per kg",
+                "sizeAmount": 1,
+                "sizeUnit": "kg",
+                "packCount": 1,
+                "pricedByWeight": true,
+                "category": "fruits",
+                "priceCents": 169,
+                "regularPriceCents": 169,
+                "memberPriceCents": 149,
+                "unitPriceCents": 169,
+                "unitLabel": "kg",
+                "comparableUnitPrice": {
+                  "per": "100g",
+                  "cents": 16.9
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z",
+                "distanceKm": 0.3
+              },
+              "lineCents": 169
+            }
+          ],
+          "missingIndexes": [],
+          "distanceKm": 0.3
+        },
+        {
+          "chainSlug": "costco",
+          "chainName": "Costco",
+          "totalCents": 2697,
+          "picks": [
+            {
+              "index": 0,
+              "row": {
+                "id": "costco:C-3008",
+                "chainSlug": "costco",
+                "chainName": "Costco",
+                "parentCompany": "Costco Wholesale",
+                "sku": "C-3008",
+                "name": "2% Milk",
+                "size": "2 x 4 L",
+                "sizeAmount": 4,
+                "sizeUnit": "l",
+                "packCount": 2,
+                "pricedByWeight": false,
+                "category": "dairy-eggs",
+                "priceCents": 1199,
+                "regularPriceCents": 1199,
+                "unitPriceCents": 15,
+                "unitLabel": "100ml",
+                "comparableUnitPrice": {
+                  "per": "100ml",
+                  "cents": 14.99
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z",
+                "distanceKm": 8
+              },
+              "lineCents": 2398
+            },
+            {
+              "index": 1,
+              "row": {
+                "id": "costco:C-3001",
+                "chainSlug": "costco",
+                "chainName": "Costco",
+                "parentCompany": "Costco Wholesale",
+                "sku": "C-3001",
+                "name": "Bananas",
+                "size": "2 kg",
+                "sizeAmount": 2,
+                "sizeUnit": "kg",
+                "packCount": 1,
+                "pricedByWeight": false,
+                "category": "fruits",
+                "priceCents": 299,
+                "regularPriceCents": 299,
+                "unitPriceCents": 15,
+                "unitLabel": "100g",
+                "comparableUnitPrice": {
+                  "per": "100g",
+                  "cents": 14.95
+                },
+                "scrapedAt": "2026-10-17T20:00:00.000Z",
+                "distanceKm": 8
+              },
+              "lineCents": 299
+            }
+          ],
+          "missingIndexes": [],
+          "distanceKm": 8
+        }
+      ],
+      "cheapestMix": {
+        "totalCents": 1427,
+        "picks": [
+          {
+            "index": 0,
+            "row": {
+              "id": "save-on-foods:SOF-1008",
+              "chainSlug": "save-on-foods",
+              "chainName": "Save-On-Foods",
+              "parentCompany": "Pattison Food Group",
+              "sku": "SOF-1008",
+              "name": "2% Milk 4 L",
+              "size": "4 L",
+              "sizeAmount": 4,
+              "sizeUnit": "l",
+              "packCount": 1,
+              "pricedByWeight": false,
+              "category": "dairy-eggs",
+              "priceCents": 629,
+              "regularPriceCents": 629,
+              "memberPriceCents": 599,
+              "unitPriceCents": 16,
+              "unitLabel": "100ml",
+              "comparableUnitPrice": {
+                "per": "100ml",
+                "cents": 15.73
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z",
+              "distanceKm": 0.3
+            },
+            "lineCents": 1258
+          },
+          {
+            "index": 1,
+            "row": {
+              "id": "save-on-foods:SOF-1001",
+              "chainSlug": "save-on-foods",
+              "chainName": "Save-On-Foods",
+              "parentCompany": "Pattison Food Group",
+              "sku": "SOF-1001",
+              "name": "Bananas",
+              "size": "per kg",
+              "sizeAmount": 1,
+              "sizeUnit": "kg",
+              "packCount": 1,
+              "pricedByWeight": true,
+              "category": "fruits",
+              "priceCents": 169,
+              "regularPriceCents": 169,
+              "memberPriceCents": 149,
+              "unitPriceCents": 169,
+              "unitLabel": "kg",
+              "comparableUnitPrice": {
+                "per": "100g",
+                "cents": 16.9
+              },
+              "scrapedAt": "2026-10-17T20:00:00.000Z",
+              "distanceKm": 0.3
+            },
+            "lineCents": 169
+          }
+        ],
+        "missingIndexes": []
+      }
+    }
+  }
+}

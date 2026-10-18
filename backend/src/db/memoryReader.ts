@@ -1,6 +1,17 @@
 import type { FinalItem } from '../pipeline/types';
 import { findItems, searchFinal, storesWithinRadius, type SearchData } from '../search/search';
-import type { Chain, MemberPricing, NearbyStore, PriceFilters, PriceRow, PriceSearchResult, StoreLocation } from '../types';
+import { priceShoppingList } from '../search/shoppingList';
+import type {
+  Chain,
+  MemberPricing,
+  NearbyStore,
+  PriceFilters,
+  PriceRow,
+  PriceSearchResult,
+  ShoppingListRequest,
+  ShoppingListResult,
+  StoreLocation,
+} from '../types';
 import type { PriceRepository } from './repository';
 
 /** Where the data comes from. MemoryFinal (the final layer kept in memory) fits this. */
@@ -37,6 +48,10 @@ export class MemoryPriceRepository implements PriceRepository {
 
   async getItems(ids: readonly string[], options: { memberPricing?: MemberPricing } = {}): Promise<PriceRow[]> {
     return findItems(await this.load(), ids, options.memberPricing);
+  }
+
+  async priceShoppingList(request: ShoppingListRequest): Promise<ShoppingListResult> {
+    return priceShoppingList(await this.load(), request);
   }
 
   async listChains(): Promise<Chain[]> {

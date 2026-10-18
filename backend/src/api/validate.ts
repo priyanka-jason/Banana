@@ -1,6 +1,14 @@
 import { PRODUCT_CATEGORIES, isProductCategory } from '../categories';
 import { MAX_LIMIT } from '../search/search';
-import type { MemberPricing, PriceFilters, PriceSort, SortOrder } from '../types';
+import { MAX_LIST_ITEMS, MAX_MATCHES_PER_ITEM, MAX_QUANTITY } from '../search/shoppingList';
+import type {
+  MemberPricing,
+  PriceFilters,
+  PriceSort,
+  ShoppingListEntry,
+  ShoppingListRequest,
+  SortOrder,
+} from '../types';
 import type { ApiErrorDetail } from './types';
 
 /**
@@ -15,7 +23,8 @@ export const MAX_QUERY_LENGTH = 100;
 export const MAX_LIST_ENTRIES = 50;
 export const MAX_LOOKUP_IDS = 100;
 export const MAX_ID_LENGTH = 200;
-export const MAX_RADIUS_KM = 200;
+/** The furthest a shopper can search for stores, in km. Matches the website's 1 to 10 km slider. */
+export const MAX_RADIUS_KM = 10;
 
 const SEARCH_FIELDS = [
   'query',
@@ -65,19 +74,20 @@ function readTextList(
   errors: Errors,
   max: number,
   maxLength = MAX_ID_LENGTH,
+  field = key,
 ): string[] | undefined {
   const value = obj[key];
   if (value === undefined) return undefined;
   if (!Array.isArray(value) || value.some((entry) => typeof entry !== 'string' || entry.trim() === '')) {
-    errors.push({ field: key, message: 'must be a list of non-empty text' });
+    errors.push({ field, message: 'must be a list of non-empty text' });
     return undefined;
   }
   if (value.length > max) {
-    errors.push({ field: key, message: `can have at most ${max} entries` });
+    errors.push({ field, message: `can have at most ${max} entries` });
     return undefined;
   }
   if (value.some((entry: string) => entry.length > maxLength)) {
-    errors.push({ field: key, message: `entries can be at most ${maxLength} characters` });
+    errors.push({ field, message: `entries can be at most ${maxLength} characters` });
     return undefined;
   }
   return (value as string[]).map((entry) => entry.trim());
@@ -163,18 +173,8 @@ export function parseSearchBody(body: unknown): ParseResult<PriceFilters> {
   const locationIds = readTextList(obj, 'locationIds', errors, MAX_LIST_ENTRIES);
   if (locationIds !== undefined) filters.locationIds = locationIds;
 
-  const categories = readTextList(obj, 'categories', errors, MAX_LIST_ENTRIES);
-  if (categories !== undefined) {
-    const unknown = categories.filter((entry) => !isProductCategory(entry));
-    if (unknown.length > 0) {
-      errors.push({
-        field: 'categories',
-        message: `has unknown categories (${unknown.join(', ')}). Known: ${PRODUCT_CATEGORIES.join(', ')}`,
-      });
-    } else {
-      filters.categories = categories as PriceFilters['categories'];
-    }
-  }
+  const categories = readCategories(obj, errors);
+  if (categories !== undefined) filters.categories = categories;
 
   const near = obj['near'];
   if (near !== undefined) {
@@ -236,6 +236,108 @@ export function parseLookupBody(body: unknown): ParseResult<{ ids: string[]; mem
 
   const memberPricing = readMemberPricing(obj, 'memberPricing', errors) ?? 'non-member';
   return finish(errors, { ids: ids ?? [], memberPricing });
+}
+
+/** Shared categories, with unknown slugs reported by name. */
+function readCategories(obj: Record<string, unknown>, errors: Errors, field = 'categories'): PriceFilters['categories'] {
+  const categories = readTextList(obj, 'categories', errors, MAX_LIST_ENTRIES, MAX_ID_LENGTH, field);
+  if (categories === undefined) return undefined;
+  const unknown = categories.filter((entry) => !isProductCategory(entry));
+  if (unknown.length > 0) {
+    errors.push({ field, message: `has unknown categories (${unknown.join(', ')}). Known: ${PRODUCT_CATEGORIES.join(', ')}` });
+    return undefined;
+  }
+  return categories as PriceFilters['categories'];
+}
+
+/** One line of a shopping list: { query, categories?, quantity? } or { itemId, quantity? }. */
+function readListEntry(value: unknown, index: number, errors: Errors): ShoppingListEntry | undefined {
+  const prefix = `items[${index}].`;
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    errors.push({ field: `items[${index}]`, message: 'must be an object like { "query": "milk", "quantity": 2 }' });
+    return undefined;
+  }
+  const obj = value as Record<string, unknown>;
+  const before = errors.length;
+  rejectUnknownFields(obj, ['query', 'itemId', 'categories', 'quantity'], errors, prefix);
+
+  const quantity = readNumber(obj, 'quantity', `${prefix}quantity`, errors, { min: 1, max: MAX_QUANTITY, integer: true });
+  const { query, itemId } = obj;
+  if (query !== undefined && itemId !== undefined) {
+    errors.push({ field: `items[${index}]`, message: 'must have "query" or "itemId", not both' });
+  } else if (itemId !== undefined) {
+    if (typeof itemId !== 'string' || itemId.trim() === '' || itemId.length > MAX_ID_LENGTH) {
+      errors.push({ field: `${prefix}itemId`, message: `must be an item id up to ${MAX_ID_LENGTH} characters` });
+    }
+    if (obj['categories'] !== undefined) {
+      errors.push({ field: `${prefix}categories`, message: 'can only be used with "query"' });
+    }
+  } else if (query === undefined) {
+    errors.push({ field: `items[${index}]`, message: 'must have "query" (like "milk") or "itemId"' });
+  } else if (typeof query !== 'string' || query.trim() === '' || query.trim().length > MAX_QUERY_LENGTH) {
+    errors.push({ field: `${prefix}query`, message: `must be text, 1 to ${MAX_QUERY_LENGTH} characters` });
+  }
+  const categories = itemId === undefined ? readCategories(obj, errors, `${prefix}categories`) : undefined;
+
+  if (errors.length > before) return undefined;
+  const extra = quantity === undefined ? {} : { quantity };
+  if (typeof itemId === 'string') return { itemId: itemId.trim(), ...extra };
+  return { query: (query as string).trim(), ...(categories === undefined ? {} : { categories }), ...extra };
+}
+
+/** The body of POST /api/prices/list: a shopping list and, optionally, where the shopper will buy. */
+export function parseShoppingListBody(body: unknown): ParseResult<ShoppingListRequest> {
+  const errors: Errors = [];
+  const obj = asObject(body, errors);
+  if (obj === undefined) return { ok: false, errors };
+  rejectUnknownFields(
+    obj,
+    ['items', 'chainSlugs', 'parentCompanies', 'locationIds', 'near', 'memberPricing', 'matchesPerItem'],
+    errors,
+  );
+
+  const request: ShoppingListRequest = { items: [] };
+  const items = obj['items'];
+  if (items === undefined) {
+    errors.push({ field: 'items', message: 'is required' });
+  } else if (!Array.isArray(items) || items.length === 0) {
+    errors.push({ field: 'items', message: 'must be a list with at least one entry' });
+  } else if (items.length > MAX_LIST_ITEMS) {
+    errors.push({ field: 'items', message: `can have at most ${MAX_LIST_ITEMS} entries` });
+  } else {
+    items.forEach((value, index) => {
+      const entry = readListEntry(value, index, errors);
+      if (entry !== undefined) request.items.push(entry);
+    });
+  }
+
+  const chainSlugs = readTextList(obj, 'chainSlugs', errors, MAX_LIST_ENTRIES);
+  if (chainSlugs !== undefined) request.chainSlugs = chainSlugs;
+  const parentCompanies = readTextList(obj, 'parentCompanies', errors, MAX_LIST_ENTRIES);
+  if (parentCompanies !== undefined) request.parentCompanies = parentCompanies;
+  const locationIds = readTextList(obj, 'locationIds', errors, MAX_LIST_ENTRIES);
+  if (locationIds !== undefined) request.locationIds = locationIds;
+
+  const near = obj['near'];
+  if (near !== undefined) {
+    if (typeof near !== 'object' || near === null || Array.isArray(near)) {
+      errors.push({ field: 'near', message: 'must be an object like { "lat": 49.28, "lng": -123.12, "radiusKm": 5 }' });
+    } else {
+      const point = readPoint(near as Record<string, unknown>, errors, 'near.');
+      if (point !== undefined) request.near = point;
+    }
+  }
+
+  const memberPricing = readMemberPricing(obj, 'memberPricing', errors);
+  if (memberPricing !== undefined) request.memberPricing = memberPricing;
+  const matchesPerItem = readNumber(obj, 'matchesPerItem', 'matchesPerItem', errors, {
+    min: 1,
+    max: MAX_MATCHES_PER_ITEM,
+    integer: true,
+  });
+  if (matchesPerItem !== undefined) request.matchesPerItem = matchesPerItem;
+
+  return finish(errors, request);
 }
 
 /** The body of POST /api/stores/nearby: { lat, lng, radiusKm, chainSlugs? }. */

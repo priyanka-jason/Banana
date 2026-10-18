@@ -5,6 +5,8 @@ import type {
   PriceFilters,
   PriceRow,
   PriceSearchResult,
+  ShoppingListRequest,
+  ShoppingListResult,
   StoreLocation,
 } from '../types';
 
@@ -27,6 +29,12 @@ export interface PriceRepository {
    * For an item page, or a saved shopping list.
    */
   getItems(ids: readonly string[], options?: { memberPricing?: MemberPricing }): Promise<PriceRow[]>;
+
+  /**
+   * Price a whole shopping list in the chosen stores: the cheapest matches for each entry,
+   * the total at each chain, and the cheapest mix. The rules are in search/shoppingList.ts.
+   */
+  priceShoppingList(request: ShoppingListRequest): Promise<ShoppingListResult>;
 
   /** Every chain, for the list of available stores and the store filters. */
   listChains(): Promise<Chain[]>;

@@ -1,5 +1,5 @@
 import type { ProductCategory } from '../categories';
-import type { Chain, NearbyStore, PriceRow, StoreLocation } from '../types';
+import type { Chain, NearbyStore, PriceRow, ShoppingListResult, StoreLocation } from '../types';
 
 /**
  * Request and response shapes for the website's API (see backend/docs/api-contract.md).
@@ -42,6 +42,9 @@ export interface LookupResponseBody {
   /** Ids that were asked for but don't exist (for example an item a store stopped selling). */
   missingIds: string[];
 }
+
+/** POST /api/prices/list. Shaped like ShoppingListResult in types.ts. */
+export type ShoppingListResponseBody = ShoppingListResult;
 
 export interface ChainsResponseBody {
   chains: Chain[];

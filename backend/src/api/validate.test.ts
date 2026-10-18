@@ -7,6 +7,7 @@ import {
   parseLookupBody,
   parseMemberPricingParam,
   parseNearbyBody,
+  parseShoppingListBody,
   parseSearchBody,
 } from './validate';
 
@@ -110,7 +111,10 @@ describe('parseSearchBody', () => {
   describe('near', () => {
     it('accepts a good location', () => {
       expect(parseSearchBody({ near: { lat: 0, lng: 0, radiusKm: 0.5 } }).ok).toBe(true);
-      expect(parseSearchBody({ near: { lat: -90, lng: 180, radiusKm: 200 } }).ok).toBe(true);
+      expect(parseSearchBody({ near: { lat: -90, lng: 180, radiusKm: 10 } }).ok).toBe(true);
+      expect(problems(parseSearchBody({ near: { lat: 49, lng: -123, radiusKm: 10.5 } }))).toEqual([
+        'near.radiusKm: must be more than 0 and at most 10',
+      ]);
     });
 
     it('rejects something that is not an object', () => {
@@ -148,7 +152,7 @@ describe('parseSearchBody', () => {
       ]);
       for (const radiusKm of [0, -1, 201]) {
         expect(problems(parseSearchBody({ near: { lat: 49, lng: -123, radiusKm } })), String(radiusKm)).toEqual([
-          'near.radiusKm: must be more than 0 and at most 200',
+          'near.radiusKm: must be more than 0 and at most 10',
         ]);
       }
     });
@@ -272,7 +276,7 @@ describe('parseNearbyBody', () => {
 
   it('rejects a place off Earth, a bad radius, extra fields and a non-object', () => {
     expect(problems(parseNearbyBody({ lat: 200, lng: -123, radiusKm: 5 }))).toEqual(['lat: must be at least -90 and at most 90']);
-    expect(problems(parseNearbyBody({ lat: 49, lng: -123, radiusKm: 0 }))).toEqual(['radiusKm: must be more than 0 and at most 200']);
+    expect(problems(parseNearbyBody({ lat: 49, lng: -123, radiusKm: 0 }))).toEqual(['radiusKm: must be more than 0 and at most 10']);
     expect(problems(parseNearbyBody({ lat: 49, lng: -123, radiusKm: 5, extra: 1 }))).toHaveLength(1);
     expect(problems(parseNearbyBody('here'))).toEqual(['(body): must be a JSON object']);
   });
@@ -313,5 +317,62 @@ describe('parseChainParams', () => {
     expect(parseChainParams('').ok).toBe(false);
     expect(parseChainParams(['walmart', 5]).ok).toBe(false);
     expect(parseChainParams(7).ok).toBe(false);
+  });
+});
+
+describe('parseShoppingListBody', () => {
+  it('accepts search entries, exact items and a store choice, trimming text', () => {
+    expect(
+      parseShoppingListBody({
+        items: [{ query: ' milk ', quantity: 2, categories: ['dairy-eggs'] }, { itemId: 'walmart:W-2002' }],
+        chainSlugs: ['walmart'],
+        near: { lat: 49.28, lng: -123.12, radiusKm: 5 },
+        matchesPerItem: 3,
+      }),
+    ).toEqual({
+      ok: true,
+      value: {
+        items: [{ query: 'milk', categories: ['dairy-eggs'], quantity: 2 }, { itemId: 'walmart:W-2002' }],
+        chainSlugs: ['walmart'],
+        near: { lat: 49.28, lng: -123.12, radiusKm: 5 },
+        matchesPerItem: 3,
+      },
+    });
+  });
+
+  it('needs a non-empty list of at most 50 entries', () => {
+    expect(problems(parseShoppingListBody({}))).toEqual(['items: is required']);
+    expect(problems(parseShoppingListBody({ items: [] }))).toEqual(['items: must be a list with at least one entry']);
+    expect(problems(parseShoppingListBody({ items: Array(51).fill({ query: 'milk' }) }))).toEqual([
+      'items: can have at most 50 entries',
+    ]);
+  });
+
+  it('points at the exact entry and field, listing every problem', () => {
+    expect(
+      problems(
+        parseShoppingListBody({
+          items: [
+            { query: 'milk', quantity: 1.5 },
+            { query: '' },
+            { itemId: 'walmart:W-1', categories: ['meat'] },
+            { query: 'eggs', categories: ['eggs'], brand: 'x' },
+          ],
+          sortBy: 'price',
+        }),
+      ),
+    ).toEqual([
+      'sortBy: is not a known field (known fields: items, chainSlugs, parentCompanies, locationIds, near, memberPricing, matchesPerItem)',
+      'items[0].quantity: must be a whole number',
+      'items[1].query: must be text, 1 to 100 characters',
+      'items[2].categories: can only be used with "query"',
+      'items[3].brand: is not a known field (known fields: query, itemId, categories, quantity)',
+      'items[3].categories: has unknown categories (eggs). Known: fruits, vegetables, meat, seafood, dairy-eggs, bakery, frozen, beverages, snacks, pantry, household, other',
+    ]);
+  });
+
+  it('never repeats the location back', () => {
+    const text = JSON.stringify(parseShoppingListBody({ items: [{ query: 'milk' }], near: { lat: 123.456789, lng: -123.1, radiusKm: 5 } }));
+    expect(text).not.toContain('123.456789');
   });
 });
