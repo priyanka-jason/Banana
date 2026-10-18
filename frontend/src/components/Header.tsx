@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { HouseIcon } from '@phosphor-icons/react/dist/csr/House'
 import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/csr/MagnifyingGlass'
 import { MapPinIcon } from '@phosphor-icons/react/dist/csr/MapPin'
+import { CrownSimpleIcon } from '@phosphor-icons/react/dist/csr/CrownSimple'
 import { CaretDownIcon } from '@phosphor-icons/react/dist/csr/CaretDown'
 import { UserCircleIcon } from '@phosphor-icons/react/dist/csr/UserCircle'
 import { IdentificationCardIcon } from '@phosphor-icons/react/dist/csr/IdentificationCard'
@@ -80,6 +81,12 @@ export function Header({ page, params }: Props) {
             aria-current={page === 'locations' ? 'page' : undefined}
           >
             Locations
+          </a>
+          <a
+            href={pageHref('membership', params)}
+            aria-current={page === 'membership' ? 'page' : undefined}
+          >
+            Membership
           </a>
         </nav>
 
@@ -204,6 +211,17 @@ export function MobileNav({
           aria-hidden="true"
         />
         <span>Locations</span>
+      </a>
+      <a
+        href={pageHref('membership', params)}
+        aria-current={page === 'membership' ? 'page' : undefined}
+      >
+        <CrownSimpleIcon
+          size={25}
+          weight={page === 'membership' ? 'fill' : 'regular'}
+          aria-hidden="true"
+        />
+        <span>Membership</span>
       </a>
       <button
         type="button"

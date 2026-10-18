@@ -18,7 +18,9 @@ export function useRoute() {
       ? 'items'
       : path === '/locations'
         ? 'locations'
-        : 'home') as Page,
+        : path === '/membership'
+          ? 'membership'
+          : 'home') as Page,
     params: new URLSearchParams(query),
   }
 }
