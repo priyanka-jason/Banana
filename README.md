@@ -10,14 +10,14 @@ Built for a hackathon.
 
 ## Project overview
 
-We are fighting inflation. Food prices keep rising, and the cheapest store for one item is rarely the cheapest for the next. Comparing them means checking five flyers and five websites. Many families don't have time for that, and they're often the ones who need the savings most. A 2024 Bank of Canada study found that families are overspending by 2.1% from choosing cheap items, whereas they can save up to 4.1% on average by buying discounted products ([Bank of Canada Working Paper 2024-31: Price Discounts and Cheapflation](https://publications.gc.ca/collections/collection_2024/banque-bank-canada/FB3-5-2024-31-eng.pdf)).
+We are fighting inflation. Food prices keep rising, and the cheapest store for one item is rarely the cheapest for the next. Comparing them means checking five flyers and five websites. Many families don't have time for that, and they're often the ones who need the savings most. Canadian families are overspending by 2.1% from choosing cheap items, whereas they can save up to 4.1% on average by buying discounted products ([Bank of Canada Working Paper 2024-31: Price Discounts and Cheapflation](https://publications.gc.ca/collections/collection_2024/banque-bank-canada/FB3-5-2024-31-eng.pdf)).
 
 Banana compares grocery prices across five chains in Metro Vancouver: **Save-On-Foods, Walmart, Costco, No Frills and Real Canadian Superstore**. You search once and see who has the item, what it costs, and how far away the store is. Then you can build a shopping list and see which store, or which mix of stores, makes your whole basket cheapest.
 
 ### Social responsibility
 
 - **Saving money is free.** Search, comparison, store maps and basket totals are all on the Free plan, with no account needed. We never paywall the features that help people spend less.
-- **Premium feeds people.** Premium costs $4.99/month (CAD). **20% of every payment goes straight to local food banks.** The other 80% covers price data, hosting and payment fees. Once operating costs are offset, all proceeds will go to local food banks.
+- **Premium feeds people.** Premium costs $4.99/month (CAD). **20% of every payment goes straight to local food banks.** The other 80% covers price data, hosting and payment fees. Once operating costs are offset, **100% of proceeds will go to local food banks.**
 - **Privacy by default.** Your location is used only to work out distances. It is never logged or stored on our servers. A searched address is saved only in your own browser.
 - **Honest numbers.** We never fill gaps with made-up values. Missing information is shown as missing. Demo prices are clearly labelled. A basket that's missing items is never ranked as the "cheapest". Totals state that they exclude taxes, fees and deposits.
 - **Free and open services.** Maps use MapLibre and OpenFreeMap, and address search uses the public BC Address Geocoder. Nobody needs a paid account to use Banana.
