@@ -119,6 +119,10 @@ function ListDialog({ onClose }: { onClose: () => void }) {
             <p className="list-note">
               Prices are the ones shown in search. Stock may vary.
             </p>
+            <p className="list-note">
+              Total doesn’t include taxes or other fees, such as environmental
+              handling fees (EHF) or container deposits.
+            </p>
             <div className="filter-dialog-actions">
               <button className="text-button" onClick={shoppingList.clear}>
                 Clear list

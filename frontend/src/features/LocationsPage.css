@@ -213,7 +213,7 @@
 }
 .location-store-summary {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 134px 24px;
+  grid-template-columns: minmax(0, 1fr) 134px 42px;
   gap: 8px;
   align-items: start;
 }
@@ -277,10 +277,11 @@
   width: auto;
   color: #14251d;
 }
-.store-expand {
-  padding: 6px 0;
-  width: 24px;
-  min-height: 44px;
+/* The round icon button is 42px; its grid column matches so it stays inside the card. */
+.location-store-summary > .store-expand {
+  width: 42px;
+  height: 42px;
+  padding: 0;
 }
 .location-chain-offers {
   margin-top: 20px;
@@ -302,19 +303,20 @@
   margin: 0;
   letter-spacing: -0.4px;
 }
+/* Four offers as a compact 2 x 2 grid. */
 .location-offer-previews {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
   list-style: none;
-  margin: 18px 0 0;
-  padding: 4px 2px 10px;
+  margin: 12px 0 0;
+  padding: 0;
 }
 .location-offer-previews > li {
   min-width: 0;
-  padding: 12px 0;
-}
-.location-offer-previews > li + li {
-  border-top: 1px solid var(--line);
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 .location-offer {
   display: flex;
@@ -329,8 +331,8 @@
 .location-offer > img,
 .location-offer > picture > img,
 .location-offer > .product-placeholder {
-  width: 64px;
-  height: 72px;
+  width: 48px;
+  height: 52px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -346,7 +348,7 @@
   margin-top: 4px;
 }
 .location-offer .price-line {
-  margin-top: 8px;
+  margin-top: 4px;
   gap: 7px;
   flex-wrap: wrap;
 }
@@ -510,7 +512,7 @@
     font-size: 13px;
   }
   .location-store-summary {
-    grid-template-columns: minmax(0, 1fr) 24px;
+    grid-template-columns: minmax(0, 1fr) 42px;
   }
   .location-store-actions {
     grid-column: 1;
@@ -634,7 +636,7 @@
     padding: 14px 9px;
   }
   .location-store-summary {
-    grid-template-columns: minmax(0, 1fr) 22px;
+    grid-template-columns: minmax(0, 1fr) 42px;
     gap: 4px;
   }
   .location-store-logo {
@@ -729,16 +731,17 @@
   }
 }
 .location-offer > span > strong {
-  font-size: 15px;
+  font-size: 14px;
+  line-height: 1.25;
 }
 .location-offer .pack {
-  font-size: 14px;
+  font-size: 12px;
 }
 .location-offer .unit-price {
-  font-size: 13px;
+  font-size: 12px;
 }
 .location-offer .price-line strong {
-  font-size: 26px;
+  font-size: 20px;
   color: var(--green);
 }
 @media (min-width: 701px) and (max-width: 900px) {
@@ -755,5 +758,16 @@
 @media (max-width: 700px) {
   .location-map-panel {
     height: max(390px, calc(100dvh - 490px));
+  }
+}
+/* On phones the grid cells are narrow: picture above the text. */
+@media (max-width: 700px) {
+  .location-offer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .location-offer .price-line strong {
+    font-size: 18px;
   }
 }
