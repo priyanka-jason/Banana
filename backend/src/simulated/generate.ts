@@ -20,8 +20,21 @@ import { between, chance } from './random';
 
 /** This week's flyer: Friday Oct 16 to Thursday Oct 22, 2026. */
 export const SIMULATED_FLYER_WEEK = { start: '2026-10-16', end: '2026-10-22' } as const;
-/** Costco's coupon book runs longer. */
-const COSTCO_SALE_END = '2026-11-01';
+/**
+ * When each sale ends, so "Valid until" varies like real flyers: weekend-only
+ * deals, this week's flyer, two-week deals and longer multi-week offers. Listed
+ * twice for the weekly flyer so it stays the most common. Costco's coupon book
+ * runs longer.
+ */
+export const SIMULATED_SALE_ENDS = ['2026-10-20', '2026-10-22', '2026-10-22', '2026-10-29', '2026-11-05'] as const;
+export const COSTCO_SALE_ENDS = ['2026-11-01', '2026-11-08', '2026-11-15'] as const;
+
+/** One of the end dates above, the same for this item every run. */
+function saleEndFor(slug: string, productKey: string): string {
+  const ends = slug === 'costco' ? COSTCO_SALE_ENDS : SIMULATED_SALE_ENDS;
+  const index = Math.min(ends.length - 1, Math.floor(chance(slug, productKey, 'sale-end') * ends.length));
+  return ends[index] ?? SIMULATED_FLYER_WEEK.end;
+}
 
 const GRAMS_PER_LB = 453.59237;
 const LB_PER_KG = 1000 / GRAMS_PER_LB;
@@ -95,7 +108,7 @@ function simulatedItem(profile: SimulatedChainProfile, product: CatalogProduct):
     if (sale < regularCents) {
       item.saleCents = sale;
       item.saleStart = SIMULATED_FLYER_WEEK.start;
-      item.saleEnd = slug === 'costco' ? COSTCO_SALE_END : SIMULATED_FLYER_WEEK.end;
+      item.saleEnd = saleEndFor(slug, product.key);
       current = sale;
     }
   }

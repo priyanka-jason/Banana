@@ -9,7 +9,9 @@ import { CATALOG } from './catalog';
 import { AREAS, SIMULATED_CHAINS } from './chains';
 import { SIMULATED_TIME, buildSimulatedFiles, loadSimulated } from './exportData';
 import {
+  COSTCO_SALE_ENDS,
   SIMULATED_CATEGORY_MAP,
+  SIMULATED_SALE_ENDS,
   roundToEnding,
   simulatedConnectors,
   simulatedItemsFor,
@@ -108,6 +110,20 @@ describe('simulated items', () => {
         }
       }
     }
+  });
+
+  it('spreads sale end dates like real flyers, and never ends a sale before it starts', () => {
+    const ends = new Set<string>();
+    for (const profile of SIMULATED_CHAINS) {
+      const allowed: readonly string[] = profile.chain.slug === 'costco' ? COSTCO_SALE_ENDS : SIMULATED_SALE_ENDS;
+      for (const item of simulatedItemsFor(profile)) {
+        if (item.saleEnd === undefined) continue;
+        expect(allowed).toContain(item.saleEnd);
+        expect(item.saleEnd >= (item.saleStart ?? '')).toBe(true);
+        ends.add(item.saleEnd);
+      }
+    }
+    expect(ends.size).toBeGreaterThanOrEqual(5);
   });
 
   it('has bananas at every chain, so a "bananas" search compares them all', () => {
