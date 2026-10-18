@@ -1,0 +1,50 @@
+[
+  {
+    "number": 1,
+    "name": "Sunny Market",
+    "description": "Bright yellow, white space and product-led discovery",
+    "original": "assets/01-original.png",
+    "companion": "assets/01-companion.png",
+    "split": 1176
+  },
+  {
+    "number": 2,
+    "name": "Daily Ledger",
+    "description": "A compact navigation rail and structured price comparisons",
+    "original": "assets/02-original.png",
+    "companion": "assets/02-companion.png",
+    "split": 1230
+  },
+  {
+    "number": 3,
+    "name": "Neighbourhood Fresh",
+    "description": "Dark navigation, yellow search and clear grocery offers",
+    "original": "assets/03-original.png",
+    "companion": "assets/03-companion.png",
+    "split": 1205
+  },
+  {
+    "number": 4,
+    "name": "Sunshine Pop",
+    "description": "Rounded typography, vivid yellow and playful product tiles",
+    "original": "assets/04-original.png",
+    "companion": "assets/04-companion.png",
+    "split": 1205
+  },
+  {
+    "number": 5,
+    "name": "Swiss Grocery Index",
+    "description": "Bold condensed type, sharp rules and an editorial price list",
+    "original": "assets/05-original.png",
+    "companion": "assets/05-companion.png",
+    "split": 1216
+  },
+  {
+    "number": 6,
+    "name": "Neighbourhood Pantry",
+    "description": "Warm neutrals, butter yellow and restrained serif typography",
+    "original": "assets/06-original.png",
+    "companion": "assets/06-companion.png",
+    "split": 1212
+  }
+]

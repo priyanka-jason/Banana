@@ -1,0 +1,756 @@
+.locations-intro {
+  background: var(--warm);
+}
+.locations-intro-inner {
+  display: grid;
+  grid-template-columns: 0.88fr 1.6fr;
+  gap: 34px;
+  align-items: center;
+  padding-block: 30px 27px;
+}
+.locations-intro .page-title {
+  margin: 0 0 6px;
+}
+.locations-intro h1 + p {
+  margin: 0;
+  font-size: 24px;
+  color: var(--muted);
+}
+.locations-controls {
+  min-width: 0;
+}
+.location-search-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+.location-address-form {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  border: 1px solid #d9dbdc;
+  background: white;
+  border-radius: 12px;
+}
+.location-address-form input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: none;
+  padding: 16px 4px 16px 16px;
+  border-radius: 12px 0 0 12px;
+  font-size: 16px;
+}
+.location-address-form input::placeholder {
+  color: #7c8491;
+  opacity: 1;
+}
+.location-address-form button {
+  flex-shrink: 0;
+  width: 44px;
+  min-height: 54px;
+  display: grid;
+  place-items: center;
+  background: none;
+  border-radius: 0 12px 12px 0;
+}
+.location-address-form button:hover {
+  background: #fff5cf;
+}
+.locate-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid #dedfdc;
+  border-radius: 12px;
+  background: none;
+  white-space: nowrap;
+  font-size: 15px;
+}
+.locate-button:hover {
+  background: white;
+}
+.locate-button:disabled {
+  color: var(--muted);
+}
+.locations-controls .select-control {
+  width: 144px;
+  flex-shrink: 0;
+  min-height: 56px;
+}
+.location-hint {
+  font-size: 13px;
+  margin: 12px 0 0;
+  text-align: right;
+  color: var(--muted);
+}
+.address-feedback {
+  font-size: 14px;
+  position: relative;
+}
+.address-feedback:empty {
+  display: none;
+}
+.address-feedback > p {
+  margin: 0;
+  padding-bottom: 16px;
+}
+.address-matches {
+  position: absolute;
+  left: 48px;
+  right: 48px;
+  top: 18px;
+  z-index: 15;
+  margin: 0;
+  list-style: none;
+  padding: 8px;
+  background: white;
+  box-shadow: 0 8px 28px #17251b20;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.address-matches button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  padding: 13px;
+  background: none;
+  border-radius: 7px;
+  min-height: 48px;
+}
+.address-matches button:hover {
+  background: #fff7da;
+}
+.locations-workspace {
+  display: grid;
+  grid-template-columns: 44% 56%;
+  max-width: 1440px;
+  margin-inline: auto;
+  align-items: start;
+}
+.location-list-panel {
+  min-width: 0;
+  padding: 26px 20px 24px;
+}
+.location-list-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding-inline: 10px;
+}
+.location-list-toolbar h2 {
+  font-size: 29px;
+  letter-spacing: -0.8px;
+  margin: 0;
+  line-height: 1.25;
+}
+.location-sort {
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  color: #535e69;
+}
+.location-sort select {
+  appearance: none;
+  border: 0;
+  padding: 10px 24px 10px 6px;
+  background: none;
+  max-width: 144px;
+}
+.location-sort svg {
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+}
+.search-origin {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 10px 10px 20px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.search-origin svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.search-origin button {
+  margin-left: auto;
+  color: var(--green);
+  min-height: 24px;
+}
+.location-store {
+  border-bottom: 1px solid var(--line);
+  padding: 20px 12px;
+}
+.location-store.is-selected {
+  border: 1px solid #f0cd58;
+  background: #fffcf0;
+  border-radius: 10px;
+  padding: 16px 12px;
+  margin-bottom: 12px;
+}
+.location-store-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 134px 24px;
+  gap: 8px;
+  align-items: start;
+}
+.store-select {
+  background: none;
+  text-align: left;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+}
+.location-store-logo {
+  width: 80px;
+  height: 80px;
+  flex: 0 0 80px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+  background: white;
+  border: 1px solid var(--line);
+}
+.location-store-logo img {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+}
+.location-store-logo.no-frills {
+  background: #ffe02d;
+  border-color: #ffe02d;
+}
+.location-store-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: #64707a;
+  font-size: 16px;
+  line-height: 1.35;
+}
+.location-store-name strong {
+  color: #172722;
+  font-size: 20px;
+  line-height: 1.35;
+  margin-bottom: 3px;
+}
+.location-store-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 17px;
+  color: #59646f;
+  padding-top: 9px;
+}
+.location-store-actions .flyer-button {
+  min-height: 42px;
+  padding: 10px 13px;
+  font-size: 14px;
+  width: auto;
+  color: #14251d;
+}
+.store-expand {
+  padding: 6px 0;
+  width: 24px;
+  min-height: 44px;
+}
+.location-chain-offers {
+  margin-top: 20px;
+  background: white;
+  padding: 17px 10px 20px;
+  border-radius: 9px;
+}
+.location-chain-offers[hidden] {
+  display: none;
+}
+.chain-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.chain-heading h3 {
+  font-size: 18px;
+  margin: 0;
+  letter-spacing: -0.4px;
+}
+.location-offer-previews {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 4px 2px 10px;
+}
+.location-offer-previews > li {
+  flex: 1 0 200px;
+  scroll-snap-align: start;
+  padding-right: 14px;
+}
+.location-offer-previews > li + li {
+  border-left: 1px solid var(--line);
+  padding-left: 14px;
+}
+.location-offer {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+  text-align: left;
+  padding: 0;
+  background: none;
+}
+.location-offer > img {
+  width: 64px;
+  height: 72px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.location-offer > span {
+  min-width: 0;
+}
+.location-offer > span > strong {
+  font-size: 14px;
+  display: block;
+}
+.location-offer .pack {
+  font-size: 13px;
+  margin-top: 4px;
+}
+.location-offer .price-line {
+  margin-top: 8px;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.location-offer .price-line strong {
+  font-size: 23px;
+  line-height: 1.15;
+}
+.location-offer .price-line del {
+  font-size: 12px;
+}
+.location-offer .unit-price {
+  display: block;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.location-data-note {
+  border-top: 1px solid var(--line);
+  padding: 20px 10px 0;
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.location-data-note p {
+  margin: 0 0 6px;
+}
+.location-data-note a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.location-map-panel {
+  min-width: 0;
+  position: sticky;
+  top: 0;
+  height: max(650px, calc(100dvh - 245px));
+  background: #f2f3f0;
+}
+.locations-map,
+.map-canvas {
+  height: 100%;
+  width: 100%;
+}
+.locations-map {
+  position: relative;
+}
+.map-message {
+  position: absolute;
+  z-index: 3;
+  left: 20px;
+  right: 20px;
+  top: 24px;
+  margin: 0;
+  padding: 16px;
+  background: white;
+  border-radius: 10px;
+  color: #47534c;
+  box-shadow: 0 2px 15px #13251c15;
+  font-size: 14px;
+}
+.map-message p {
+  margin: 8px 0;
+}
+.map-message button {
+  color: var(--green);
+  text-decoration: underline;
+  min-height: 36px;
+}
+.map-sample-label {
+  position: absolute;
+  bottom: 28px;
+  right: 12px;
+  margin: 0;
+  z-index: 2;
+  font-size: 11px;
+  padding: 7px 10px;
+  background: #fffffff0;
+  border-radius: 6px;
+  color: #535e69;
+  pointer-events: none;
+}
+.map-marker-number {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #173724;
+  font-weight: 700;
+  font-size: 12px;
+  pointer-events: none;
+}
+.maplibregl-marker[role='button'] {
+  cursor: pointer;
+}
+.maplibregl-marker[role='button']:focus-visible {
+  outline: 3px solid #9a7310;
+  outline-offset: 4px;
+}
+.locations-empty {
+  text-align: center;
+  padding: 55px 22px;
+  color: var(--muted);
+}
+.locations-empty h3 {
+  font-size: 22px;
+  color: var(--ink);
+  margin: 12px 0;
+}
+.locations-empty p {
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+.locations-mobile-tabs {
+  display: none;
+}
+.branch-context {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: -10px 0 20px;
+}
+.branch-context a {
+  color: var(--green);
+  text-decoration: underline;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+.mobile-nav a {
+  flex: 1;
+}
+@media (min-width: 701px) and (max-width: 1100px) {
+  .header-inner {
+    gap: 34px;
+  }
+  .desktop-nav {
+    gap: 24px;
+  }
+  .desktop-nav a {
+    font-size: 16px;
+  }
+  .locations-intro-inner {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .locations-intro h1 + p {
+    font-size: 21px;
+  }
+  .locations-workspace {
+    grid-template-columns: 49% 51%;
+  }
+  .location-list-panel {
+    padding: 22px 12px;
+  }
+  .location-list-toolbar {
+    gap: 8px;
+  }
+  .location-list-toolbar h2 {
+    font-size: 23px;
+  }
+  .location-sort {
+    font-size: 13px;
+  }
+  .location-store-summary {
+    grid-template-columns: minmax(0, 1fr) 24px;
+  }
+  .location-store-actions {
+    grid-column: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 75px;
+    padding-top: 4px;
+  }
+  .store-expand {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .location-store-logo {
+    width: 60px;
+    height: 60px;
+    flex-basis: 60px;
+  }
+  .location-store-logo img {
+    width: 50px;
+    height: 50px;
+  }
+  .location-store-name {
+    font-size: 14px;
+  }
+  .location-store-name strong {
+    font-size: 17px;
+  }
+  .chain-heading {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+@media (max-width: 700px) {
+  .locations-intro-inner {
+    display: block;
+    padding-block: 24px 18px;
+  }
+  .locations-intro .page-title {
+    font-size: 32px;
+    line-height: 1.05;
+    letter-spacing: -1.2px;
+  }
+  .locations-intro h1 + p {
+    font-size: 17px;
+    margin-top: 6px;
+  }
+  .locations-controls {
+    margin-top: 22px;
+  }
+  .location-search-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .location-address-form {
+    grid-column: 1 / -1;
+  }
+  .location-address-form input {
+    font-size: 15px;
+  }
+  .locate-button {
+    font-size: 13px;
+    min-height: 48px;
+    padding-inline: 9px;
+  }
+  .locations-controls .select-control {
+    width: 100%;
+    min-height: 48px;
+    font-size: 14px;
+  }
+  .location-hint {
+    font-size: 11px;
+    text-align: left;
+    line-height: 1.5;
+  }
+  .address-feedback > p {
+    font-size: 13px;
+  }
+  .address-matches {
+    left: 20px;
+    right: 20px;
+  }
+  .locations-mobile-tabs {
+    display: flex;
+    margin: 18px 22px 0;
+    border: 1px solid var(--line);
+    padding: 3px;
+    border-radius: 10px;
+  }
+  .locations-mobile-tabs button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: white;
+    min-height: 42px;
+    border-radius: 7px;
+    font-size: 14px;
+  }
+  .locations-mobile-tabs button[aria-pressed='true'] {
+    background: var(--yellow);
+  }
+  .locations-workspace {
+    display: block;
+    padding-bottom: 65px;
+  }
+  .location-list-panel {
+    padding: 24px 14px;
+  }
+  .location-list-toolbar {
+    padding-inline: 6px;
+  }
+  .location-list-toolbar h2 {
+    font-size: 24px;
+  }
+  .location-sort {
+    font-size: 13px;
+  }
+  .search-origin {
+    margin-inline: 6px;
+    font-size: 12px;
+  }
+  .location-store {
+    padding: 20px 6px;
+  }
+  .location-store.is-selected {
+    padding: 14px 9px;
+  }
+  .location-store-summary {
+    grid-template-columns: minmax(0, 1fr) 22px;
+    gap: 4px;
+  }
+  .location-store-logo {
+    width: 58px;
+    height: 58px;
+    flex-basis: 58px;
+  }
+  .location-store-logo img {
+    width: 48px;
+    height: 48px;
+  }
+  .store-select {
+    gap: 12px;
+  }
+  .location-store-name {
+    font-size: 13px;
+  }
+  .location-store-name strong {
+    font-size: 17px;
+  }
+  .location-store-actions {
+    grid-column: 1;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 70px;
+    font-size: 14px;
+    padding-top: 6px;
+  }
+  .location-store-actions .flyer-button {
+    font-size: 13px;
+  }
+  .store-expand {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .location-chain-offers {
+    margin-top: 15px;
+    padding: 14px 8px;
+  }
+  .chain-heading {
+    display: block;
+  }
+  .chain-heading h3 {
+    font-size: 16px;
+  }
+  .location-offer-previews {
+    margin-top: 14px;
+  }
+  .location-offer .price-line strong {
+    font-size: 23px;
+  }
+  .location-offer .pack {
+    font-size: 12px;
+  }
+  .location-map-panel {
+    position: relative;
+    height: max(470px, calc(100dvh - 160px));
+    margin-top: 16px;
+  }
+  .view-list .location-map-panel {
+    display: none;
+  }
+  .view-map .location-list-panel {
+    display: none;
+  }
+  .map-sample-label {
+    font-size: 10px;
+  }
+  .location-data-note {
+    font-size: 11px;
+  }
+}
+@media (max-width: 355px) {
+  .location-list-toolbar h2 {
+    font-size: 21px;
+  }
+  .location-sort select {
+    max-width: 117px;
+  }
+  .location-store-name strong {
+    font-size: 15px;
+  }
+}
+
+.locations-controls .select-control {
+  width: 156px;
+}
+.locations-controls .select-control select {
+  font-size: 15px;
+  padding-inline: 12px 32px;
+}
+@media (max-width: 700px) {
+  .locations-controls .select-control {
+    width: 100%;
+  }
+}
+.location-offer > span > strong {
+  font-size: 15px;
+}
+.location-offer .pack {
+  font-size: 14px;
+}
+.location-offer .unit-price {
+  font-size: 13px;
+}
+.location-offer .price-line strong {
+  font-size: 26px;
+  color: var(--green);
+}
+@media (min-width: 701px) and (max-width: 900px) {
+  .header-inner {
+    gap: 25px;
+  }
+  .desktop-nav {
+    gap: 19px;
+  }
+  .header-inner .location-city {
+    display: none;
+  }
+}
+@media (max-width: 700px) {
+  .location-map-panel {
+    height: max(390px, calc(100dvh - 490px));
+  }
+}
