@@ -60,3 +60,47 @@ export function subscribeUrl(
   url.searchParams.set('client_reference_id', accountId)
   return url.toString()
 }
+
+/** The Stripe customer portal link (https://billing.stripe.com/...), or '' if unset or not Stripe's. */
+export function portalUrl(link: string | undefined): string {
+  if (!link) return ''
+  try {
+    const url = new URL(link)
+    return url.protocol === 'https:' && url.hostname === 'billing.stripe.com'
+      ? url.toString()
+      : ''
+  } catch {
+    return ''
+  }
+}
+
+/** The signed-in person's row in banana.subscriptions, written by the stripe-webhook function. */
+export interface SubscriptionRow {
+  status: string
+  current_period_end: string | null
+  cancel_at_period_end: boolean
+}
+
+export interface PremiumStatus {
+  premium: boolean
+  /** "renews Nov 17" or "ends Nov 17", when Stripe gave a date. */
+  note: string
+}
+
+/** Premium while the subscription is active or in a trial; anything else is Free. */
+export function premiumStatus(row: SubscriptionRow | null): PremiumStatus {
+  if (!row || !['active', 'trialing'].includes(row.status))
+    return { premium: false, note: '' }
+  const end = row.current_period_end ? new Date(row.current_period_end) : null
+  if (!end || Number.isNaN(end.getTime())) return { premium: true, note: '' }
+  const date = new Intl.DateTimeFormat('en-CA', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'America/Vancouver',
+  }).format(end)
+  return {
+    premium: true,
+    note: `${row.cancel_at_period_end ? 'ends' : 'renews'} ${date}`,
+  }
+}
