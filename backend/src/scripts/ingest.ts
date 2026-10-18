@@ -5,6 +5,7 @@
  *   npm run ingest -- --dry-run         same, but save nothing
  *   npm run ingest -- --chain walmart   only one store
  *   npm run ingest -- --rows 10         show 10 sample rows (default 5)
+ *   npm run ingest -- --simulated       use the simulated Lower Mainland chains instead
  *
  * Nothing is saved anywhere permanent yet: the in-memory repositories are
  * thrown away when the script ends. Supabase versions come later.
@@ -12,6 +13,7 @@
 import { sampleConnectors } from '../connectors';
 import { MemoryFinal, MemoryStoreData } from '../db/memory';
 import { runIngest } from '../pipeline/runIngest';
+import { SIMULATED_CATEGORY_MAP, simulatedConnectors } from '../simulated/generate';
 import { formatIngestSummary } from '../pipeline/summary';
 
 function readOption(args: string[], name: string): string | undefined {
@@ -26,7 +28,7 @@ async function main(): Promise<void> {
   const args = process.argv.slice(2);
 
   if (args.includes('--help')) {
-    console.log('Usage: npm run ingest -- [--dry-run] [--chain <slug>] [--rows <number>]');
+    console.log('Usage: npm run ingest -- [--dry-run] [--simulated] [--chain <slug>] [--rows <number>]');
     return;
   }
 
@@ -34,8 +36,10 @@ async function main(): Promise<void> {
   const rows = rowsText === undefined ? 5 : Number(rowsText);
   if (!Number.isInteger(rows) || rows < 0) throw new Error('--rows must be a whole number, 0 or more');
 
+  const simulated = args.includes('--simulated');
   const result = await runIngest({
-    connectors: sampleConnectors,
+    connectors: simulated ? simulatedConnectors : sampleConnectors,
+    categoryMap: simulated ? SIMULATED_CATEGORY_MAP : undefined,
     storeData: new MemoryStoreData(),
     final: new MemoryFinal(),
     dryRun: args.includes('--dry-run'),

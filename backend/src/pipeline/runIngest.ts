@@ -2,6 +2,7 @@ import type { FetchResult, SkippedItem, StoreConnector } from '../connectors/typ
 import type { FinalRepository } from '../db/final';
 import type { StoreDataRepository } from '../db/storeData';
 import type { Chain } from '../types';
+import type { CategoryMap } from './categoryMap';
 import { combine } from './combine';
 import { recordsFromItems } from './storeRecords';
 import type { CombineResult, StoreRecord } from './types';
@@ -29,6 +30,8 @@ export interface IngestOptions {
   dropWarningRatio?: number;
   /** Clock to stamp records with. Tests pass a fixed one. */
   now?: () => Date;
+  /** Store category name to shared category. Default: the hand-checked CATEGORY_MAP. */
+  categoryMap?: CategoryMap;
 }
 
 export interface IngestResult {
@@ -91,6 +94,7 @@ export async function runIngest(options: IngestOptions): Promise<IngestResult> {
     chainSlug,
     dropWarningRatio = DEFAULT_DROP_WARNING_RATIO,
     now = () => new Date(),
+    categoryMap,
   } = options;
 
   const selected =
@@ -154,7 +158,7 @@ export async function runIngest(options: IngestOptions): Promise<IngestResult> {
   const toCombine = dryRun
     ? fetched
     : (await Promise.all(succeeded.map((connector) => storeData.loadRecords(connector.chain.slug)))).flat();
-  const combined = combine(chains, toCombine);
+  const combined = combine(chains, toCombine, categoryMap);
 
   let savedItems = 0;
   if (!dryRun) {

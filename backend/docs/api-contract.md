@@ -16,6 +16,15 @@ produced by the real code, and a test fails if they drift. To refresh them after
 npm --prefix backend run examples
 ```
 
+## Simulated Lower Mainland data (bigger mock set)
+
+[`docs/simulated/`](simulated/) holds a larger **made-up** data set for the demo: 8 chains (Save-On-Foods, Walmart,
+Costco, Real Canadian Superstore, No Frills, Safeway, T&T Supermarket, FreshCo), 60 stores across Metro Vancouver and
+433 items. Prices, sales and store spots are invented; store spots are rough neighbourhood centres, not real
+addresses. Each file is the body an endpoint would send: `chains.json`, `categories.json`, `stores.json`, and
+`prices.json` (every `PriceRow`, sorted by name). Regenerate with `npm --prefix backend run simulate`, or load it
+through the pipeline with `npm --prefix backend run ingest -- --simulated`.
+
 ## Ground rules
 
 - **Base path** `/api`. JSON in and out (UTF-8). POST bodies are `Content-Type: application/json`.
