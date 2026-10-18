@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { branches, neighbourhoodOrigins } from '../src/data/mockLocations.ts'
+import { branches, neighbourhoodOrigins } from '../src/data/storeLocations.ts'
 import {
   branchOffers,
   distanceKm,
@@ -18,14 +18,14 @@ test('radius uses geographic distance and excludes brands without item data', ()
         111.195,
     ) < 0.01,
   )
-  assert.equal(nearbyBranches(origin, 5).length, 3)
-  assert.equal(nearbyBranches(origin, 1).length, 1)
+  assert.equal(nearbyBranches(origin, 5).length, 12)
+  assert.equal(nearbyBranches(origin, 1).length, 5)
   assert.equal(
     nearbyBranches(origin, 5, [
       ...branches,
       { ...branches[0], id: 'unsupported', brandId: 'unknown' },
     ]).length,
-    3,
+    12,
   )
   assert.equal(
     nearbyBranches({ label: 'far away', latitude: 48, longitude: -123 }, 10)
@@ -35,10 +35,8 @@ test('radius uses geographic distance and excludes brands without item data', ()
 })
 test('separate branches of a chain share the same offers', () => {
   const nearby = nearbyBranches(origin, 5)
-  const sameBrand = nearby.filter(
-    (branch) => branch.brandId === 'save-on-foods',
-  )
-  assert.equal(sameBrand.length, 2)
+  const sameBrand = nearby.filter((branch) => branch.brandId === 'no-frills')
+  assert.equal(sameBrand.length, 5)
   assert.deepEqual(
     branchOffers(sameBrand[0]).map((offer) => [offer.id, offer.price]),
     branchOffers(sameBrand[1]).map((offer) => [offer.id, offer.price]),
@@ -53,8 +51,8 @@ test('radius ring closes and each point follows the requested radius', () => {
 })
 test('catalogue follows the selected branch distance and hides brands without supported branches', () => {
   const filters = readFilters(new URLSearchParams())
-  const results = getNearbyOffers(filters, origin, 'saveon-cambie')
-  const branch = branches.find((branch) => branch.id === 'saveon-cambie')!
+  const results = getNearbyOffers(filters, origin, 'nofrills-joti')
+  const branch = branches.find((branch) => branch.id === 'nofrills-joti')!
   assert.ok(
     results
       .filter((offer) => offer.storeId === branch.brandId)
@@ -62,7 +60,7 @@ test('catalogue follows the selected branch distance and hides brands without su
   )
   assert.ok(
     results
-      .filter((offer) => offer.storeId === 'walmart')
+      .filter((offer) => offer.storeId === 'unknown-brand')
       .every((offer) => offer.distance === Infinity),
   )
 })

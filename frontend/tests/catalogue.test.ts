@@ -14,14 +14,14 @@ function search(query = '') {
 
 test('search compares the same grocery at multiple stores and keeps regular prices', () => {
   const results = search('q=milk')
-  assert.equal(results.length, 2)
+  assert.equal(results.length, 3)
   assert.deepEqual(
     results.map((offer) => offer.storeId),
-    ['superstore', 'save-on-foods'],
+    ['superstore', 'costco', 'save-on-foods'],
   )
   assert.equal(results[0].price, 4.49)
-  assert.equal(isDiscounted(results[1]), false)
-  assert.equal(search('q=milk&sale=1').length, 1)
+  assert.equal(isDiscounted(results[2]), false)
+  assert.equal(search('q=milk&sale=1').length, 2)
 })
 
 test('category, store, discount and distance filters combine', () => {
@@ -49,7 +49,7 @@ test('neighbourhood selection changes which stores are within the radius', () =>
 })
 
 test('sorting compares numeric prices, percentage discounts and distances', () => {
-  assert.equal(search('sort=price-desc')[0].price, 5.19)
+  assert.equal(search('sort=price-desc')[0].price, 6.99)
   assert.equal(search('sort=price')[0].price, 3.49)
   assert.equal(search('sort=discount')[0].id, 'avocados-nofrills')
   const nearest = search('sort=distance')
