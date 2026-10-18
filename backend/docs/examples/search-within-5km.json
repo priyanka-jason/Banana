@@ -1,0 +1,50 @@
+{
+  "description": "Milk at any store within 5 km of the shopper (one of the radius choices, 5 or 10 km). Only chains with a store that close show up. Built with storeSelectionFilters() from src/api/storeChoice.ts.",
+  "request": {
+    "method": "POST",
+    "path": "/api/prices/search",
+    "body": {
+      "query": "milk",
+      "near": {
+        "lat": 49.28,
+        "lng": -123.12,
+        "radiusKm": 5
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "id": "save-on-foods:SOF-1008",
+          "chainSlug": "save-on-foods",
+          "chainName": "Save-On-Foods",
+          "parentCompany": "Pattison Food Group",
+          "sku": "SOF-1008",
+          "name": "2% Milk 4 L",
+          "size": "4 L",
+          "sizeAmount": 4,
+          "sizeUnit": "l",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "dairy-eggs",
+          "priceCents": 629,
+          "regularPriceCents": 629,
+          "memberPriceCents": 599,
+          "unitPriceCents": 16,
+          "unitLabel": "100ml",
+          "comparableUnitPrice": {
+            "per": "100ml",
+            "cents": 15.73
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z",
+          "distanceKm": 0.3
+        }
+      ],
+      "total": 1,
+      "limit": 50,
+      "offset": 0
+    }
+  }
+}

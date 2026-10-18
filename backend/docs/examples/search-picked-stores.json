@@ -1,0 +1,66 @@
+{
+  "description": "Prices at stores picked on a map. Pass the ids from /api/stores.",
+  "request": {
+    "method": "POST",
+    "path": "/api/prices/search",
+    "body": {
+      "query": "eggs",
+      "locationIds": [
+        "walmart-sample-1",
+        "costco-sample-2"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "id": "walmart:W-2009",
+          "chainSlug": "walmart",
+          "chainName": "Walmart",
+          "parentCompany": "Walmart",
+          "sku": "W-2009",
+          "name": "Large Eggs 12 ct",
+          "size": "12 ct",
+          "sizeAmount": 12,
+          "sizeUnit": "ct",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "dairy-eggs",
+          "priceCents": 447,
+          "regularPriceCents": 447,
+          "comparableUnitPrice": {
+            "per": "each",
+            "cents": 37.25
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "costco:C-3009",
+          "chainSlug": "costco",
+          "chainName": "Costco",
+          "parentCompany": "Costco Wholesale",
+          "sku": "C-3009",
+          "name": "Large Eggs",
+          "size": "24 ct",
+          "sizeAmount": 24,
+          "sizeUnit": "ct",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "dairy-eggs",
+          "priceCents": 899,
+          "regularPriceCents": 899,
+          "comparableUnitPrice": {
+            "per": "each",
+            "cents": 37.46
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        }
+      ],
+      "total": 2,
+      "limit": 50,
+      "offset": 0
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "description": "An id that does not exist, for example an item a store stopped selling.",
+  "request": {
+    "method": "GET",
+    "path": "/api/prices/walmart%3ANOPE"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "error": {
+        "code": "not_found",
+        "message": "There is no item with id \"walmart:NOPE\"."
+      }
+    }
+  }
+}

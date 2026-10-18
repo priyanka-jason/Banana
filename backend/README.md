@@ -1,15 +1,32 @@
-# Backend
+# Banana backend
 
-All backend code for Banana lives in this folder.
+Store connectors, the data pipeline, search, and a small local API for the website. TypeScript on Node 24.
+All prices are **made up** for now; there is no database yet.
 
-## What goes here
+## Commands
 
-- **Store connectors**: one module per store that fetches items and prices and returns them in one shared format.
-- **Database layer**: the code that saves prices to and reads prices from the database (Supabase / Postgres).
-- **Filters**: search by item, store, parent company, distance, and member vs non-member price.
+```sh
+npm install
+npm run api              # start the local API on http://127.0.0.1:8787 (simulated data)
+npm run api -- --sample  # same, with the small sample set
+npm test                 # run the tests
+npm run typecheck        # check the types
+npm run ingest           # run the pipeline once and print a summary
+```
 
-## Notes
+`PORT=9000 npm run api` picks another port. The website's Vite dev proxy finds the API with
+`API_PROXY_TARGET=http://127.0.0.1:8787`.
 
-- Written in TypeScript, the same language as the front end.
-- The front end will connect to this later, so shared types and filters should be easy to import.
-- Never commit secrets. Keys go in a local `.env` file, which is already ignored by git.
+## How it fits together
+
+```
+connectors -> per-store layer -> combine -> final layer -> PriceRepository -> API handlers -> local server
+```
+
+- `src/app.ts` builds all of it with `createBackend()`. Today every layer lives in memory and is rebuilt on start.
+  The Supabase versions plug in there later, behind the same interfaces.
+- `src/api/handlers.ts` has one plain function per endpoint. `src/server/` is a small `node:http` server that
+  routes requests to them.
+- The endpoints, mock responses and privacy rules are in [`docs/api-contract.md`](docs/api-contract.md).
+- Money is always whole cents. A visitor's location only ever travels in a POST body and is never logged.
+- Never commit secrets. Keys go in a local `.env` file, which git already ignores.

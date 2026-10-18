@@ -1,0 +1,149 @@
+{
+  "description": "The \"top deals\" list: only items on sale, biggest percent off first, 5 per page.",
+  "request": {
+    "method": "POST",
+    "path": "/api/prices/search",
+    "body": {
+      "onSaleOnly": true,
+      "sortBy": "discount",
+      "limit": 5
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "id": "costco:C-3015",
+          "chainSlug": "costco",
+          "chainName": "Costco",
+          "parentCompany": "Costco Wholesale",
+          "sku": "C-3015",
+          "name": "Paper Towels",
+          "size": "12 rolls",
+          "sizeAmount": 12,
+          "sizeUnit": "ct",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "household",
+          "priceCents": 1999,
+          "regularPriceCents": 2499,
+          "discountCents": 500,
+          "discountPercent": 20,
+          "salePriceCents": 1999,
+          "comparableUnitPrice": {
+            "per": "each",
+            "cents": 166.58
+          },
+          "saleEnd": "2026-10-25",
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "save-on-foods:SOF-1005",
+          "chainSlug": "save-on-foods",
+          "chainName": "Save-On-Foods",
+          "parentCompany": "Pattison Food Group",
+          "sku": "SOF-1005",
+          "name": "Boneless Skinless Chicken Breast",
+          "size": "per kg",
+          "sizeAmount": 1,
+          "sizeUnit": "kg",
+          "packCount": 1,
+          "pricedByWeight": true,
+          "category": "meat",
+          "priceCents": 1199,
+          "regularPriceCents": 1499,
+          "discountCents": 300,
+          "discountPercent": 20,
+          "salePriceCents": 1199,
+          "unitPriceCents": 120,
+          "unitLabel": "100g",
+          "comparableUnitPrice": {
+            "per": "100g",
+            "cents": 119.9
+          },
+          "saleEnd": "2026-10-22",
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "save-on-foods:SOF-1012",
+          "chainSlug": "save-on-foods",
+          "chainName": "Save-On-Foods",
+          "parentCompany": "Pattison Food Group",
+          "sku": "SOF-1012",
+          "name": "Orange Juice 1.75 L",
+          "size": "1.75 L",
+          "sizeAmount": 1.75,
+          "sizeUnit": "l",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "beverages",
+          "priceCents": 399,
+          "regularPriceCents": 499,
+          "discountCents": 100,
+          "discountPercent": 20,
+          "salePriceCents": 399,
+          "comparableUnitPrice": {
+            "per": "100ml",
+            "cents": 22.8
+          },
+          "saleEnd": "2026-10-22",
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "save-on-foods:SOF-1015",
+          "chainSlug": "save-on-foods",
+          "chainName": "Save-On-Foods",
+          "parentCompany": "Pattison Food Group",
+          "sku": "SOF-1015",
+          "name": "Paper Towels 6 Rolls",
+          "size": "6 rolls",
+          "sizeAmount": 6,
+          "sizeUnit": "ct",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "household",
+          "priceCents": 899,
+          "regularPriceCents": 1099,
+          "discountCents": 200,
+          "discountPercent": 18,
+          "salePriceCents": 899,
+          "comparableUnitPrice": {
+            "per": "each",
+            "cents": 149.83
+          },
+          "saleEnd": "2026-10-22",
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "costco:C-3006",
+          "chainSlug": "costco",
+          "chainName": "Costco",
+          "parentCompany": "Costco Wholesale",
+          "sku": "C-3006",
+          "name": "Lean Ground Beef",
+          "size": "1.36 kg",
+          "sizeAmount": 1.36,
+          "sizeUnit": "kg",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "meat",
+          "priceCents": 1249,
+          "regularPriceCents": 1499,
+          "discountCents": 250,
+          "discountPercent": 17,
+          "salePriceCents": 1249,
+          "comparableUnitPrice": {
+            "per": "100g",
+            "cents": 91.84
+          },
+          "saleEnd": "2026-10-25",
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        }
+      ],
+      "total": 10,
+      "limit": 5,
+      "offset": 0
+    }
+  }
+}
