@@ -36,7 +36,7 @@ export function Header({ page, params, area, onAreaChange }: Props) {
             href={pageHref('items', params)}
             aria-current={page === 'items' ? 'page' : undefined}
           >
-            Search items
+            Search
           </a>
           <a
             href={pageHref('locations', params)}
@@ -91,7 +91,7 @@ export function MobileNav({ page, params }: Omit<Props, 'area'>) {
         aria-current={page === 'items' ? 'page' : undefined}
       >
         <MagnifyingGlassIcon size={25} aria-hidden="true" />
-        <span>Search items</span>
+        <span>Search</span>
       </a>
       <a
         href={pageHref('locations', params)}

@@ -94,11 +94,11 @@ p {
   margin: 0;
 }
 .home-intro h1 {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: clamp(50px, 5.15vw, 72px);
-  line-height: 0.97;
-  font-weight: 400;
-  letter-spacing: -1.8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(42px, 4.2vw, 58px);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -1.5px;
   color: #0b2823;
 }
 .headline-line {

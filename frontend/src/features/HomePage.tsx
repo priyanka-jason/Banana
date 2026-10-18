@@ -39,9 +39,6 @@ export function HomePage({
                 <br />
                 for less.
               </h1>
-              <p className="intro-description">
-                Daily grocery discounts within {filters.radius} km.
-              </p>
             </div>
             <div className="intro-search">
               <SearchForm
