@@ -114,6 +114,36 @@ describe.skipIf(url === undefined)('database functions for the website (needs TE
     expect(actual.rows.map(fromDatabase)).toEqual(expected.rows.map(fromMemory));
   });
 
+  it('says which branch each price is for: the nearest in range, or the one picked', async () => {
+    const near = await pool.query(
+      `select chain_slug, distance_km, nearest_store_id, nearest_store_name
+       from banana.search_offers(p_query => 'bananas', p_near_lat => $1, p_near_lng => $2, p_radius_km => 5, p_limit => 100, p_as_of => $3)`,
+      [MOUNT_PLEASANT.lat, MOUNT_PLEASANT.lng, AS_OF],
+    );
+    expect(near.rows.length).toBeGreaterThan(0);
+    const stores = await pool.query('select id, chain_slug, name, lat, lng from banana.store_locations');
+    for (const row of near.rows) {
+      const store = stores.rows.find((s) => s.id === row.nearest_store_id);
+      expect(store?.chain_slug).toBe(row.chain_slug);
+      expect(row.nearest_store_name).toBe(store?.name);
+      // The named store is the one the distance was measured to.
+      const sameChain = stores.rows.filter((s) => s.chain_slug === row.chain_slug);
+      const km = (s: { lat: number; lng: number }) =>
+        2 * 6371 * Math.asin(Math.sqrt(Math.sin(((s.lat - MOUNT_PLEASANT.lat) * Math.PI) / 360) ** 2 +
+          Math.cos((MOUNT_PLEASANT.lat * Math.PI) / 180) * Math.cos((s.lat * Math.PI) / 180) * Math.sin(((s.lng - MOUNT_PLEASANT.lng) * Math.PI) / 360) ** 2));
+      expect(Math.min(...sameChain.map(km))).toBeCloseTo(km(store), 9);
+    }
+
+    const picked = await pool.query(
+      `select distinct nearest_store_id from banana.search_offers(p_location_ids => array['nofrills-joti'], p_limit => 100, p_as_of => $1)`,
+      [AS_OF],
+    );
+    expect(picked.rows).toEqual([{ nearest_store_id: 'nofrills-joti' }]);
+
+    const nowhere = await pool.query(`select distinct nearest_store_id from banana.search_offers(p_limit => 5, p_as_of => $1)`, [AS_OF]);
+    expect(nowhere.rows).toEqual([{ nearest_store_id: null }]);
+  });
+
   it('only counts a sale between its start and end dates', async () => {
     const run = async (asOf: string) => {
       const result = await pool.query('select count(*) from banana.search_offers(p_on_sale_only => true, p_limit => 100, p_as_of => $1)', [asOf]);
