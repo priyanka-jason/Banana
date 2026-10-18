@@ -1,8 +1,9 @@
 import { useCatalogue } from '../data/catalogueState'
+import { showBackendGaps } from '../lib/devFlags'
 
 export function BackendReadiness() {
   const { data, connected, retry } = useCatalogue()
-  if (!connected || !data) return null
+  if (!showBackendGaps || !connected || !data) return null
   const gaps = new Map<string, number>()
   data.offers.forEach((offer) =>
     offer.missingFields?.forEach((field) =>

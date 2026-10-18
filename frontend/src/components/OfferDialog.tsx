@@ -3,6 +3,7 @@ import { ArrowSquareOutIcon } from '@phosphor-icons/react/dist/csr/ArrowSquareOu
 import { XIcon } from '@phosphor-icons/react/dist/csr/X'
 import { currency, isDiscounted } from '../lib/catalogue'
 import { Expiry, Merchant, Price, MissingOfferData } from './Offer'
+import { showBackendGaps } from '../lib/devFlags'
 import { ProductImage } from './ProductImage'
 import type { NearbyOffer } from '../types'
 
@@ -79,7 +80,7 @@ export function OfferDialog({
             <ArrowSquareOutIcon size={18} aria-hidden="true" />
           </a>
         )}
-        {!offer.store.website && (
+        {showBackendGaps && !offer.store.website && (
           <p className="missing-backend">Missing backend: store website link</p>
         )}
         {offer.store.website && (
