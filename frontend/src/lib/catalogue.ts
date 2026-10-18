@@ -1,4 +1,6 @@
 import { areas, offers, stores } from '../data/mockOffers.ts'
+import { branches, type SearchOrigin } from '../data/mockLocations.ts'
+import { distanceKm } from './locations.ts'
 import type { Filters, NearbyOffer, SortOrder } from '../types.ts'
 
 export const currency = (value: number) => `$${value.toFixed(2)}`
@@ -39,11 +41,29 @@ export function readFilters(params: URLSearchParams): Filters {
   }
 }
 
-export function getNearbyOffers(filters: Filters): NearbyOffer[] {
+export function getNearbyOffers(
+  filters: Filters,
+  origin?: SearchOrigin | null,
+  branchId?: string | null,
+): NearbyOffer[] {
   return offers.map((offer) => ({
     ...offer,
     store: stores.find((store) => store.id === offer.storeId)!,
-    distance: offer.distances[filters.area],
+    distance: origin
+      ? (() => {
+          const chainBranches = branches.filter(
+            (branch) => branch.brandId === offer.storeId,
+          )
+          const selectedBranch = chainBranches.find(
+            (branch) => branch.id === branchId,
+          )
+          return selectedBranch
+            ? distanceKm(origin, selectedBranch)
+            : Math.min(
+                ...chainBranches.map((branch) => distanceKm(origin, branch)),
+              )
+        })()
+      : offer.distances[filters.area],
   }))
 }
 

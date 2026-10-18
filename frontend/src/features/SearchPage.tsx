@@ -8,6 +8,8 @@ import { OfferTable } from '../components/Offer'
 import { filterOffers, getNearbyOffers } from '../lib/catalogue'
 import { updateRoute } from '../lib/navigation'
 import type { Filters, NearbyOffer } from '../types'
+import { branches, type SearchOrigin } from '../data/mockLocations'
+import { pageHref } from '../lib/navigation'
 
 function FilterDialog({
   filters,
@@ -80,13 +82,22 @@ export function SearchPage({
   filters,
   params,
   onOpen,
+  origin,
 }: {
   filters: Filters
   params: URLSearchParams
   onOpen: (offer: NearbyOffer) => void
+  origin?: SearchOrigin | null
 }) {
   const [filterOpen, setFilterOpen] = useState(false)
-  const items = filterOffers(getNearbyOffers(filters), filters)
+  const branch = branches.find(
+    (branch) =>
+      branch.id === params.get('branch') && branch.brandId === filters.store,
+  )
+  const items = filterOffers(
+    getNearbyOffers(filters, origin, branch?.id),
+    filters,
+  )
   function change(patch: Partial<Filters>) {
     const next = { ...filters, ...patch }
     updateRoute(
@@ -99,6 +110,7 @@ export function SearchPage({
         radius: String(next.radius),
         sale: next.discountsOnly ? '1' : '',
         sort: next.sort,
+        branch: 'store' in patch ? '' : params.get('branch') || '',
       },
       Object.keys(patch).length === 1 && 'query' in patch,
     )
@@ -113,6 +125,22 @@ export function SearchPage({
   return (
     <main id="main-content" tabIndex={-1} className="shell search-page">
       <h1>Search items</h1>
+      {branch && (
+        <p className="branch-context">
+          Offers from this chain · {branch.name}, Vancouver. Stock may vary.{' '}
+          <a
+            href={pageHref(
+              'locations',
+              new URLSearchParams({
+                area: filters.area,
+                radius: String(filters.radius),
+              }),
+            )}
+          >
+            Back to locations
+          </a>
+        </p>
+      )}
       <SearchForm
         id="catalogue-search"
         value={filters.query}

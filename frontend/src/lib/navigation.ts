@@ -14,14 +14,18 @@ export function useRoute() {
   )
   const [path, query = ''] = hash.replace(/^#/, '').split('?')
   return {
-    page: path === '/items' ? ('items' as const) : ('home' as const),
+    page: (path === '/items'
+      ? 'items'
+      : path === '/locations'
+        ? 'locations'
+        : 'home') as Page,
     params: new URLSearchParams(query),
   }
 }
 
 export function pageHref(page: Page, params: URLSearchParams) {
   const query = params.toString()
-  return `#/${page === 'items' ? 'items' : ''}${query ? `?${query}` : ''}`
+  return `#/${page === 'home' ? '' : page}${query ? `?${query}` : ''}`
 }
 
 export function updateRoute(

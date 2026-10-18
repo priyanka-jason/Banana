@@ -7,18 +7,21 @@ import { OfferCard } from '../components/Offer'
 import { getNearbyOffers } from '../lib/catalogue'
 import { pageHref, updateRoute } from '../lib/navigation'
 import type { Filters, NearbyOffer } from '../types'
+import type { SearchOrigin } from '../data/mockLocations'
 
 export function HomePage({
   filters,
   params,
   onOpen,
+  origin,
 }: {
   filters: Filters
   params: URLSearchParams
   onOpen: (offer: NearbyOffer) => void
+  origin?: SearchOrigin | null
 }) {
   const [query, setQuery] = useState('')
-  const nearby = getNearbyOffers(filters).filter(
+  const nearby = getNearbyOffers(filters, origin).filter(
     (offer) => offer.featured && offer.distance <= filters.radius,
   )
   const browseParams = new URLSearchParams({
@@ -52,6 +55,7 @@ export function HomePage({
                     store: '',
                     sale: '',
                     sort: '',
+                    branch: '',
                   })
                 }
               />

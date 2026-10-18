@@ -74,3 +74,37 @@ section and serif brand/headline, with style 01's product grid. Search uses
 The frontend uses DM Serif Display, DM Sans, and Phosphor icons. Relevant
 installed Codex skills cover frontend design, React, image generation, and
 browser QA. They are local tools, not project runtime dependencies.
+
+## Locations
+
+The third page follows `design/locations/01-split-view.png`: stores beside a live
+map on desktop, List/Map views on phones. Search an address explicitly, choose
+one of BC Address Geocoder's matches, or tap **Use my location** to request browser
+permission. Choose a 1, 3, 5 or 10 km straight-line radius. Selecting a list row
+or map pin reveals chain offers; Browse items retains branch context in Search.
+
+MapLibre and OpenFreeMap provide map rendering and tiles without a billing
+account or API key. The BC geocoder's public endpoint was verified without a key
+and with CORS on October 17, 2026; its access policy can change. Search runs only
+on explicit submission, with cancellation and a timeout. The address is sent to
+BC Address Geocoder, but Banana keeps the chosen point only in page memory; it
+is not persisted or included in share URLs. Browser geolocation coordinates are
+not sent to the geocoder. The map requests geographic tiles from OpenFreeMap.
+
+The three branch points are **illustrative**, not verified physical branches.
+The map and address lookup are live, while the store records and catalogue remain
+mock data. Only branches linked to a known brand with offers are displayed.
+Branches of the same brand share offers. These offers do not establish inventory
+or pricing at an individual branch. When an origin has been chosen, Home and
+Search use geographic distances to the supported branches instead of the older
+neighbourhood sample distances. A full reload resets the temporary origin.
+
+- `src/api/addressSearch.ts`: replaceable public address-search client.
+- `src/data/mockLocations.ts`: branch records and neighbourhood centers.
+- `src/lib/locations.ts`: distance, radius geometry and brand-offer joins.
+- `src/components/LocationsMap.tsx`: lazy-loaded MapLibre map and markers.
+- `src/features/LocationsPage.tsx`: search, location sharing, store list and links.
+
+The map bundle loads separately. A list remains available if map loading fails;
+address errors and denied/unavailable location sharing offer manual-search
+recovery. No Supabase credentials or paid map service has been added.

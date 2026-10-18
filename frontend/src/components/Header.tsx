@@ -10,9 +10,10 @@ interface Props {
   page: Page
   params: URLSearchParams
   area: AreaId
+  onAreaChange?: () => void
 }
 
-export function Header({ page, params, area }: Props) {
+export function Header({ page, params, area, onAreaChange }: Props) {
   const areaName = areas.find((item) => item.id === area)!.name
   return (
     <header className="site-header">
@@ -37,6 +38,12 @@ export function Header({ page, params, area }: Props) {
           >
             Search items
           </a>
+          <a
+            href={pageHref('locations', params)}
+            aria-current={page === 'locations' ? 'page' : undefined}
+          >
+            Locations
+          </a>
         </nav>
         <label className="location-control">
           <MapPinIcon size={21} aria-hidden="true" />
@@ -48,9 +55,10 @@ export function Header({ page, params, area }: Props) {
           <select
             aria-label="Your neighbourhood"
             value={area}
-            onChange={(event) =>
+            onChange={(event) => {
+              onAreaChange?.()
               updateRoute(page, params, { area: event.target.value })
-            }
+            }}
           >
             {areas.map((item) => (
               <option key={item.id} value={item.id}>
@@ -84,6 +92,17 @@ export function MobileNav({ page, params }: Omit<Props, 'area'>) {
       >
         <MagnifyingGlassIcon size={25} aria-hidden="true" />
         <span>Search items</span>
+      </a>
+      <a
+        href={pageHref('locations', params)}
+        aria-current={page === 'locations' ? 'page' : undefined}
+      >
+        <MapPinIcon
+          size={25}
+          weight={page === 'locations' ? 'fill' : 'regular'}
+          aria-hidden="true"
+        />
+        <span>Locations</span>
       </a>
     </nav>
   )
