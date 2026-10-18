@@ -115,7 +115,7 @@ function isSpec(value: unknown): value is ProductSpec {
   )
 }
 
-function isListItem(value: unknown): value is ListItem {
+export function isListItem(value: unknown): value is ListItem {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
   return (

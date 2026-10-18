@@ -58,6 +58,11 @@ export const shoppingList = {
   setQuantity: (offerId: string, quantity: number) =>
     update(setQuantity(list, offerId, quantity)),
   remove: (offerId: string) => update(removeFromList(list, offerId)),
+  // Swap in a saved list; it's priced from the current catalogue like any other list.
+  replace: (items: ListItem[], offers: Offer[] = []) => {
+    choose(null)
+    update(reconcileList(items, offers))
+  },
   clear: () => update([]),
 }
 

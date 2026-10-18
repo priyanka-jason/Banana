@@ -15,6 +15,7 @@ import { MAX_QUANTITY, itemCount } from '../lib/shoppingList'
 import { productRequest, samePackage } from '../lib/basketIdentity'
 import { compareBasket } from '../lib/basketComparison'
 import { BasketOptions, BasketPlanDetails } from './BasketComparison'
+import { SavedLists } from './SavedLists'
 import type { NearbyOffer } from '../types'
 
 export function AddToListButton({ offer }: { offer: NearbyOffer }) {
@@ -228,6 +229,7 @@ function ListDialog({ onClose }: { onClose: () => void }) {
               Total doesn’t include taxes or other fees, such as environmental
               handling fees (EHF) or container deposits.
             </p>
+            <SavedLists />
             <div className="filter-dialog-actions">
               <button className="text-button" onClick={shoppingList.clear}>
                 Clear list
@@ -247,6 +249,7 @@ function ListDialog({ onClose }: { onClose: () => void }) {
             <button className="flyer-button" onClick={onClose}>
               Keep searching
             </button>
+            <SavedLists />
           </div>
         )}
       </div>
