@@ -256,7 +256,8 @@ export function ListLauncher() {
         aria-label={`My basket, ${count} ${count === 1 ? 'item' : 'items'}`}
       >
         <BasketIcon size={22} aria-hidden="true" />
-        My basket<span className="list-count">{count}</span>
+        <span className="list-label">My basket</span>
+        <span className="list-count">{count}</span>
       </button>
       {open && <ListDialog onClose={() => setOpen(false)} />}
     </>
