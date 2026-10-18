@@ -2,9 +2,11 @@ import { sampleConnectors } from './connectors';
 import type { FinalRepository } from './db/final';
 import { MemoryFinal, MemoryStoreData } from './db/memory';
 import { MemoryPriceRepository } from './db/memoryReader';
+import { CachedFinalSource, createPool, PostgresFinal, type PoolOptions } from './db/postgres';
 import type { PriceRepository } from './db/repository';
 import type { StoreDataRepository } from './db/storeData';
 import { MemoryListRepository, type ListRepository } from './lists/lists';
+import { PostgresListRepository } from './lists/postgresLists';
 import { runIngest, type IngestResult } from './pipeline/runIngest';
 import { SIMULATED_CATEGORY_MAP, simulatedConnectors } from './simulated/generate';
 
@@ -27,8 +29,8 @@ export interface Backend {
   /** What the ingest run did, so a caller can report failures. */
   ingest: IngestResult;
   /**
-   * Saved shopping lists. In memory for now, so they are lost when the server stops.
-   * SUPABASE GOES HERE too: banana.shopping_lists (backend/sql/accounts-setup.sql).
+   * Saved shopping lists. In memory here, so they are lost when the server stops;
+   * createDatabaseBackend keeps them in banana.shopping_lists.
    */
   lists: ListRepository;
 }
@@ -43,10 +45,7 @@ export interface Backend {
 export async function createBackend(options: BackendOptions = {}): Promise<Backend> {
   const source = options.source ?? 'simulated';
 
-  // SUPABASE GOES HERE: a later version builds Supabase-backed StoreDataRepository and
-  // FinalRepository (writing to raw.<chain> and public tables) and a PriceRepository that
-  // reads the public tables with the limited key, instead of these in-memory ones.
-  // The website server would then only read, and ingest would run as its own job.
+  // For the database (Supabase) instead, see createDatabaseBackend below.
   const storeData: StoreDataRepository = new MemoryStoreData();
   const memoryFinal = new MemoryFinal();
   const final: FinalRepository = memoryFinal;
@@ -61,4 +60,26 @@ export async function createBackend(options: BackendOptions = {}): Promise<Backe
   });
 
   return { prices, ingest, lists: new MemoryListRepository({ now: options.now }) };
+}
+
+export interface DatabaseBackend {
+  prices: PriceRepository;
+  lists: ListRepository;
+  /** Closes the database connections. */
+  close(): Promise<void>;
+}
+
+/**
+ * The same pieces, backed by the database (Supabase) instead of memory. Nothing is loaded at
+ * start: prices are whatever ingest last wrote to the banana tables (npm run ingest --
+ * --simulated --database), read through a 60-second cache. Saved lists live in
+ * banana.shopping_lists, so they survive restarts.
+ */
+export function createDatabaseBackend(options: PoolOptions): DatabaseBackend {
+  const pool = createPool(options);
+  return {
+    prices: new MemoryPriceRepository(new CachedFinalSource(new PostgresFinal(pool))),
+    lists: new PostgresListRepository(pool),
+    close: () => pool.end(),
+  };
 }
