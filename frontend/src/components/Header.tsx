@@ -7,6 +7,7 @@ import { CaretDownIcon } from '@phosphor-icons/react/dist/csr/CaretDown'
 import { UserCircleIcon } from '@phosphor-icons/react/dist/csr/UserCircle'
 import { IdentificationCardIcon } from '@phosphor-icons/react/dist/csr/IdentificationCard'
 import { CardholderIcon } from '@phosphor-icons/react/dist/csr/Cardholder'
+import { BookmarkSimpleIcon } from '@phosphor-icons/react/dist/csr/BookmarkSimple'
 import { SignOutIcon } from '@phosphor-icons/react/dist/csr/SignOut'
 import { pageHref } from '../lib/navigation'
 import type { Page } from '../types'
@@ -25,6 +26,7 @@ export function Header({ page, params }: Props) {
     openAuthModal,
     openProfileModal,
     openMembershipsModal,
+    openSavedListsModal,
     signOut,
   } = useAuth()
 
@@ -138,6 +140,17 @@ export function Header({ page, params }: Props) {
                   >
                     <IdentificationCardIcon size={20} aria-hidden="true" />
                     <span>Profile</span>
+                  </button>
+                  <button
+                    className="account-menu-item"
+                    role="menuitem"
+                    onClick={() => {
+                      setDropdownOpen(false)
+                      openSavedListsModal()
+                    }}
+                  >
+                    <BookmarkSimpleIcon size={20} aria-hidden="true" />
+                    <span>Saved lists</span>
                   </button>
                   <button
                     className="account-menu-item"
