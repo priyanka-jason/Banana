@@ -5,11 +5,11 @@ import { XIcon } from '@phosphor-icons/react/dist/csr/X'
 import { FilterControls, SortSelect } from '../components/FilterControls'
 import { Freshness, SearchForm } from '../components/SearchForm'
 import { OfferTable } from '../components/Offer'
-import { filterOffers } from '../lib/catalogue'
 import { updateRoute } from '../lib/navigation'
 import type { Filters, NearbyOffer } from '../types'
 import { type SearchOrigin } from '../data/storeLocations'
-import { useCatalogue, catalogueOffers } from '../data/catalogueState'
+import { useCatalogue } from '../data/catalogueState'
+import { useOfferSearch } from '../data/offerSearch'
 import { pageHref } from '../lib/navigation'
 
 function FilterDialog({
@@ -96,10 +96,13 @@ export function SearchPage({
     (branch) =>
       branch.id === params.get('branch') && branch.brandId === filters.store,
   )
-  const items = filterOffers(
-    catalogueOffers(data!, filters, origin, branch?.id),
+  const search = useOfferSearch({
     filters,
-  )
+    origin,
+    branchId: branch?.id,
+    pageSize: 20,
+  })
+  const items = search.items
   function change(patch: Partial<Filters>) {
     const next = { ...filters, ...patch }
     updateRoute(
@@ -120,9 +123,6 @@ export function SearchPage({
       Object.keys(patch).length === 1 && 'query' in patch,
     )
   }
-  const [pageSize, setPageSize] = useState({ key: '', size: 20 })
-  const searchKey = params.toString()
-  const visibleCount = pageSize.key === searchKey ? pageSize.size : 20
   const activeCount =
     Number(filters.category !== 'all') +
     Number(filters.store !== 'all') +
@@ -179,7 +179,9 @@ export function SearchPage({
       </div>
       <div className="results-meta">
         <p role="status" aria-live="polite">
-          {items.length} {items.length === 1 ? 'offer' : 'offers'}
+          {search.loading && !items.length
+            ? 'Searching…'
+            : `${search.total} ${search.total === 1 ? 'offer' : 'offers'}`}
           {filters.query ? ` for “${filters.query}”` : ''}
           {hasChanges ? (
             <button
@@ -202,20 +204,18 @@ export function SearchPage({
       </div>
       {items.length ? (
         <>
-          <OfferTable offers={items.slice(0, visibleCount)} onOpen={onOpen} />
-          {items.length > visibleCount && (
+          <OfferTable offers={items} onOpen={onOpen} />
+          {search.total > items.length && (
             <button
               className="flyer-button load-more"
-              onClick={() =>
-                setPageSize({ key: searchKey, size: visibleCount + 20 })
-              }
+              disabled={search.loading}
+              onClick={search.loadMore}
             >
-              Show more ({Math.min(visibleCount, items.length)} of{' '}
-              {items.length})
+              Show more ({items.length} of {search.total})
             </button>
           )}
         </>
-      ) : (
+      ) : search.loading ? null : (
         <div className="empty-state">
           <MagnifyingGlassIcon size={38} aria-hidden="true" />
           <h2>No matching groceries</h2>

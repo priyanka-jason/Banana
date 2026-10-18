@@ -316,3 +316,92 @@ export async function loadCatalogue(
     },
   }
 }
+
+/** One row from banana.search_offers (only the columns the site uses). */
+export interface SearchRow {
+  id: string
+  chain_slug: string
+  location_id: string | null
+  sku: string
+  name: string
+  brand: string | null
+  size: string | null
+  size_unit: string | null
+  size_kind: string | null
+  size_total_base: number | null
+  pack_count: number
+  priced_by_weight: boolean
+  category: string | null
+  price_cents: number
+  regular_price_cents: number
+  sale_price_cents: number | null
+  sale_start: string | null
+  sale_end: string | null
+  source_url: string | null
+  scraped_at: string | null
+  distance_km: number | null
+  total_count: number
+}
+
+/**
+ * A search result as the site's Offer. The database's price wins. When the same
+ * offer is already in the loaded catalogue, its details are kept: they include
+ * the product identity (UPC, comparison group) that My list needs to compare
+ * baskets, which search rows don't carry.
+ */
+export function searchRowToOffer(
+  row: SearchRow,
+  known?: Offer,
+  now = new Date(),
+): Offer | null {
+  const base =
+    known ??
+    mapPrice(
+      {
+        id: 0,
+        location_id: row.location_id,
+        regular_price_cents: row.regular_price_cents,
+        sale_price_cents: row.sale_price_cents,
+        sale_start: row.sale_start,
+        sale_end: row.sale_end,
+        scraped_at: row.scraped_at,
+        source_url: row.source_url,
+        products: {
+          id: 0,
+          chain_slug: row.chain_slug,
+          brand: row.brand,
+          sku: row.sku,
+          name: row.name,
+          size: row.size,
+          category: row.category,
+          pack_count: row.pack_count,
+          priced_by_weight: row.priced_by_weight,
+          size_kind: row.size_kind,
+          size_total_base:
+            row.size_total_base == null ? null : Number(row.size_total_base),
+          size_unit: row.size_unit,
+        },
+      },
+      now,
+    )
+  if (!base || !Number.isInteger(row.price_cents)) return null
+  const discounted = row.price_cents < row.regular_price_cents
+  return {
+    ...base,
+    price: row.price_cents / 100,
+    regularPrice: discounted ? row.regular_price_cents / 100 : undefined,
+    featured: discounted,
+    saleEnd: discounted ? (row.sale_end ?? undefined) : undefined,
+  }
+}
+
+export async function searchOffers(
+  url: string,
+  key: string,
+  body: object,
+  signal: AbortSignal,
+  fetcher: typeof fetch = fetch,
+): Promise<SearchRow[]> {
+  const read = createSupabaseReader(url, key, fetcher)
+  return read<SearchRow[]>('rpc/search_offers', signal, body)
+}
