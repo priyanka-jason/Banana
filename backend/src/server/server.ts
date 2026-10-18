@@ -9,6 +9,7 @@ import {
   handleLookup,
   handleNearbyStores,
   handleSearch,
+  handleShoppingList,
   handleStores,
   type HandlerOptions,
 } from '../api/handlers';
@@ -125,6 +126,7 @@ function routesFor(prices: PriceRepository, handlerOptions: HandlerOptions): Rec
   return {
     '/api/prices/search': { POST: withBody((body) => handleSearch(prices, body, handlerOptions)) },
     '/api/prices/lookup': { POST: withBody((body) => handleLookup(prices, body, handlerOptions)) },
+    '/api/prices/list': { POST: withBody((body) => handleShoppingList(prices, body, handlerOptions)) },
     '/api/prices/{id}': {
       GET: (ctx) => handleGetItem(prices, ctx.id, { memberPricing: ctx.params.get('memberPricing') ?? undefined }, handlerOptions),
     },

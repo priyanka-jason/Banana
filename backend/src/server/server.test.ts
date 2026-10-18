@@ -100,6 +100,17 @@ describe('local API server', () => {
     expect(body.missingIds).toEqual(['costco:does-not-exist']);
   });
 
+  it('prices a whole shopping list, and never reads /api/prices/list as an item id', async () => {
+    const response = await post('/api/prices/list', { items: [{ query: 'milk', quantity: 2 }, { query: 'banana' }] });
+    expect(response.status).toBe(200);
+    const body = await json<{ entries: unknown[]; chains: unknown[] }>(response);
+    expect(body.entries).toHaveLength(2);
+    expect(body.chains.length).toBeGreaterThan(0);
+
+    const wrongMethod = await fetch(`${running.url}/api/prices/list`);
+    expect(wrongMethod.status).toBe(405);
+  });
+
   it('lists chains, categories and stores, with a repeatable ?chain=', async () => {
     const chains = await json<{ chains: unknown[] }>(await fetch(`${running.url}/api/chains`));
     expect(chains.chains).toHaveLength(5);
