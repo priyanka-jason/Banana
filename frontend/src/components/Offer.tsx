@@ -1,7 +1,17 @@
 import { ArrowSquareOutIcon } from '@phosphor-icons/react/dist/csr/ArrowSquareOut'
 import { CaretRightIcon } from '@phosphor-icons/react/dist/csr/CaretRight'
 import { currency, isDiscounted } from '../lib/catalogue'
+import { ProductImage, StoreLogo } from './ProductImage'
 import type { NearbyOffer } from '../types'
+
+export function MissingOfferData({ offer }: { offer: NearbyOffer }) {
+  if (!offer.missingFields?.length) return null
+  return (
+    <small className="missing-backend">
+      Missing backend: {offer.missingFields.join(' · ')}
+    </small>
+  )
+}
 
 export function Price({ offer }: { offer: NearbyOffer }) {
   return (
@@ -26,12 +36,14 @@ export function Merchant({
   return (
     <div className={`merchant ${compact ? 'merchant-compact' : ''}`}>
       <span className={`merchant-logo ${offer.storeId}`}>
-        <img src={offer.store.logo} alt="" width="44" height="44" />
+        <StoreLogo src={offer.store.logo} name={offer.store.name} />
       </span>
       <div>
         <span className="merchant-name">{offer.store.name}</span>
         <span className="merchant-distance">
-          {offer.distance.toFixed(1)} km
+          {Number.isFinite(offer.distance)
+            ? `${offer.distance.toFixed(1)} km`
+            : ''}
         </span>
       </div>
     </div>
@@ -42,9 +54,21 @@ export function Expiry({ offer }: { offer: NearbyOffer }) {
   return (
     <span className="expiry">
       {isDiscounted(offer) ? (
-        <>
-          Valid until <time dateTime="2026-10-22">Oct 22, 2026</time>
-        </>
+        offer.saleEnd ? (
+          <>
+            Valid until{' '}
+            <time dateTime={offer.saleEnd!}>
+              {new Intl.DateTimeFormat('en-CA', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                timeZone: 'UTC',
+              }).format(new Date(`${offer.saleEnd!}T12:00:00Z`))}
+            </time>
+          </>
+        ) : (
+          'On sale'
+        )
       ) : (
         'Regular price'
       )}
@@ -63,9 +87,13 @@ export function FlyerButton({
     <button
       className="flyer-button"
       onClick={() => onOpen(offer)}
-      aria-label={`View ${isDiscounted(offer) ? 'flyer' : 'regular price'} offer for ${offer.name} at ${offer.store.name}`}
+      aria-label={`View ${offer.source ? 'grocery' : isDiscounted(offer) ? 'flyer' : 'regular price'} offer for ${offer.name} at ${offer.store.name}`}
     >
-      {isDiscounted(offer) ? 'View flyer' : 'View offer'}{' '}
+      {offer.source
+        ? 'View offer'
+        : isDiscounted(offer)
+          ? 'View flyer'
+          : 'View offer'}{' '}
       <ArrowSquareOutIcon size={18} aria-hidden="true" />
     </button>
   )
@@ -85,12 +113,12 @@ export function OfferCard({
         onClick={() => onOpen(offer)}
         aria-label={`View ${offer.name} offer`}
       >
-        <img
+        <ProductImage
           className="product-image"
           src={offer.image}
           alt={offer.name}
-          width="300"
-          height="230"
+          width={300}
+          height={230}
         />
       </button>
       <h3>
@@ -98,7 +126,8 @@ export function OfferCard({
           {offer.name}
         </button>
       </h3>
-      <p className="pack">{offer.pack}</p>
+      <p className="pack">{offer.pack || 'Package size missing'}</p>
+      <MissingOfferData offer={offer} />
       <Price offer={offer} />
       <p className="unit-price">{offer.unitPrice}</p>
       <Merchant offer={offer} />
@@ -139,11 +168,11 @@ export function OfferTable({
                     onClick={() => onOpen(offer)}
                     aria-label={`View ${offer.name} at ${offer.store.name}`}
                   >
-                    <img
+                    <ProductImage
                       src={offer.image}
                       alt={offer.name}
-                      width="100"
-                      height="100"
+                      width={100}
+                      height={100}
                     />
                   </button>
                   <div>
@@ -153,7 +182,10 @@ export function OfferTable({
                     >
                       {offer.name}
                     </button>
-                    <p className="pack">{offer.pack}</p>
+                    <p className="pack">
+                      {offer.pack || 'Package size missing'}
+                    </p>
+                    <MissingOfferData offer={offer} />
                   </div>
                 </div>
               </td>
@@ -182,16 +214,19 @@ export function OfferTable({
               onClick={() => onOpen(offer)}
               aria-label={`${offer.name}, ${currency(offer.price)}, ${offer.store.name}. View offer`}
             >
-              <img
+              <ProductImage
                 className="result-image"
                 src={offer.image}
                 alt=""
-                width="100"
-                height="100"
+                width={100}
+                height={100}
               />
               <span className="result-details">
                 <strong className="product-title">{offer.name}</strong>
-                <span className="pack">{offer.pack}</span>
+                <span className="pack">
+                  {offer.pack || 'Package size missing'}
+                </span>
+                <MissingOfferData offer={offer} />
                 <Price offer={offer} />
                 <span className="unit-price">{offer.unitPrice}</span>
                 <Merchant offer={offer} compact />

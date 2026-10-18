@@ -14,17 +14,16 @@ import { CaretDownIcon } from '@phosphor-icons/react/dist/csr/CaretDown'
 import { ListIcon } from '@phosphor-icons/react/dist/csr/List'
 import { MapTrifoldIcon } from '@phosphor-icons/react/dist/csr/MapTrifold'
 import { RadiusSelect } from '../components/FilterControls'
-import { Price } from '../components/Offer'
+import { Price, MissingOfferData } from '../components/Offer'
 import { searchAddresses } from '../api/addressSearch'
 import { neighbourhoodOrigins, type SearchOrigin } from '../data/storeLocations'
-import {
-  branchOffers,
-  nearbyBranches,
-  type NearbyBranch,
-} from '../lib/locations'
+import { type NearbyBranch } from '../lib/locations'
 import { updateRoute } from '../lib/navigation'
 import type { Filters, NearbyOffer } from '../types'
 import './LocationsPage.css'
+import { useCatalogue, catalogueBranches } from '../data/catalogueState'
+import { ProductImage, StoreLogo } from '../components/ProductImage'
+import { Freshness } from '../components/SearchForm'
 
 const LocationsMap = lazy(() => import('../components/LocationsMap'))
 
@@ -51,14 +50,25 @@ function StoreRow({
   onBrowse: () => void
   onOpen: (offer: NearbyOffer) => void
 }) {
-  const linkedOffers = branchOffers(branch)
+  const { data } = useCatalogue()
+  const linkedOffers = data!.offers
+    .filter((offer) => offer.storeId === branch.brandId)
+    .map((offer) => ({
+      ...offer,
+      store: branch.store,
+      distance: branch.distance,
+    }))
   // One example per product, while keeping the full chain catalogue one click away.
   const uniqueOffers = [
     ...new Map(linkedOffers.map((offer) => [offer.name, offer])).values(),
   ]
   const previews = [
     uniqueOffers[0],
-    uniqueOffers.find((offer) => offer.category === 'Dairy') ?? uniqueOffers[1],
+    uniqueOffers.find(
+      (offer) =>
+        offer.id !== uniqueOffers[0]?.id &&
+        ['Dairy', 'dairy-eggs'].includes(offer.category),
+    ) ?? uniqueOffers[1],
   ].filter((offer): offer is NearbyOffer => Boolean(offer))
   return (
     <article
@@ -74,12 +84,22 @@ function StoreRow({
           aria-label={`${selected ? 'Collapse' : 'Select'} ${branch.store.name}, ${branch.name}`}
         >
           <span className={`location-store-logo ${branch.brandId}`}>
-            <img src={branch.store.logo} alt="" />
+            <StoreLogo src={branch.store.logo} name={branch.store.name} />
           </span>
           <span className="location-store-name">
             <strong>{branch.store.name}</strong>
             <span>{branch.name}</span>
-            <span>Vancouver, BC</span>
+            <span
+              className={
+                branch.missingAddress || !branch.address
+                  ? 'missing-backend'
+                  : undefined
+              }
+            >
+              {branch.missingAddress
+                ? `Missing backend: street address${branch.address ? ` · ${branch.address}` : ''}`
+                : branch.address || 'Missing backend: street address'}
+            </span>
           </span>
         </button>
         <div className="location-store-actions">
@@ -120,12 +140,13 @@ function StoreRow({
                 onClick={() => onOpen(offer)}
                 aria-label={`View ${offer.name} offer at ${branch.store.name}`}
               >
-                <img src={offer.image} alt="" />
+                <ProductImage src={offer.image} alt="" />
                 <span>
                   <strong>{offer.name}</strong>
                   <span className="pack">{offer.pack}</span>
                   <Price offer={offer} />
                   <span className="unit-price">{offer.unitPrice}</span>
+                  <MissingOfferData offer={offer} />
                 </span>
               </button>
             </li>
@@ -143,6 +164,7 @@ export function LocationsPage({
   onOriginChange,
   onOpen,
 }: Props) {
+  const { data } = useCatalogue()
   const origin = savedOrigin ?? neighbourhoodOrigins[filters.area]
   const [query, setQuery] = useState('')
   const [matches, setMatches] = useState<SearchOrigin[]>([])
@@ -156,14 +178,14 @@ export function LocationsPage({
   const requestId = useRef(0)
   const input = useRef<HTMLInputElement>(null)
   const locationList = useMemo(() => {
-    const result = nearbyBranches(origin, filters.radius)
+    const result = catalogueBranches(data!, origin, filters.radius)
     if (sort === 'name')
       result.sort(
         (a, b) =>
           a.store.name.localeCompare(b.store.name) || a.distance - b.distance,
       )
     return result
-  }, [origin, filters.radius, sort])
+  }, [data, origin, filters.radius, sort])
   const selected =
     selectedId === null
       ? undefined
@@ -226,7 +248,7 @@ export function LocationsPage({
     setQuery('')
     setMatches([])
     setMessage('')
-    setSelectedId(null)
+    setSelectedId('')
     setView('list')
   }
   function locate() {
@@ -280,7 +302,7 @@ export function LocationsPage({
       <section className="locations-intro">
         <div className="shell locations-intro-inner">
           <div>
-            <h1>Locations</h1>
+            <h1 className="page-title">Locations</h1>
             <p>Find grocery offers near you.</p>
           </div>
           <div className="locations-controls">
@@ -338,7 +360,7 @@ export function LocationsPage({
               />
             </div>
             <p className="location-hint">
-              Straight-line radius · Showing stores with item data
+              Approximate straight-line radius · Showing stores with item data
             </p>
           </div>
         </div>
@@ -399,7 +421,6 @@ export function LocationsPage({
                 className="text-button"
                 onClick={() => {
                   onOriginChange(null)
-                  setSelectedId(null)
                   setMessage('')
                   setQuery('')
                 }}
@@ -437,14 +458,12 @@ export function LocationsPage({
                     : onOriginChange(null)
                 }
               >
-                {filters.radius < 10
-                  ? 'Expand to 10 km'
-                  : 'Use demo neighbourhood'}
+                {filters.radius < 10 ? 'Expand to 10 km' : 'Use Mount Pleasant'}
               </button>
             </div>
           )}
           <footer className="location-data-note">
-            <p>Sample store locations and prices · CAD · Oct 17, 2026</p>
+            <Freshness />
             <p>
               Address lookup:{' '}
               <a

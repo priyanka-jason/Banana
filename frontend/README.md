@@ -27,23 +27,25 @@ npm run preview  # local production preview on port 4173
 
 ## Current data and interactions
 
-All offers, distances, and update timestamps are labelled sample data. The
-catalogue has eight sample offers across four grocers, including regular and
-sale prices. It uses a fixed October 17, 2026 sample update, not a live daily
-feed. Neighbourhood presets change the illustrative distances.
+All grocery prices, branches, addresses, and update timestamps come directly from
+Supabase's `banana` schema. The current dataset includes simulated prices, which remain
+labelled. Neighbourhood presets supply only the visitor's default search origin;
+store distances are calculated from Supabase branch coordinates.
 
-The Home search opens the catalogue. Search and filters are encoded in the URL
-for shareable views; Back/Forward restores filter states. Mobile has bottom
-navigation, a filter dialog, and touch-friendly offer details. No account is
-required. The View flyer action opens a clearly labelled sample offer preview;
-actual flyer documents and live availability are not connected yet.
+The Home search opens the catalogue. Search and filters are encoded in the URL for
+shareable views; Back/Forward restores filter states. Mobile has bottom navigation,
+a filter dialog, and offer details. No account is required. View offer opens the
+actual database-backed record. Missing source/flyer URLs and other fields are labelled,
+not filled with mock values. Local images and logos are visual assets only.
 
 ## Source layout
 
 - `src/App.tsx`: page composition and selected offer state.
-- `src/features/`: Home and Search items screens.
+- `src/features/`: Home, Search items, and Locations screens.
 - `src/components/`: navigation, search, controls, offers, and dialogs.
-- `src/data/mockOffers.ts`: the complete illustrative catalogue and stores.
+- `src/api/supabaseCatalogue.ts`: read-only database client, conversion and diagnostics.
+- `src/data/CatalogueContext.tsx`: shared loading, error and refresh state.
+- `src/data/mockOffers.ts`: legacy fixtures for pure catalogue tests; not displayed by the app.
 - `src/lib/catalogue.ts`: pure search/filter/sort logic.
 - `src/lib/navigation.ts`: URL state and hash navigation.
 - `src/index.css`: font imports and tokens; `src/App.css`: responsive styles.
@@ -53,18 +55,10 @@ actual flyer documents and live availability are not connected yet.
 
 ## Backend handoff
 
-Frontend work stays inside `frontend/`. The backend team can work independently
-elsewhere. Supabase is planned but is not configured or called by this prototype.
-Agree on the product/store/offer schema, coordinates, unit-price normalization,
-expiry, last-checked timestamps, and source/flyer URLs before integration.
-Replace the mock catalogue through a dedicated data client once that contract
-is ready; keep filtering behavior covered by the existing tests.
-
-For a separate local HTTP API, copy `.env.example` to `.env.local`, set
-`API_PROXY_TARGET`, and restart Vite. Requests to `/api/...` retain their path
-when forwarded. This is a development proxy; production needs an agreed API
-origin or reverse proxy. Never include service-role keys or other secrets in
-browser code or VITE_* variables.
+Frontend work stays inside `frontend/`. Backend teammates own ingestion, data quality,
+and Supabase migrations/policies. Read [the direct Supabase handoff](docs/supabase-direct-handoff.md).
+A custom Node read API is no longer required. Never include administrative keys or
+other secrets in browser code or VITE variables.
 
 ## Design and tools
 
@@ -91,20 +85,36 @@ BC Address Geocoder, but Banana keeps the chosen point only in page memory; it
 is not persisted or included in share URLs. Browser geolocation coordinates are
 not sent to the geocoder. The map requests geographic tiles from OpenFreeMap.
 
-The three branch points are **illustrative**, not verified physical branches.
-The map and address lookup are live, while the store records and catalogue remain
-mock data. Only branches linked to a known brand with offers are displayed.
-Branches of the same brand share offers. These offers do not establish inventory
-or pricing at an individual branch. When an origin has been chosen, Home and
-Search use geographic distances to the supported branches instead of the older
-neighbourhood sample distances. A full reload resets the temporary origin.
+Store records are loaded from Supabase through its radius RPC. Only branches of brands
+with usable item prices are shown; same-brand branches share chain-wide offers. This
+does not establish live inventory at an individual branch. Home and Search use distances
+to these branch coordinates. A full reload resets the temporary visitor origin.
 
 - `src/api/addressSearch.ts`: replaceable public address-search client.
-- `src/data/mockLocations.ts`: branch records and neighbourhood centers.
+- `src/data/storeLocations.ts`: default neighbourhood centers, types and legacy test fixtures.
 - `src/lib/locations.ts`: distance, radius geometry and brand-offer joins.
 - `src/components/LocationsMap.tsx`: lazy-loaded MapLibre map and markers.
 - `src/features/LocationsPage.tsx`: search, location sharing, store list and links.
 
 The map bundle loads separately. A list remains available if map loading fails;
 address errors and denied/unavailable location sharing offer manual-search
-recovery. No Supabase credentials or paid map service has been added.
+recovery. Only a browser-safe Supabase publishable key is configured; no paid map service is required.
+
+## Direct Supabase connection
+
+Copy `.env.example` to `.env.local`, set `VITE_SUPABASE_URL` and the browser-safe
+`VITE_SUPABASE_PUBLISHABLE_KEY`, and restart `npm run dev`. Production builds need the same
+values configured in Cloudflare Pages before building. Never use a service-role key,
+secret key, or database connection string here.
+
+The three pages read the `banana` schema directly. No local/backend Node server or Vite
+API proxy is needed. Data refreshes on page reload or **Refresh data** in the readiness panel.
+The panel and per-offer labels identify missing Supabase fields; there is no runtime mock
+fallback. Local product images and logos are visual assets only.
+
+For this initial demo, the adapter completely paginates a bounded catalogue snapshot
+(200 rows per request, up to 5,000), and loads Metro Vancouver branches through the radius
+RPC using a fixed public city point. Search and distance filtering use those Supabase
+records locally, with origins rounded to two decimals for consistent approximate distances.
+Replace this bootstrap with paginated database search before exceeding these limits.
+See [the direct Supabase handoff](docs/supabase-direct-handoff.md) for contracts and gaps.

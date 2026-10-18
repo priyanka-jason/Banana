@@ -1,5 +1,6 @@
 import { CaretDownIcon } from '@phosphor-icons/react/dist/csr/CaretDown'
-import { stores } from '../data/mockOffers'
+import { useCatalogue } from '../data/catalogueState'
+import { categoryLabels } from '../api/supabaseCatalogue'
 import type { Filters, SortOrder } from '../types'
 
 interface SelectProps {
@@ -87,6 +88,11 @@ export function FilterControls({
   filters: Filters
   onChange: (patch: Partial<Filters>) => void
 }) {
+  const { data } = useCatalogue()
+  const stores = data?.stores ?? []
+  const categories = [
+    ...new Set(data?.offers.map((offer) => offer.category) ?? []),
+  ].sort()
   return (
     <>
       <SelectControl
@@ -95,9 +101,9 @@ export function FilterControls({
         onChange={(category) => onChange({ category })}
       >
         <option value="all">Category: All</option>
-        {['Produce', 'Dairy', 'Eggs'].map((category) => (
+        {categories.map((category) => (
           <option key={category} value={category}>
-            {category}
+            {categoryLabels[category] ?? category}
           </option>
         ))}
       </SelectControl>

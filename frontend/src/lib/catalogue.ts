@@ -1,5 +1,6 @@
 import { areas, offers, stores } from '../data/mockOffers.ts'
 import { branches, type SearchOrigin } from '../data/storeLocations.ts'
+import { categoryLabels } from '../api/supabaseCatalogue.ts'
 import { distanceKm } from './locations.ts'
 import type { Filters, NearbyOffer, SortOrder } from '../types.ts'
 
@@ -11,7 +12,10 @@ export const saving = (offer: NearbyOffer) =>
     ? (offer.regularPrice - offer.price) / offer.regularPrice
     : 0
 
-export function readFilters(params: URLSearchParams): Filters {
+export function readFilters(
+  params: URLSearchParams,
+  options?: { stores: string[]; categories: string[] },
+): Filters {
   const sorts: SortOrder[] = [
     'recommended',
     'price',
@@ -24,12 +28,23 @@ export function readFilters(params: URLSearchParams): Filters {
   const radius = Number(params.get('radius') || 5)
   return {
     query: params.get('q') || '',
-    category: ['Produce', 'Dairy', 'Eggs'].includes(
-      params.get('category') || '',
-    )
+    category: (
+      options?.categories ?? [
+        'Produce',
+        'Dairy',
+        'Eggs',
+        ...Object.keys(categoryLabels),
+      ]
+    ).includes(params.get('category') || '')
       ? params.get('category')!
       : 'all',
-    store: stores.some((store) => store.id === params.get('store'))
+    store: (
+      options?.stores ?? [
+        ...stores.map((store) => store.id),
+        'costco',
+        'real-canadian-superstore',
+      ]
+    ).includes(params.get('store') || '')
       ? params.get('store')!
       : 'all',
     radius: [1, 3, 5, 10].includes(radius) ? radius : 5,

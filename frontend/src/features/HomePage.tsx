@@ -4,7 +4,8 @@ import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/csr/MagnifyingGl
 import { Freshness, SearchForm } from '../components/SearchForm'
 import { RadiusSelect } from '../components/FilterControls'
 import { OfferCard } from '../components/Offer'
-import { getNearbyOffers } from '../lib/catalogue'
+import { isDiscounted, saving } from '../lib/catalogue'
+import { useCatalogue, catalogueOffers } from '../data/catalogueState'
 import { pageHref, updateRoute } from '../lib/navigation'
 import type { Filters, NearbyOffer } from '../types'
 import type { SearchOrigin } from '../data/storeLocations'
@@ -21,9 +22,11 @@ export function HomePage({
   origin?: SearchOrigin | null
 }) {
   const [query, setQuery] = useState('')
-  const nearby = getNearbyOffers(filters, origin).filter(
-    (offer) => offer.featured && offer.distance <= filters.radius,
-  )
+  const { data } = useCatalogue()
+  const nearby = catalogueOffers(data!, filters, origin)
+    .filter((offer) => isDiscounted(offer) && offer.distance <= filters.radius)
+    .sort((a, b) => saving(b) - saving(a))
+    .slice(0, 4)
   const browseParams = new URLSearchParams({
     area: filters.area,
     radius: String(filters.radius),
@@ -34,7 +37,7 @@ export function HomePage({
         <div className="shell">
           <div className="intro-content">
             <div>
-              <h1>
+              <h1 className="page-title">
                 <span className="headline-line">Your neighbourhood,</span>
                 <br />
                 for less.
@@ -83,7 +86,7 @@ export function HomePage({
         ) : (
           <div className="empty-state">
             <MagnifyingGlassIcon size={36} aria-hidden="true" />
-            <h3>No sample discounts within {filters.radius} km</h3>
+            <h3>No discounts within {filters.radius} km</h3>
             <p>Try a wider distance to see more nearby offers.</p>
             <button
               className="flyer-button"

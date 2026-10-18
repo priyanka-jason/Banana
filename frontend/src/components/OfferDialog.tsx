@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react'
 import { ArrowSquareOutIcon } from '@phosphor-icons/react/dist/csr/ArrowSquareOut'
 import { XIcon } from '@phosphor-icons/react/dist/csr/X'
 import { currency, isDiscounted } from '../lib/catalogue'
-import { Expiry, Merchant, Price } from './Offer'
+import { Expiry, Merchant, Price, MissingOfferData } from './Offer'
+import { ProductImage } from './ProductImage'
 import type { NearbyOffer } from '../types'
 
 export function OfferDialog({
@@ -35,17 +36,22 @@ export function OfferDialog({
           <XIcon size={23} />
         </button>
         <p className="dialog-kicker">
-          {isDiscounted(offer) ? 'Sample flyer offer' : 'Sample grocery offer'}
+          {offer.source
+            ? offer.simulated
+              ? 'Simulated grocery offer'
+              : 'Grocery offer'
+            : 'Grocery offer'}
         </p>
-        <img
+        <ProductImage
           className="dialog-product-image"
           src={offer.image}
           alt={offer.name}
-          width="240"
-          height="200"
+          width={240}
+          height={200}
         />
         <h2 id="offer-title">{offer.name}</h2>
         <p className="pack">{offer.pack}</p>
+        <MissingOfferData offer={offer} />
         <Price offer={offer} />
         <p className="unit-price">{offer.unitPrice}</p>
         {isDiscounted(offer) ? (
@@ -56,18 +62,37 @@ export function OfferDialog({
         <Merchant offer={offer} />
         <Expiry offer={offer} />
         <p className="sample-explanation">
-          This is a sample offer for exploring Banana. Prices, distances and
-          availability are illustrative. Check the store for its current flyer.
+          {offer.source
+            ? offer.simulated
+              ? 'This price is simulated demo data stored in Supabase. Check the store for current prices and availability.'
+              : 'Price information comes from the shared catalogue. Check the store for current availability.'
+            : 'This is a sample offer for exploring Banana. Prices, distances and availability are illustrative.'}
         </p>
-        <a
-          className="flyer-button store-link"
-          href={offer.store.website}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Visit store website{' '}
-          <ArrowSquareOutIcon size={18} aria-hidden="true" />
-        </a>
+        {offer.sourceUrl && (
+          <a
+            className="flyer-button store-link"
+            href={offer.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View source / flyer{' '}
+            <ArrowSquareOutIcon size={18} aria-hidden="true" />
+          </a>
+        )}
+        {!offer.store.website && (
+          <p className="missing-backend">Missing backend: store website link</p>
+        )}
+        {offer.store.website && (
+          <a
+            className="flyer-button store-link"
+            href={offer.store.website}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit store website{' '}
+            <ArrowSquareOutIcon size={18} aria-hidden="true" />
+          </a>
+        )}
       </div>
     </dialog>
   )

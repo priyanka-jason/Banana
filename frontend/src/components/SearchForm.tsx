@@ -1,5 +1,6 @@
 import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/csr/MagnifyingGlass'
 import { XIcon } from '@phosphor-icons/react/dist/csr/X'
+import { useCatalogue } from '../data/catalogueState'
 import type { FormEvent } from 'react'
 
 interface Props {
@@ -67,12 +68,40 @@ export function SearchForm({
 }
 
 export function Freshness() {
-  return (
-    <p className="freshness">
-      Sample prices (CAD)<span aria-hidden="true"> · </span>
-      <time dateTime="2026-10-17T06:00:00-07:00">
-        Updated Oct 17, 2026, 6:00 AM
-      </time>
-    </p>
-  )
+  const { data, connected } = useCatalogue()
+  const dates =
+    data?.offers
+      .map((offer) => offer.updatedAt)
+      .filter(
+        (date): date is string =>
+          Boolean(date) && Number.isFinite(Date.parse(date!)),
+      )
+      .sort() ?? []
+  const oldest = dates[0]
+  if (connected)
+    return (
+      <p className="freshness">
+        {data?.simulated ? 'Simulated prices' : 'Prices'} (CAD) · Supabase
+        {oldest ? (
+          <>
+            {' '}
+            · Updated{' '}
+            <time dateTime={oldest}>
+              {new Intl.DateTimeFormat('en-CA', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                timeZone: 'America/Vancouver',
+                timeZoneName: 'short',
+              }).format(new Date(oldest))}
+            </time>
+          </>
+        ) : (
+          ' · Update time unavailable'
+        )}
+      </p>
+    )
+  return null
 }

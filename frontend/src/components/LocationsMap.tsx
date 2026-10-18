@@ -214,7 +214,7 @@ export default function LocationsMap({
           </button>
         </div>
       )}
-      <p className="map-sample-label">Sample store locations · Live map</p>
+      <p className="map-sample-label">Store locations · Live map</p>
     </div>
   )
 }

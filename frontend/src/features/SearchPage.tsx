@@ -5,10 +5,11 @@ import { XIcon } from '@phosphor-icons/react/dist/csr/X'
 import { FilterControls, SortSelect } from '../components/FilterControls'
 import { Freshness, SearchForm } from '../components/SearchForm'
 import { OfferTable } from '../components/Offer'
-import { filterOffers, getNearbyOffers } from '../lib/catalogue'
+import { filterOffers } from '../lib/catalogue'
 import { updateRoute } from '../lib/navigation'
 import type { Filters, NearbyOffer } from '../types'
-import { branches, type SearchOrigin } from '../data/storeLocations'
+import { type SearchOrigin } from '../data/storeLocations'
+import { useCatalogue, catalogueOffers } from '../data/catalogueState'
 import { pageHref } from '../lib/navigation'
 
 function FilterDialog({
@@ -90,12 +91,13 @@ export function SearchPage({
   origin?: SearchOrigin | null
 }) {
   const [filterOpen, setFilterOpen] = useState(false)
-  const branch = branches.find(
+  const { data } = useCatalogue()
+  const branch = data!.branches.find(
     (branch) =>
       branch.id === params.get('branch') && branch.brandId === filters.store,
   )
   const items = filterOffers(
-    getNearbyOffers(filters, origin, branch?.id),
+    catalogueOffers(data!, filters, origin, branch?.id),
     filters,
   )
   function change(patch: Partial<Filters>) {
@@ -110,11 +112,17 @@ export function SearchPage({
         radius: String(next.radius),
         sale: next.discountsOnly ? '1' : '',
         sort: next.sort,
-        branch: 'store' in patch ? '' : params.get('branch') || '',
+        branch:
+          'store' in patch && patch.store !== filters.store
+            ? ''
+            : params.get('branch') || '',
       },
       Object.keys(patch).length === 1 && 'query' in patch,
     )
   }
+  const [pageSize, setPageSize] = useState({ key: '', size: 20 })
+  const searchKey = params.toString()
+  const visibleCount = pageSize.key === searchKey ? pageSize.size : 20
   const activeCount =
     Number(filters.category !== 'all') +
     Number(filters.store !== 'all') +
@@ -124,10 +132,10 @@ export function SearchPage({
     activeCount > 0 || Boolean(filters.query) || filters.sort !== 'recommended'
   return (
     <main id="main-content" tabIndex={-1} className="shell search-page">
-      <h1>Search items</h1>
+      <h1 className="page-title">Search items</h1>
       {branch && (
         <p className="branch-context">
-          Offers from this chain · {branch.name}, Vancouver. Stock may vary.{' '}
+          Offers from this chain · {branch.name}. Stock may vary.{' '}
           <a
             href={pageHref(
               'locations',
@@ -171,7 +179,7 @@ export function SearchPage({
       </div>
       <div className="results-meta">
         <p role="status" aria-live="polite">
-          {items.length} sample {items.length === 1 ? 'offer' : 'offers'}
+          {items.length} {items.length === 1 ? 'offer' : 'offers'}
           {filters.query ? ` for “${filters.query}”` : ''}
           {hasChanges ? (
             <button
@@ -194,7 +202,20 @@ export function SearchPage({
         <Freshness />
       </div>
       {items.length ? (
-        <OfferTable offers={items} onOpen={onOpen} />
+        <>
+          <OfferTable offers={items.slice(0, visibleCount)} onOpen={onOpen} />
+          {items.length > visibleCount && (
+            <button
+              className="flyer-button load-more"
+              onClick={() =>
+                setPageSize({ key: searchKey, size: visibleCount + 20 })
+              }
+            >
+              Show more ({Math.min(visibleCount, items.length)} of{' '}
+              {items.length})
+            </button>
+          )}
+        </>
       ) : (
         <div className="empty-state">
           <MagnifyingGlassIcon size={38} aria-hidden="true" />

@@ -10,12 +10,13 @@ export interface StoreBranch {
   brandId: string
   name: string
   address: string
-  city: string
-  postalCode: string
+  city?: string
+  postalCode?: string
   latitude: number
   longitude: number
-  phone: string
-  googlePlaceId: string
+  missingAddress?: boolean
+  phone?: string
+  googlePlaceId?: string
 }
 
 export const neighbourhoodOrigins: Record<AreaId, SearchOrigin> = {

@@ -93,12 +93,12 @@ h3,
 p {
   margin: 0;
 }
-.home-intro h1 {
+.page-title {
   font-family: 'DM Sans', sans-serif;
-  font-size: clamp(42px, 4.2vw, 58px);
-  line-height: 1;
+  font-size: clamp(42px, 4vw, 52px);
+  line-height: 1.05;
   font-weight: 600;
-  letter-spacing: -1.5px;
+  letter-spacing: -1.4px;
   color: #0b2823;
 }
 .headline-line {
@@ -431,12 +431,7 @@ p {
   padding-top: 36px;
   padding-bottom: 60px;
 }
-.search-page > h1 {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 46px;
-  line-height: 1.2;
-  letter-spacing: -1.6px;
-  font-weight: 700;
+.search-page > .page-title {
   margin-bottom: 24px;
 }
 .search-page > .search-form {
@@ -755,9 +750,6 @@ dialog::backdrop {
   .intro-search {
     max-width: 650px;
   }
-  .home-intro h1 {
-    font-size: 55px;
-  }
   .offer-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 30px 0;
@@ -849,11 +841,6 @@ dialog::backdrop {
   .intro-content {
     display: block;
     padding: 18px 0 15px;
-  }
-  .home-intro h1 {
-    font-size: clamp(29px, 8.7vw, 43px);
-    letter-spacing: -1px;
-    line-height: 1;
   }
   .intro-description {
     font-size: 15px;
@@ -1047,9 +1034,10 @@ dialog::backdrop {
     padding-top: 24px;
     padding-bottom: 30px;
   }
-  .search-page > h1 {
+  .search-page > .page-title {
     font-size: 32px;
-    letter-spacing: -1px;
+    line-height: 1.05;
+    letter-spacing: -1.2px;
     margin-bottom: 17px;
   }
   .search-page > .search-form {
@@ -1285,9 +1273,10 @@ dialog::backdrop {
   .header-inner {
     height: 66px;
   }
-  .home-intro h1 {
-    font-size: clamp(29px, 9.9vw, 46px);
-    line-height: 0.94;
+  .home-intro .page-title {
+    font-size: 32px;
+    line-height: 1.05;
+    letter-spacing: -1.2px;
   }
   .intro-description {
     font-size: 16px;
@@ -1386,5 +1375,91 @@ dialog::backdrop {
 @media (max-width: 700px) {
   .offer-card .product-image {
     height: 50px;
+  }
+}
+
+/* Local images are optional; missing backend imagery uses a neutral icon. */
+.product-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5ef;
+  border-radius: 12px;
+  color: #879187;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+}
+.product-placeholder.product-image {
+  width: 100%;
+}
+.product-placeholder.dialog-product-image {
+  width: 240px;
+  height: 200px;
+}
+.store-initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #f4f3ea;
+  color: #214d37;
+  font-weight: 600;
+}
+.load-more {
+  margin: 24px auto;
+  display: block;
+}
+
+.backend-readiness {
+  margin-block: 20px;
+  padding: 16px 20px;
+  border: 1px solid #e5d293;
+  border-radius: 12px;
+  background: #fffaf0;
+  color: #443b24;
+  font-size: 13px;
+}
+.backend-readiness-heading {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+}
+.backend-readiness summary {
+  margin-top: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.backend-readiness ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 28px;
+  padding-left: 18px;
+  margin-block: 10px;
+}
+.backend-readiness p {
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+.missing-backend {
+  display: block;
+  color: #895a16;
+  background: #fff7e5;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 400;
+  margin-block: 4px;
+}
+@media (max-width: 600px) {
+  .backend-readiness-heading {
+    align-items: flex-start;
+  }
+  .backend-readiness {
+    padding: 12px;
   }
 }

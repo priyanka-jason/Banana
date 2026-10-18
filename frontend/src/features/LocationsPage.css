@@ -8,11 +8,8 @@
   align-items: center;
   padding-block: 30px 27px;
 }
-.locations-intro h1 {
+.locations-intro .page-title {
   margin: 0 0 6px;
-  font-size: 56px;
-  line-height: 1.1;
-  letter-spacing: -2px;
 }
 .locations-intro h1 + p {
   margin: 0;
@@ -479,9 +476,6 @@
     grid-template-columns: 1fr;
     gap: 22px;
   }
-  .locations-intro h1 {
-    font-size: 46px;
-  }
   .locations-intro h1 + p {
     font-size: 21px;
   }
@@ -540,9 +534,10 @@
     display: block;
     padding-block: 24px 18px;
   }
-  .locations-intro h1 {
-    font-size: 34px;
-    letter-spacing: -1px;
+  .locations-intro .page-title {
+    font-size: 32px;
+    line-height: 1.05;
+    letter-spacing: -1.2px;
   }
   .locations-intro h1 + p {
     font-size: 17px;

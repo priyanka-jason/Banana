@@ -1,5 +1,5 @@
 export type AreaId = 'mount-pleasant' | 'kitsilano' | 'downtown'
-export type Category = 'Produce' | 'Dairy' | 'Eggs'
+export type Category = string
 export type SortOrder =
   'recommended' | 'price' | 'price-desc' | 'distance' | 'discount'
 export type Page = 'home' | 'items' | 'locations'
@@ -23,6 +23,12 @@ export interface Offer {
   storeId: string
   distances: Record<AreaId, number>
   featured?: boolean
+  saleEnd?: string
+  updatedAt?: string
+  source?: 'supabase'
+  simulated?: boolean
+  missingFields?: string[]
+  sourceUrl?: string
 }
 
 export interface NearbyOffer extends Offer {

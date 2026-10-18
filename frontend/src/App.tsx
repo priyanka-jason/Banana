@@ -8,11 +8,20 @@ import type { SearchOrigin } from './data/storeLocations'
 import { readFilters } from './lib/catalogue'
 import { useRoute } from './lib/navigation'
 import type { NearbyOffer } from './types'
+import { BackendReadiness } from './components/BackendReadiness'
 import './App.css'
+import { useCatalogue } from './data/catalogueState'
 
 function App() {
   const { page, params } = useRoute()
-  const filters = readFilters(params)
+  const catalogue = useCatalogue()
+  const canonicalParams = new URLSearchParams(params)
+  if (canonicalParams.get('store') === 'superstore')
+    canonicalParams.set('store', 'real-canadian-superstore')
+  const filters = readFilters(canonicalParams, {
+    stores: catalogue.data?.stores.map((store) => store.id) ?? [],
+    categories: catalogue.data?.offers.map((offer) => offer.category) ?? [],
+  })
   const [selected, setSelected] = useState<NearbyOffer | null>(null)
   const [origin, setOrigin] = useState<SearchOrigin | null>(null)
   useEffect(() => {
@@ -37,7 +46,29 @@ function App() {
         area={filters.area}
         onAreaChange={() => setOrigin(null)}
       />
-      {page === 'home' ? (
+      <BackendReadiness />
+      {catalogue.loading || catalogue.error ? (
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="shell empty-state"
+          aria-live="polite"
+        >
+          <h1 className="page-title">
+            {catalogue.loading
+              ? 'Loading groceries…'
+              : 'Unable to load groceries'}
+          </h1>
+          <p>
+            {catalogue.loading ? 'Connecting to Supabase.' : catalogue.error}
+          </p>
+          {catalogue.error && (
+            <button className="flyer-button" onClick={catalogue.retry}>
+              Try again
+            </button>
+          )}
+        </main>
+      ) : page === 'home' ? (
         <HomePage
           filters={filters}
           params={params}
