@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Header, MobileNav } from './components/Header'
 import { OfferDialog } from './components/OfferDialog'
+import { AuthModal } from './components/AuthModal'
+import { ProfileModal } from './components/ProfileModal'
+import { MembershipsModal } from './components/MembershipsModal'
 import { HomePage } from './features/HomePage'
 import { SearchPage } from './features/SearchPage'
 import { LocationsPage } from './features/LocationsPage'
@@ -13,10 +16,12 @@ import { BackendReadiness } from './components/BackendReadiness'
 import { ListLauncher } from './components/ShoppingList'
 import './App.css'
 import { useCatalogue } from './data/catalogueState'
+import { useAuth } from './data/AuthContext'
 
 function App() {
   const { page, params } = useRoute()
   const catalogue = useCatalogue()
+  const { account } = useAuth()
   const canonicalParams = new URLSearchParams(params)
   if (canonicalParams.get('store') === 'superstore')
     canonicalParams.set('store', 'real-canadian-superstore')
@@ -33,6 +38,18 @@ function App() {
     setOriginState(nextOrigin)
     saveOrigin(nextOrigin)
   }
+
+  // Load saved location from account if present
+  useEffect(() => {
+    if (account?.use_location && account.latitude && account.longitude) {
+      setOriginState({
+        label: account.location_label || 'Your saved location',
+        latitude: account.latitude,
+        longitude: account.longitude,
+      })
+    }
+  }, [account?.use_location, account?.latitude, account?.longitude, account?.location_label])
+
   useEffect(() => {
     document.title = `${page === 'home' ? 'Nearby grocery deals' : page === 'locations' ? 'Grocery store locations' : 'Search groceries'} | Banana`
     window.scrollTo({ top: 0, behavior: 'instant' })
@@ -49,12 +66,7 @@ function App() {
       >
         Skip to content
       </a>
-      <Header
-        page={page}
-        params={params}
-        area={filters.area}
-        onAreaChange={() => setOrigin(null)}
-      />
+      <Header page={page} params={params} />
       <BackendReadiness />
       {catalogue.loading || catalogue.error ? (
         <main
@@ -106,6 +118,9 @@ function App() {
       {selected ? (
         <OfferDialog offer={selected} onClose={() => setSelected(null)} />
       ) : null}
+      <AuthModal />
+      <ProfileModal />
+      <MembershipsModal />
     </>
   )
 }

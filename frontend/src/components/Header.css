@@ -1,0 +1,155 @@
+.header-auth-control {
+  margin-left: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-sign-in-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #dcded8;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink, #13251c);
+  transition: all 0.2s ease;
+  min-height: 44px;
+}
+
+.auth-sign-in-button:hover {
+  background: #f4f3ed;
+  border-color: #07562d;
+  color: #07562d;
+}
+
+.account-dropdown-wrapper {
+  position: relative;
+}
+
+.my-account-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #dedfdc;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #14251d;
+  min-height: 44px;
+  transition: all 0.2s ease;
+}
+
+.my-account-button:hover,
+.my-account-button.is-active {
+  background: #f5f4ee;
+  border-color: #07562d;
+}
+
+.my-account-label {
+  white-space: nowrap;
+}
+
+.account-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 240px;
+  background: #ffffff;
+  border: 1px solid #e2e4de;
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(12, 39, 34, 0.12);
+  padding: 8px 0;
+  z-index: 1000;
+  animation: fadeInDown 0.15s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.account-dropdown-header {
+  padding: 10px 16px;
+}
+
+.account-user-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #13251c;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-user-email {
+  font-size: 13px;
+  color: #69717b;
+  margin: 2px 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-dropdown-divider {
+  height: 1px;
+  background: #eee;
+  margin: 6px 0;
+}
+
+.account-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #18231e;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.account-menu-item:hover {
+  background: #f5f4ee;
+  color: #07562d;
+}
+
+.account-menu-item.sign-out {
+  color: #c0392b;
+}
+
+.account-menu-item.sign-out:hover {
+  background: #fdf2f2;
+  color: #a93226;
+}
+
+.mobile-account-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #59616c;
+  font-size: 11px;
+  padding: 8px;
+}
+
+.mobile-account-btn:hover {
+  color: #07562d;
+}

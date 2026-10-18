@@ -25,6 +25,7 @@ import './LocationsPage.css'
 import { useCatalogue, catalogueBranches } from '../data/catalogueState'
 import { ProductImage, StoreLogo } from '../components/ProductImage'
 import { Freshness } from '../components/SearchForm'
+import { useAuth } from '../data/AuthContext'
 
 const LocationsMap = lazy(() => import('../components/LocationsMap'))
 
@@ -167,6 +168,7 @@ export function LocationsPage({
   onOpen,
 }: Props) {
   const { data } = useCatalogue()
+  const { user, saveLocationToAccount } = useAuth()
   const origin = savedOrigin ?? neighbourhoodOrigins[filters.area]
   const [query, setQuery] = useState('')
   const [matches, setMatches] = useState<SearchOrigin[]>([])
@@ -247,6 +249,9 @@ export function LocationsPage({
   }
   function chooseAddress(next: SearchOrigin) {
     onOriginChange(next)
+    if (user) {
+      void saveLocationToAccount(next)
+    }
     setQuery('')
     setMatches([])
     setMessage('')
