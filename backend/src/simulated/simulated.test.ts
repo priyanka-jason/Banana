@@ -141,10 +141,17 @@ describe('simulated data through the pipeline', () => {
       'real-canadian-superstore',
       'no-frills',
     ]);
-    const sql = readFileSync(fileURLToPath(new URL('../../sql/draft-schema.sql', import.meta.url)), 'utf8');
+    const sqlFile = (name: string) => readFileSync(fileURLToPath(new URL(`../../sql/${name}`, import.meta.url)), 'utf8');
+    const draft = sqlFile('draft-schema.sql');
+    const setup = sqlFile('supabase-setup.sql');
     for (const chain of result.chains) {
-      expect(sql, rawTableName(chain.slug)).toContain(`create table ${rawTableName(chain.slug)} (`);
-      expect(sql, rawTableName(chain.slug)).toMatch(new RegExp(`alter table ${rawTableName(chain.slug).replace('.', '\\.')}\\s+enable row level security`));
+      const table = rawTableName(chain.slug);
+      const rls = new RegExp(`alter table ${table.replace('.', '\\.')}\\s+enable row level security`);
+      expect(draft, table).toContain(`create table ${table} (`);
+      expect(draft, table).toMatch(rls);
+      // The Supabase setup copies the first table's shape for the others.
+      expect(setup, table).toMatch(new RegExp(`create table ${table.replace('.', '\\.')} \\(`));
+      expect(setup, table).toMatch(rls);
     }
   });
 
