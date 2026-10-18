@@ -4,6 +4,7 @@ import { OfferDialog } from './components/OfferDialog'
 import { AuthModal } from './components/AuthModal'
 import { ProfileModal } from './components/ProfileModal'
 import { MembershipsModal } from './components/MembershipsModal'
+import { SavedListsModal } from './components/SavedLists'
 import { HomePage } from './features/HomePage'
 import { SearchPage } from './features/SearchPage'
 import { LocationsPage } from './features/LocationsPage'
@@ -135,6 +136,7 @@ function App() {
       <AuthModal />
       <ProfileModal />
       <MembershipsModal />
+      <SavedListsModal />
     </>
   )
 }

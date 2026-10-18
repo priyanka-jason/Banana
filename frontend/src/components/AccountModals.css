@@ -353,3 +353,20 @@
   border-color: #c3e6cb;
   color: #1e8449;
 }
+
+/* "Saved lists" shortcut in the profile window (the phone tab bar opens Profile). */
+.account-link-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e6e7e5;
+  border-radius: 10px;
+  background: white;
+  font-weight: 600;
+  text-align: left;
+}
+.account-link-btn:hover {
+  background: #f7f7f2;
+}

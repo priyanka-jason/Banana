@@ -33,9 +33,19 @@ function choose(id: string | null) {
   listeners.forEach((listener) => listener())
 }
 
+// The saved list now in the basket, if any, so "Update" saves back to it.
+let loaded: { id: string; name: string } | null = null
+function setLoaded(next: { id: string; name: string } | null) {
+  loaded = next
+  listeners.forEach((listener) => listener())
+}
+
 function update(next: ListItem[]) {
   list = next
-  if (!next.length) choose(null)
+  if (!next.length) {
+    choose(null)
+    loaded = null
+  }
   saveList(storage, list)
   listeners.forEach((listener) => listener())
 }
@@ -59,15 +69,24 @@ export const shoppingList = {
     update(setQuantity(list, offerId, quantity)),
   remove: (offerId: string) => update(removeFromList(list, offerId)),
   // Swap in a saved list; it's priced from the current catalogue like any other list.
-  replace: (items: ListItem[], offers: Offer[] = []) => {
+  load: (
+    saved: { id: string; name: string; items: ListItem[] },
+    offers: Offer[] = [],
+  ) => {
     choose(null)
-    update(reconcileList(items, offers))
+    update(reconcileList(saved.items, offers))
+    setLoaded({ id: saved.id, name: saved.name })
   },
+  setLoaded,
   clear: () => update([]),
 }
 
 export function useShoppingList(): ListItem[] {
   return useSyncExternalStore(subscribe, () => list)
+}
+
+export function useLoadedList(): { id: string; name: string } | null {
+  return useSyncExternalStore(subscribe, () => loaded)
 }
 
 export function useBasketChoice(): string | null {

@@ -15,7 +15,7 @@ import { MAX_QUANTITY, itemCount } from '../lib/shoppingList'
 import { productRequest, samePackage } from '../lib/basketIdentity'
 import { amountLabel, compareBasket } from '../lib/basketComparison'
 import { BasketOptions } from './BasketComparison'
-import { SavedLists } from './SavedLists'
+import { SaveBasket } from './SavedLists'
 import type { NearbyOffer } from '../types'
 
 export function AddToListButton({ offer }: { offer: NearbyOffer }) {
@@ -27,10 +27,10 @@ export function AddToListButton({ offer }: { offer: NearbyOffer }) {
       className="list-add-button"
       disabled={Boolean(inList && inList.quantity >= MAX_QUANTITY)}
       onClick={() => shoppingList.add(offer, data?.offers)}
-      aria-label={`Add ${offer.name} from ${offer.store.name} to my list${inList ? `, ${inList.quantity} already in list` : ''}`}
+      aria-label={`Add ${offer.name} from ${offer.store.name} to my basket${inList ? `, ${inList.quantity} already in basket` : ''}`}
     >
       <PlusIcon size={16} aria-hidden="true" />
-      {inList ? `In list (${inList.quantity})` : 'Add to list'}
+      {inList ? `In basket (${inList.quantity})` : 'Add to basket'}
     </button>
   )
 }
@@ -75,10 +75,10 @@ function ListDialog({ onClose }: { onClose: () => void }) {
     >
       <div className="dialog-inner">
         <div className="filter-dialog-heading">
-          <h2 id="list-title">My list</h2>
+          <h2 id="list-title">My basket</h2>
           <button
             className="icon-button"
-            aria-label="Close my list"
+            aria-label="Close my basket"
             onClick={onClose}
           >
             <XIcon size={23} />
@@ -216,10 +216,10 @@ function ListDialog({ onClose }: { onClose: () => void }) {
               </>
             ) : null}
             <p className="list-note">Before taxes, fees & deposits.</p>
-            <SavedLists onLeave={onClose} />
+            <SaveBasket onLeave={onClose} />
             <div className="filter-dialog-actions">
               <button className="text-button" onClick={shoppingList.clear}>
-                Clear list
+                Clear basket
               </button>
               <button className="flyer-button" onClick={onClose}>
                 Keep searching
@@ -229,11 +229,11 @@ function ListDialog({ onClose }: { onClose: () => void }) {
         ) : (
           <div className="list-empty">
             <BasketIcon size={38} aria-hidden="true" />
-            <p>Your list is empty.</p>
+            <p>Your basket is empty.</p>
             <button className="flyer-button" onClick={onClose}>
               Keep searching
             </button>
-            <SavedLists onLeave={onClose} />
+            <SaveBasket onLeave={onClose} />
           </div>
         )}
       </div>
@@ -253,10 +253,10 @@ export function ListLauncher() {
           if (data) shoppingList.reconcile(data.offers)
           setOpen(true)
         }}
-        aria-label={`My list, ${count} ${count === 1 ? 'item' : 'items'}`}
+        aria-label={`My basket, ${count} ${count === 1 ? 'item' : 'items'}`}
       >
         <BasketIcon size={22} aria-hidden="true" />
-        My list<span className="list-count">{count}</span>
+        My basket<span className="list-count">{count}</span>
       </button>
       {open && <ListDialog onClose={() => setOpen(false)} />}
     </>
