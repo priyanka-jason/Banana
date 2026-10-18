@@ -12,6 +12,7 @@ import {
   handleSearch,
   handleStores,
 } from './handlers';
+import { nearbyStoresBody, storeSelectionFilters } from './storeChoice';
 import type { ApiResult } from './types';
 
 /**
@@ -94,6 +95,19 @@ export async function buildExamples(): Promise<Record<string, ExampleFile>> {
     { query: 'banana', near: { ...SHOPPER, radiusKm: 12 }, sortBy: 'distance' },
   );
   await search(
+    'search-within-5km.json',
+    'Milk at any store within 5 km of the shopper (one of the radius choices, 5 or 10 km). Only chains with a store that close show up. Built with storeSelectionFilters() from src/api/storeChoice.ts.',
+    { query: 'milk', ...storeSelectionFilters({ where: { kind: 'nearby', ...SHOPPER, radiusKm: 5 } }) },
+  );
+  await search(
+    'search-within-10km-one-chain.json',
+    'Milk at Costco stores within 10 km: a radius and a chain together. distanceKm is the distance to the nearest Costco.',
+    {
+      query: 'milk',
+      ...storeSelectionFilters({ where: { kind: 'nearby', ...SHOPPER, radiusKm: 10 }, chainSlugs: ['costco'] }),
+    },
+  );
+  await search(
     'search-picked-stores.json',
     'Prices at stores picked on a map. Pass the ids from /api/stores.',
     { query: 'eggs', locationIds: ['walmart-sample-1', 'costco-sample-2'] },
@@ -146,6 +160,12 @@ export async function buildExamples(): Promise<Record<string, ExampleFile>> {
     'Stores within 10 km of the shopper, nearest first.',
     { method: 'POST', path: '/api/stores/nearby', body: nearbyBody },
     await handleNearbyStores(repo, nearbyBody),
+  );
+  const nearbyCostcoBody = nearbyStoresBody({ kind: 'nearby', ...SHOPPER, radiusKm: 10 }, ['costco']);
+  files['stores-nearby-one-chain.json'] = example(
+    'Only Costco stores within 10 km, for a store picker after the shopper chose a chain.',
+    { method: 'POST', path: '/api/stores/nearby', body: nearbyCostcoBody },
+    await handleNearbyStores(repo, nearbyCostcoBody),
   );
   files['stores-nearby-invalid.json'] = example(
     'A location that is not on Earth.',

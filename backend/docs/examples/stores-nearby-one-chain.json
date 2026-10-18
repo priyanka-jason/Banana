@@ -1,0 +1,31 @@
+{
+  "description": "Only Costco stores within 10 km, for a store picker after the shopper chose a chain.",
+  "request": {
+    "method": "POST",
+    "path": "/api/stores/nearby",
+    "body": {
+      "lat": 49.28,
+      "lng": -123.12,
+      "radiusKm": 10,
+      "chainSlugs": [
+        "costco"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "stores": [
+        {
+          "id": "costco-sample-1",
+          "chainSlug": "costco",
+          "name": "Costco (sample, Burnaby)",
+          "city": "Burnaby",
+          "lat": 49.261,
+          "lng": -123.013,
+          "distanceKm": 8
+        }
+      ]
+    }
+  }
+}

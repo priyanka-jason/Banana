@@ -52,7 +52,12 @@ export class MemoryPriceRepository implements PriceRepository {
       .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   }
 
-  async storesWithinRadius(lat: number, lng: number, radiusKm: number): Promise<NearbyStore[]> {
-    return storesWithinRadius(await this.source.listLocations(), lat, lng, radiusKm);
+  async storesWithinRadius(
+    lat: number,
+    lng: number,
+    radiusKm: number,
+    options: { chainSlugs?: readonly string[] } = {},
+  ): Promise<NearbyStore[]> {
+    return storesWithinRadius(await this.source.listLocations(), lat, lng, radiusKm, options.chainSlugs);
   }
 }

@@ -118,6 +118,8 @@ Examples: [bananas](examples/search-bananas.json),
 [second page](examples/search-fruit-and-vegetables-page-2.json),
 [near me](examples/search-near-me.json),
 [picked stores](examples/search-picked-stores.json),
+[within 5 km](examples/search-within-5km.json),
+[one chain within 10 km](examples/search-within-10km-one-chain.json),
 [an invalid request](examples/search-invalid.json).
 
 ### `GET /api/prices/{id}`
@@ -145,7 +147,31 @@ Example: [lookup-shopping-list.json](examples/lookup-shopping-list.json).
 markers. Add `?chain=walmart` (repeatable) to limit it. No visitor location is involved.
 
 `POST /api/stores/nearby` takes `{ "lat": 49.28, "lng": -123.12, "radiusKm": 10 }` and returns the same stores plus
-`distanceKm`, nearest first.
+`distanceKm`, nearest first. Add `"chainSlugs": ["costco"]` to list only those chains' stores
+([stores-nearby-one-chain.json](examples/stores-nearby-one-chain.json)).
+
+### Choosing where to buy
+
+The shopper picks one of three, and can also narrow any of them to some chains:
+
+| Choice | Search fields | Where the store list comes from |
+|---|---|---|
+| Any store | none | |
+| Specific stores | `locationIds` | `GET /api/stores` (map or list), or `POST /api/stores/nearby` |
+| Any store within 5 km or 10 km | `near: { lat, lng, radiusKm }` | needs the browser's location |
+| ...only these chains | `chainSlugs`, added to any of the above | `GET /api/chains` |
+
+`backend/src/api/storeChoice.ts` does this conversion: `storeSelectionFilters(selection)` gives the store fields of
+the search body, `nearbyStoresBody(...)` the body for `/api/stores/nearby`, and `STORE_RADIUS_OPTIONS_KM` the radius
+choices (`[5, 10]`, default 5). It rounds the location to 2 decimals. It only imports types, so the website can import
+or copy it. The API itself accepts any radius above 0 and up to 200 km.
+
+All the filters apply together. Picked stores from a chain that is not chosen find nothing, so offer stores from the
+chosen chains only. Prices are currently the same at every store of a chain, so a row stands for the chain;
+`distanceKm` is the distance to that chain's nearest store in range.
+Examples: [within 5 km](examples/search-within-5km.json),
+[one chain within 10 km](examples/search-within-10km-one-chain.json),
+[picked stores](examples/search-picked-stores.json).
 
 ## What a result row (`PriceRow`) means
 

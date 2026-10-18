@@ -276,6 +276,16 @@ describe('parseNearbyBody', () => {
     expect(problems(parseNearbyBody({ lat: 49, lng: -123, radiusKm: 5, extra: 1 }))).toHaveLength(1);
     expect(problems(parseNearbyBody('here'))).toEqual(['(body): must be a JSON object']);
   });
+
+  it('takes an optional chain list', () => {
+    expect(parseNearbyBody({ lat: 49, lng: -123, radiusKm: 5, chainSlugs: [' walmart ', 'costco'] })).toEqual({
+      ok: true,
+      value: { lat: 49, lng: -123, radiusKm: 5, chainSlugs: ['walmart', 'costco'] },
+    });
+    expect(problems(parseNearbyBody({ lat: 49, lng: -123, radiusKm: 5, chainSlugs: 'walmart' }))).toEqual([
+      'chainSlugs: must be a list of non-empty text',
+    ]);
+  });
 });
 
 describe('parseMemberPricingParam', () => {

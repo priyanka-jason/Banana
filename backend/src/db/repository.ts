@@ -34,6 +34,14 @@ export interface PriceRepository {
   /** Every physical store (or just some chains'), for showing on a map. */
   listStoreLocations(options?: { chainSlugs?: readonly string[] }): Promise<StoreLocation[]>;
 
-  /** Physical stores within `radiusKm` of a point, nearest first. */
-  storesWithinRadius(lat: number, lng: number, radiusKm: number): Promise<NearbyStore[]>;
+  /**
+   * Physical stores within `radiusKm` of a point, nearest first. `chainSlugs` keeps only
+   * those chains' stores (empty or missing: every chain), e.g. "Walmart stores within 5 km".
+   */
+  storesWithinRadius(
+    lat: number,
+    lng: number,
+    radiusKm: number,
+    options?: { chainSlugs?: readonly string[] },
+  ): Promise<NearbyStore[]>;
 }

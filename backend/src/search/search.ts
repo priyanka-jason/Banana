@@ -234,15 +234,21 @@ export function findItems(
   return rows;
 }
 
-/** Stores within `radiusKm` of a point, nearest first. Distances are to a tenth of a km. */
+/**
+ * Stores within `radiusKm` of a point, nearest first. Distances are to a tenth of a km.
+ * `chainSlugs` keeps only those chains' stores; empty or missing means every chain.
+ */
 export function storesWithinRadius(
   locations: readonly StoreLocation[],
   lat: number,
   lng: number,
   radiusKm: number,
+  chainSlugs?: readonly string[],
 ): NearbyStore[] {
+  const chainFilter = toSet(chainSlugs);
   const found: NearbyStore[] = [];
   for (const location of locations) {
+    if (chainFilter !== undefined && !chainFilter.has(location.chainSlug)) continue;
     const distance = distanceKm({ lat, lng }, location);
     if (distance <= radiusKm) found.push({ ...location, distanceKm: round1(distance) });
   }

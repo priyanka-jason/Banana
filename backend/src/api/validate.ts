@@ -121,8 +121,8 @@ interface Point {
 }
 
 /** A point and a radius: { lat, lng, radiusKm }. `prefix` is "near." when it is nested inside a search. */
-function readPoint(obj: Record<string, unknown>, errors: Errors, prefix = ''): Point | undefined {
-  rejectUnknownFields(obj, ['lat', 'lng', 'radiusKm'], errors, prefix);
+function readPoint(obj: Record<string, unknown>, errors: Errors, prefix = '', otherFields: readonly string[] = []): Point | undefined {
+  rejectUnknownFields(obj, ['lat', 'lng', 'radiusKm', ...otherFields], errors, prefix);
 
   const before = errors.length;
   for (const key of ['lat', 'lng', 'radiusKm']) {
@@ -238,13 +238,15 @@ export function parseLookupBody(body: unknown): ParseResult<{ ids: string[]; mem
   return finish(errors, { ids: ids ?? [], memberPricing });
 }
 
-/** The body of POST /api/stores/nearby: { lat, lng, radiusKm }. */
-export function parseNearbyBody(body: unknown): ParseResult<Point> {
+/** The body of POST /api/stores/nearby: { lat, lng, radiusKm, chainSlugs? }. */
+export function parseNearbyBody(body: unknown): ParseResult<Point & { chainSlugs?: string[] }> {
   const errors: Errors = [];
   const obj = asObject(body, errors);
   if (obj === undefined) return { ok: false, errors };
-  const point = readPoint(obj, errors);
-  return finish(errors, point ?? { lat: 0, lng: 0, radiusKm: 0 });
+  const point = readPoint(obj, errors, '', ['chainSlugs']);
+  const chainSlugs = readTextList(obj, 'chainSlugs', errors, MAX_LIST_ENTRIES);
+  const value = point ?? { lat: 0, lng: 0, radiusKm: 0 };
+  return finish(errors, chainSlugs === undefined ? value : { ...value, chainSlugs });
 }
 
 /** The ?memberPricing= part of GET /api/prices/{id}. Missing means a non-member. */

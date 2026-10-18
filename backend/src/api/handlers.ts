@@ -170,7 +170,11 @@ export async function handleNearbyStores(
 
   return guarded(options, async () => ({
     status: 200,
-    body: { stores: await repo.storesWithinRadius(parsed.value.lat, parsed.value.lng, parsed.value.radiusKm) },
+    body: {
+      stores: await repo.storesWithinRadius(parsed.value.lat, parsed.value.lng, parsed.value.radiusKm, {
+        chainSlugs: parsed.value.chainSlugs,
+      }),
+    },
   }));
 }
 
