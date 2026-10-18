@@ -10,19 +10,16 @@ Built for a hackathon.
 
 ## Project overview
 
-Food prices keep rising, and the cheapest store for one item is rarely the cheapest for the next. Comparing them means checking five flyers and five websites. Many families don't have time for that, and they're often the ones who need the savings most.
+We are fighting inflation. Food prices keep rising, and the cheapest store for one item is rarely the cheapest for the next. Comparing them means checking five flyers and five websites. Many families don't have time for that, and they're often the ones who need the savings most. A 2024 Bank of Canada study found that families are overspending by 2.1% from choosing cheap items, whereas they can save up to 4.1% on average by buying discounted products ([Bank of Canada Working Paper 2024-31: Price Discounts and Cheapflation](https://publications.gc.ca/collections/collection_2024/banque-bank-canada/FB3-5-2024-31-eng.pdf)).
 
 Banana compares grocery prices across five chains in Metro Vancouver: **Save-On-Foods, Walmart, Costco, No Frills and Real Canadian Superstore**. You search once and see who has the item, what it costs, and how far away the store is. Then you can build a shopping list and see which store, or which mix of stores, makes your whole basket cheapest.
 
 ### Social responsibility
 
-This is the core of the project, not an add-on.
-
 - **Saving money is free.** Search, comparison, store maps and basket totals are all on the Free plan, with no account needed. We never paywall the features that help people spend less.
-- **Premium feeds people.** Premium costs $4.99/month (CAD). **20% of every payment goes straight to local food banks.** The other 80% covers price data, hosting and payment fees, and whatever is left after those costs is donated too.
+- **Premium feeds people.** Premium costs $4.99/month (CAD). **20% of every payment goes straight to local food banks.** The other 80% covers price data, hosting and payment fees. Once operating costs are offset, all proceeds will go to local food banks.
 - **Privacy by default.** Your location is used only to work out distances. It is never logged or stored on our servers. A searched address is saved only in your own browser.
 - **Honest numbers.** We never fill gaps with made-up values. Missing information is shown as missing. Demo prices are clearly labelled. A basket that's missing items is never ranked as the "cheapest". Totals state that they exclude taxes, fees and deposits.
-- **Responsible data collection.** Real prices come from each chain's public weekly flyer, read slowly, once a week. We don't crawl store websites against their terms, and we stop at any bot check.
 - **Free and open services.** Maps use MapLibre and OpenFreeMap, and address search uses the public BC Address Geocoder. Nobody needs a paid account to use Banana.
 
 ## Key features
@@ -38,16 +35,16 @@ This is the core of the project, not an add-on.
 - The home page shows the best discounts close to you right away.
 - Banana remembers your neighbourhood.
 
-**Store locations and map**
-- Live map of nearby stores beside a list (List and Map tabs on phones).
-- Search any Metro Vancouver address with suggestions as you type, or tap **Use my location**.
-- Choose a 1, 3, 5 or 10 km radius, then tap a store to see its offers.
-
 **My basket: whole-list comparison**
 - Add items to **My basket** while you search.
 - See your **whole basket's total at every chain**, plus the cheapest split across stores.
 - Exact matches (same product and size) are shown separately from cheaper alternatives (a different size or pack count).
 - If a chain is missing items, Banana names them instead of quietly showing a lower total.
+
+**Store locations and map**
+- Live map of nearby stores beside a list (List and Map tabs on phones).
+- Search any Metro Vancouver address with suggestions as you type, or tap **Use my location**.
+- Choose a 1, 3, 5 or 10 km radius, then tap a store to see its offers
 
 **Accounts and saved lists**
 - Sign in with Google, or with email and password.
@@ -59,6 +56,11 @@ This is the core of the project, not an add-on.
 
 **Works on any device**
 - Responsive design with bottom navigation and a filter panel on phones, plus home-screen app icons.
+
+## Future Roadmap
+- **Full Canadian Support:** Banana will be revamped to expand beyond Metro Vancouver, extending to other Canadian provinces and territories.
+- **Comprehensive Data Collection:** Automated flyer and cost will be conducted using AI-assisted retrieval and querying methods on websites, to how
+- **User-submitted and Opt-in Services:** Verified user-submitted crowdsourcing and opt-in services for stores without online catalogues will be integrated to have a more comprehensive database. 
 
 ## Tech stack
 
