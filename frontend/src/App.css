@@ -1806,3 +1806,103 @@ dialog::backdrop {
     padding: 12px;
   }
 }
+
+/* Saved lists inside My list */
+.saved-lists {
+  margin: 18px 0 6px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  text-align: left;
+  width: 100%;
+}
+.saved-lists h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+.saved-list-form {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.saved-list-form label {
+  font-size: 13px;
+  font-weight: 600;
+}
+.saved-list-form > div {
+  display: flex;
+  gap: 8px;
+}
+.saved-list-form input,
+.saved-list-rename input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #d9dbdc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 15px;
+}
+.saved-list-form .flyer-button {
+  flex-shrink: 0;
+}
+.saved-list-form > .text-button {
+  justify-self: start;
+}
+.saved-list-status {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--green);
+}
+.saved-list-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.saved-list-items li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+.saved-list-items li > svg {
+  flex-shrink: 0;
+  color: var(--green);
+}
+.saved-list-name {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+}
+.saved-list-name strong {
+  overflow-wrap: anywhere;
+}
+.saved-list-name span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.saved-list-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.saved-list-actions .flyer-button {
+  min-height: 36px;
+  padding: 6px 14px;
+}
+.saved-list-rename {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+@media (max-width: 420px) {
+  .saved-list-items li {
+    flex-wrap: wrap;
+  }
+  .saved-list-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

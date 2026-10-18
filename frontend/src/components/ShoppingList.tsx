@@ -15,6 +15,7 @@ import { MAX_QUANTITY, itemCount } from '../lib/shoppingList'
 import { productRequest, samePackage } from '../lib/basketIdentity'
 import { amountLabel, compareBasket } from '../lib/basketComparison'
 import { BasketOptions } from './BasketComparison'
+import { SavedLists } from './SavedLists'
 import type { NearbyOffer } from '../types'
 
 export function AddToListButton({ offer }: { offer: NearbyOffer }) {
@@ -215,6 +216,7 @@ function ListDialog({ onClose }: { onClose: () => void }) {
               </>
             ) : null}
             <p className="list-note">Before taxes, fees & deposits.</p>
+            <SavedLists onLeave={onClose} />
             <div className="filter-dialog-actions">
               <button className="text-button" onClick={shoppingList.clear}>
                 Clear list
@@ -231,6 +233,7 @@ function ListDialog({ onClose }: { onClose: () => void }) {
             <button className="flyer-button" onClick={onClose}>
               Keep searching
             </button>
+            <SavedLists onLeave={onClose} />
           </div>
         )}
       </div>
