@@ -97,7 +97,7 @@ export async function buildExamples(): Promise<Record<string, ExampleFile>> {
   );
   await search(
     'search-within-5km.json',
-    'Milk at any store within 5 km of the shopper (one of the radius choices, 5 or 10 km). Only chains with a store that close show up. Built with storeSelectionFilters() from src/api/storeChoice.ts.',
+    'Milk at any store within 5 km of the shopper (the distance slider goes from 1 to 10 km). Only chains with a store that close show up. Built with storeSelectionFilters() from src/api/storeChoice.ts.',
     { query: 'milk', ...storeSelectionFilters({ where: { kind: 'nearby', ...SHOPPER, radiusKm: 5 } }) },
   );
   await search(

@@ -3,8 +3,8 @@ import type { MemoryPriceRepository } from '../db/memoryReader';
 import { loadSimulated } from '../simulated/exportData';
 import { handleNearbyStores, handleSearch } from './handlers';
 import {
-  DEFAULT_STORE_RADIUS_KM,
-  STORE_RADIUS_OPTIONS_KM,
+  STORE_RADIUS_SLIDER_KM,
+  clampRadiusKm,
   nearbyStoresBody,
   roundCoordinate,
   storeSelectionFilters,
@@ -15,9 +15,19 @@ import type { NearbyStoresResponseBody, SearchResponseBody } from './types';
 const SHOPPER = { lat: 49.2004321, lng: -122.9101234 };
 
 describe('storeSelectionFilters', () => {
-  it('offers 5 and 10 km, 5 by default', () => {
-    expect(STORE_RADIUS_OPTIONS_KM).toEqual([5, 10]);
-    expect(DEFAULT_STORE_RADIUS_KM).toBe(5);
+  it('has a 1 to 10 km slider in 1 km steps, starting at 5', () => {
+    expect(STORE_RADIUS_SLIDER_KM).toEqual({ min: 1, max: 10, step: 1, default: 5 });
+  });
+
+  it('keeps a slider value on a whole km between 1 and 10', () => {
+    expect([1, 3, 7.4, 7.6, 10].map(clampRadiusKm)).toEqual([1, 3, 7, 8, 10]);
+    expect([0, 0.2, -4, 10.4, 25, 200].map(clampRadiusKm)).toEqual([1, 1, 1, 10, 10, 10]);
+    expect([Number.NaN, Number.POSITIVE_INFINITY].map(clampRadiusKm)).toEqual([5, 5]);
+  });
+
+  it('sends the clamped radius', () => {
+    expect(storeSelectionFilters({ where: { kind: 'nearby', ...SHOPPER, radiusKm: 30 } }).near?.radiusKm).toBe(10);
+    expect(nearbyStoresBody({ kind: 'nearby', ...SHOPPER, radiusKm: 0.3 }).radiusKm).toBe(1);
   });
 
   it('adds nothing for any store', () => {
@@ -80,7 +90,8 @@ describe('store choices through the handlers, on the simulated chains', () => {
   });
 
   it('agrees with the nearby-stores list: a chain shows up when one of its stores is in range', async () => {
-    for (const radiusKm of STORE_RADIUS_OPTIONS_KM) {
+    const { min, max, step } = STORE_RADIUS_SLIDER_KM;
+    for (let radiusKm = min; radiusKm <= max; radiusKm += step) {
       const where = { kind: 'nearby' as const, ...SHOPPER, radiusKm };
       const stores = (await nearby(nearbyStoresBody(where))).stores;
       const rows = (await search({ query: 'bananas', ...storeSelectionFilters({ where }) })).rows;

@@ -197,12 +197,13 @@ The shopper picks one of three, and can also narrow any of them to some chains:
 |---|---|---|
 | Any store | none | |
 | Specific stores | `locationIds` | `GET /api/stores` (map or list), or `POST /api/stores/nearby` |
-| Any store within 5 km or 10 km | `near: { lat, lng, radiusKm }` | needs the browser's location |
+| Any store within 1 to 10 km (a slider) | `near: { lat, lng, radiusKm }` | needs the browser's location |
 | ...only these chains | `chainSlugs`, added to any of the above | `GET /api/chains` |
 
 `backend/src/api/storeChoice.ts` does this conversion: `storeSelectionFilters(selection)` gives the store fields of
-the search body, `nearbyStoresBody(...)` the body for `/api/stores/nearby`, and `STORE_RADIUS_OPTIONS_KM` the radius
-choices (`[5, 10]`, default 5). It rounds the location to 2 decimals. It only imports types, so the website can import
+the search body, `nearbyStoresBody(...)` the body for `/api/stores/nearby`, and `STORE_RADIUS_SLIDER_KM` the distance
+slider (`{ min: 1, max: 10, step: 1, default: 5 }`). Both builders pass the radius through `clampRadiusKm()`, which
+snaps it to a whole km from 1 to 10, and round the location to 2 decimals. It only imports types, so the website can import
 or copy it. The API itself accepts any radius above 0 and up to 200 km.
 
 All the filters apply together. Picked stores from a chain that is not chosen find nothing, so offer stores from the
