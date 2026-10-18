@@ -2,65 +2,65 @@
 
 **Find the cheapest groceries near you, in one search.**
 
-**Live site:** https://banana-8qk.pages.dev
+🌐 **Live site:** https://banana-8qk.pages.dev
 
-Built for a hackathon.
+🏆 Built for a hackathon.
 
 ---
 
-## Project overview
+## 📖 Project overview
 
 Food prices keep rising, and the cheapest store for one item is rarely the cheapest for the next. Comparing them means checking five flyers and five websites. Many families don't have time for that, and they're often the ones who need the savings most.
 
 Banana compares grocery prices across five chains in Metro Vancouver: **Save-On-Foods, Walmart, Costco, No Frills and Real Canadian Superstore**. You search once and see who has the item, what it costs, and how far away the store is. Then you can build a shopping list and see which store, or which mix of stores, makes your whole basket cheapest.
 
-### Social responsibility
+### 💚 Social responsibility
 
 This is the core of the project, not an add-on.
 
-- **Saving money is free.** Search, comparison, store maps and basket totals are all on the Free plan, with no account needed. We never paywall the features that help people spend less.
-- **Premium feeds people.** Premium costs $4.99/month (CAD). **20% of every payment goes straight to local food banks.** The other 80% covers price data, hosting and payment fees, and whatever is left after those costs is donated too.
-- **Privacy by default.** Your location is used only to work out distances. It is never logged or stored on our servers. A searched address is saved only in your own browser.
-- **Honest numbers.** We never fill gaps with made-up values. Missing information is shown as missing. Demo prices are clearly labelled. A basket that's missing items is never ranked as the "cheapest". Totals state that they exclude taxes, fees and deposits.
-- **Responsible data collection.** Real prices come from each chain's public weekly flyer, read slowly, once a week. We don't crawl store websites against their terms, and we stop at any bot check.
-- **Free and open services.** Maps use MapLibre and OpenFreeMap, and address search uses the public BC Address Geocoder. Nobody needs a paid account to use Banana.
+- 🆓 **Saving money is free.** Search, comparison, store maps and basket totals are all on the Free plan, with no account needed. We never paywall the features that help people spend less.
+- 🥫 **Premium feeds people.** Premium costs $4.99/month (CAD). **20% of every payment goes straight to local food banks.** The other 80% covers price data, hosting and payment fees, and whatever is left after those costs is donated too.
+- 🔒 **Privacy by default.** Your location is used only to work out distances. It is never logged or stored on our servers. A searched address is saved only in your own browser.
+- ✅ **Honest numbers.** We never fill gaps with made-up values. Missing information is shown as missing. Demo prices are clearly labelled. A basket that's missing items is never ranked as the "cheapest". Totals state that they exclude taxes, fees and deposits.
+- 📰 **Responsible data collection.** Real prices come from each chain's public weekly flyer, read slowly, once a week. We don't crawl store websites against their terms, and we stop at any bot check.
+- 🌍 **Free and open services.** Maps use MapLibre and OpenFreeMap, and address search uses the public BC Address Geocoder. Nobody needs a paid account to use Banana.
 
-## Key features
+## ✨ Key features
 
-**Search and compare**
+### 🔍 Search and compare
 - One search across all five chains, by item name.
 - Filter by category, store, distance, and discounts only.
 - Sort by lowest price, highest price, nearest first, or biggest discount.
 - Each offer shows the price, any discount, package size, the store, and the distance to the nearest branch.
 - Searches and filters are saved in the URL, so a results page can be shared and the Back button works.
 
-**Nearby discounts**
+### 🏷️ Nearby discounts
 - The home page shows the best discounts close to you right away.
 - Banana remembers your neighbourhood.
 
-**Store locations and map**
+### 🗺️ Store locations and map
 - Live map of nearby stores beside a list (List and Map tabs on phones).
 - Search any Metro Vancouver address with suggestions as you type, or tap **Use my location**.
 - Choose a 1, 3, 5 or 10 km radius, then tap a store to see its offers.
 
-**My basket: whole-list comparison**
+### 🧺 My basket: whole-list comparison
 - Add items to **My basket** while you search.
 - See your **whole basket's total at every chain**, plus the cheapest split across stores.
 - Exact matches (same product and size) are shown separately from cheaper alternatives (a different size or pack count).
 - If a chain is missing items, Banana names them instead of quietly showing a lower total.
 
-**Accounts and saved lists**
+### 👤 Accounts and saved lists
 - Sign in with Google, or with email and password.
 - Save a basket under a name and reload it later, on any device.
 
-**Plans**
+### 💳 Plans
 - **Free:** prices refreshed every 3–4 days, full search and comparison, map, and basket totals.
 - **Premium ($4.99/month):** daily prices, and 20% goes to local food banks. Checkout runs through Stripe.
 
-**Works on any device**
+### 📱 Works on any device
 - Responsive design with bottom navigation and a filter panel on phones, plus home-screen app icons.
 
-## Tech stack
+## 🛠️ Tech stack
 
 | Part | Technology |
 |---|---|
@@ -75,15 +75,15 @@ This is the core of the project, not an add-on.
 
 Prices are stored in whole cents. Every item also gets a **comparable unit price** (per 100 g, per 100 mL or per item), so a 4 L jug and a 2 L carton can be compared fairly.
 
-**Data status:** the live demo runs on **clearly labelled simulated prices** for 283 items. We're adding real prices from each chain's public weekly flyer. Store locations and distances are real.
+📊 **Data status:** the live demo runs on **clearly labelled simulated prices** for 283 items. We're adding real prices from each chain's public weekly flyer. Store locations and distances are real.
 
-## Running the project
+## 🚀 Running the project
 
-**Quickest way:** open the live site, https://banana-8qk.pages.dev. Nothing to install.
+⚡ **Quickest way:** open the live site, https://banana-8qk.pages.dev. Nothing to install.
 
 To run it on your own computer, you need **Node.js 24** and **npm**.
 
-### Backend: data pipeline, search and local API (no keys needed)
+### ⚙️ Backend: data pipeline, search and local API (no keys needed)
 
 ```sh
 cd backend
@@ -95,7 +95,7 @@ npm run api         # start the local API at http://127.0.0.1:8787
 
 Without any settings, the backend runs entirely in memory on the simulated prices.
 
-### Website
+### 💻 Website
 
 ```sh
 cd frontend
@@ -114,7 +114,7 @@ npm run build       # production build in dist/
 
 More detail is in [`frontend/README.md`](frontend/README.md) and [`backend/README.md`](backend/README.md).
 
-## Repository layout
+## 📁 Repository layout
 
 ```
 frontend/              The website (React)
