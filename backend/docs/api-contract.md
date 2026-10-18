@@ -1,10 +1,31 @@
 # Banana API contract (draft)
 
-**Status: draft, for the team to react to.** Nothing here is final. There is no web server yet. Each endpoint
-below already exists as a plain function in [`src/api/handlers.ts`](../src/api/handlers.ts) that takes the request
-body and returns a status plus a JSON body, so a server only has to wire routes to them.
+**Status: draft, for the team to react to.** Nothing here is final. Each endpoint below exists as a plain function
+in [`src/api/handlers.ts`](../src/api/handlers.ts) that takes the request body and returns a status plus a JSON body.
+A small local server ([`src/server/`](../src/server/)) wires real HTTP routes to them, so the website can call it.
 
 All data behind it is still **made up** sample data.
+
+## Run it locally
+
+```sh
+npm --prefix backend install
+npm --prefix backend run api                 # simulated Lower Mainland data (default)
+npm --prefix backend run api -- --sample     # the small hand-written sample set instead
+```
+
+It listens on `http://127.0.0.1:8787` (set `PORT` to change it), only on this computer. Check it with
+`curl http://127.0.0.1:8787/api/health`. The data is loaded into memory when it starts and is gone when it stops;
+there is no database yet. Stop it with Ctrl+C.
+
+For the website, point the Vite dev proxy at it when starting the frontend:
+
+```sh
+API_PROXY_TARGET=http://127.0.0.1:8787 npm run dev
+```
+
+The server logs one line per request: method, path (without the query string), status and time. It never logs
+request bodies, so a visitor's location is never written down.
 
 ## Sample requests and responses (use these as mocks)
 
@@ -218,15 +239,19 @@ Every error has the same shape:
 | Status | `code` | When |
 |---|---|---|
 | `400` | `invalid_request` | The request is wrong. `details` lists **every** problem, each with the `field` (like `near.lat`; `(body)` means the whole body). Fix them all and resend. |
-| `404` | `not_found` | `GET /api/prices/{id}` for an id that doesn't exist. |
+| `400` | `invalid_request` | Also: a POST body that isn't valid JSON, or isn't sent with `Content-Type: application/json` (field `(body)`). An empty body counts as `{}`. |
+| `404` | `not_found` | `GET /api/prices/{id}` for an id that doesn't exist, or a path that isn't an endpoint. |
+| `405` | `invalid_request` | The wrong method for an endpoint, like `GET /api/prices/search`. The `Allow` header says which one to use. |
+| `413` | `invalid_request` | The body is over 64 KB (field `(body)`). |
 | `500` | `internal_error` | Something broke on our side. The message is always the same plain text and never includes internal details. |
 
 Error messages never repeat a coordinate that was sent.
 
 ## Not decided or not built yet
 
-- **There is no server.** Someone needs to pick one (Express, Hono, a serverless function...), host it, and decide
-  between a same-origin deploy and CORS. `frontend/` already expects `/api` through a Vite dev proxy.
+- **Only a local server exists.** It uses plain `node:http`, keeps data in memory and is not meant to be put online.
+  Someone still needs to pick a real setup (Express, Hono, a serverless function...), host it, and decide between a
+  same-origin deploy and CORS. The handlers stay the same whichever is picked.
 - **Login and accounts**, saved shopping lists, and purchase history ("Records" on the whiteboard) are not in this contract.
 - **Shopping-list totals per store** ("where is my whole list cheapest?") are not built. `lookup` returns rows only.
 - **Price history** is not stored.
