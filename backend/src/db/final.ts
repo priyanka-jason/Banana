@@ -10,8 +10,13 @@ export interface FinalRepository {
   /** Save chains. A chain with a `slug` that already exists is updated. */
   upsertChains(chains: Chain[]): Promise<void>;
 
-  /** Save store locations. A location with an `id` that already exists is updated. */
-  upsertLocations(locations: StoreLocation[]): Promise<void>;
+  /**
+   * Save one chain's stores: add new ones, update existing ones (by `id`), and remove that
+   * chain's stores that are no longer in the list, so a closed or replaced store disappears.
+   * An empty list removes nothing (it more likely means the fetch failed than that every store
+   * closed). Only ever touches this chain. Every location must belong to `chainSlug`.
+   */
+  saveChainLocations(chainSlug: string, locations: StoreLocation[]): Promise<void>;
 
   /** Save items. An item with an `id` that already exists is updated. Returns how many were saved. */
   upsertItems(items: FinalItem[]): Promise<number>;

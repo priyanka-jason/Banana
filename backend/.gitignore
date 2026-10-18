@@ -1,0 +1,15 @@
+# The backend's own ignores, so they hold even if the repo-wide .gitignore changes.
+
+# Secrets and local settings: never commit.
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+
+# Generated files
+out/
+.wrangler/
+node_modules/
+
+.DS_Store

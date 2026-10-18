@@ -28,6 +28,8 @@ export interface PoolOptions {
    */
   ssl?: SslMode;
   caFile?: string;
+  /** Most connections open at once. Default 5; the Cloudflare Worker uses 1 per request. */
+  max?: number;
 }
 
 function isLocalHost(connectionString: string): boolean {
@@ -49,7 +51,7 @@ export function createPool(options: PoolOptions): pg.Pool {
   } else if (mode === 'require') {
     ssl = { rejectUnauthorized: false };
   }
-  return new pg.Pool({ connectionString: options.connectionString, ssl, max: 5, idleTimeoutMillis: 30_000 });
+  return new pg.Pool({ connectionString: options.connectionString, ssl, max: options.max ?? 5, idleTimeoutMillis: 30_000 });
 }
 
 /** Reads DATABASE_URL, DATABASE_SSL and DATABASE_SSL_CA. Undefined if DATABASE_URL isn't set. */
@@ -131,31 +133,50 @@ export class PostgresFinal implements FinalRepository, FinalSource {
     );
   }
 
-  async upsertLocations(locations: StoreLocation[]): Promise<void> {
+  async saveChainLocations(chainSlug: string, locations: StoreLocation[]): Promise<void> {
+    for (const location of locations) {
+      if (location.chainSlug !== chainSlug) throw new Error(`Store ${location.id} belongs to "${location.chainSlug}", not "${chainSlug}"`);
+    }
     if (locations.length === 0) return;
-    await this.pool.query(
-      `insert into banana.store_locations (id, chain_slug, name, address, city, postal_code, location)
-       select id, chain_slug, name, address, city, postal_code,
-         extensions.st_setsrid(extensions.st_makepoint(lng, lat), 4326)::extensions.geography
-       from jsonb_to_recordset($1::jsonb) as x(id text, chain_slug text, name text, address text, city text,
-         postal_code text, lat double precision, lng double precision)
-       on conflict (id) do update set chain_slug = excluded.chain_slug, name = excluded.name, address = excluded.address,
-         city = excluded.city, postal_code = excluded.postal_code, location = excluded.location`,
-      [
-        JSON.stringify(
-          locations.map((l) => ({
-            id: l.id,
-            chain_slug: l.chainSlug,
-            name: l.name,
-            address: l.address ?? null,
-            city: l.city ?? null,
-            postal_code: l.postalCode ?? null,
-            lat: l.lat,
-            lng: l.lng,
-          })),
-        ),
-      ],
-    );
+    const client = await this.pool.connect();
+    try {
+      await client.query('begin');
+      await client.query(
+        `insert into banana.store_locations (id, chain_slug, name, address, city, postal_code, location)
+         select id, chain_slug, name, address, city, postal_code,
+           extensions.st_setsrid(extensions.st_makepoint(lng, lat), 4326)::extensions.geography
+         from jsonb_to_recordset($1::jsonb) as x(id text, chain_slug text, name text, address text, city text,
+           postal_code text, lat double precision, lng double precision)
+         on conflict (id) do update set chain_slug = excluded.chain_slug, name = excluded.name, address = excluded.address,
+           city = excluded.city, postal_code = excluded.postal_code, location = excluded.location`,
+        [
+          JSON.stringify(
+            locations.map((l) => ({
+              id: l.id,
+              chain_slug: l.chainSlug,
+              name: l.name,
+              address: l.address ?? null,
+              city: l.city ?? null,
+              postal_code: l.postalCode ?? null,
+              lat: l.lat,
+              lng: l.lng,
+            })),
+          ),
+        ],
+      );
+      // This chain's stores that are no longer in the list. Prices that point at one of them
+      // (store-specific prices) would block this on purpose rather than be lost silently.
+      await client.query('delete from banana.store_locations where chain_slug = $1 and not (id = any($2::text[]))', [
+        chainSlug,
+        locations.map((location) => location.id),
+      ]);
+      await client.query('commit');
+    } catch (error) {
+      await client.query('rollback').catch(() => undefined);
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 
   async upsertItems(items: FinalItem[]): Promise<number> {

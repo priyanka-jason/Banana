@@ -52,7 +52,8 @@ export interface LookupResponseBody {
 export type ShoppingListResponseBody = ShoppingListResult;
 
 export interface ChainsResponseBody {
-  chains: Chain[];
+  /** Each chain, plus its public website when we know it. */
+  chains: Array<Chain & { websiteUrl?: string }>;
 }
 
 export interface CategoriesResponseBody {

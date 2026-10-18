@@ -104,8 +104,8 @@ describe('MemoryFinal', () => {
     const final = new MemoryFinal();
     await final.upsertChains([{ slug: 'walmart', name: 'Walmart', parentCompany: 'Walmart', hasMemberPricing: false }]);
     await final.upsertChains([{ slug: 'walmart', name: 'Walmart Canada', parentCompany: 'Walmart', hasMemberPricing: false }]);
-    await final.upsertLocations([{ id: 'walmart-1', chainSlug: 'walmart', name: 'One', lat: 49.2, lng: -123.1 }]);
-    await final.upsertLocations([{ id: 'walmart-1', chainSlug: 'walmart', name: 'One (moved)', lat: 49.3, lng: -123.2 }]);
+    await final.saveChainLocations('walmart', [{ id: 'walmart-1', chainSlug: 'walmart', name: 'One', lat: 49.2, lng: -123.1 }]);
+    await final.saveChainLocations('walmart', [{ id: 'walmart-1', chainSlug: 'walmart', name: 'One (moved)', lat: 49.3, lng: -123.2 }]);
 
     const chains = await final.listChains();
     const locations = await final.listLocations();
@@ -113,6 +113,21 @@ describe('MemoryFinal', () => {
     expect(chains[0]?.name).toBe('Walmart Canada');
     expect(locations).toHaveLength(1);
     expect(locations[0]?.name).toBe('One (moved)');
+  });
+
+  it("replaces one chain's stores without touching other chains, and an empty list removes nothing", async () => {
+    const final = new MemoryFinal();
+    const store = (id: string, chainSlug: string) => ({ id, chainSlug, name: id, lat: 49.2, lng: -123.1 });
+    await final.saveChainLocations('walmart', [store('walmart-old', 'walmart'), store('walmart-keep', 'walmart')]);
+    await final.saveChainLocations('costco', [store('costco-1', 'costco')]);
+
+    await final.saveChainLocations('walmart', [store('walmart-keep', 'walmart'), store('walmart-new', 'walmart')]);
+    expect((await final.listLocations()).map((l) => l.id).sort()).toEqual(['costco-1', 'walmart-keep', 'walmart-new']);
+
+    await final.saveChainLocations('walmart', []);
+    expect(await final.listLocations()).toHaveLength(3);
+
+    await expect(final.saveChainLocations('walmart', [store('costco-2', 'costco')])).rejects.toThrow('belongs to "costco"');
   });
 
   it('does not let callers change saved items by accident', async () => {

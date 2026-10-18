@@ -7,7 +7,7 @@ describe('createBackend', () => {
     expect(ingest.failures).toEqual([]);
     expect(await prices.listChains()).toHaveLength(5);
     expect((await prices.searchPrices()).total).toBe(283);
-    expect(await prices.listStoreLocations()).toHaveLength(37);
+    expect(await prices.listStoreLocations()).toHaveLength(38);
   });
 
   it('loads the small sample set when asked', async () => {

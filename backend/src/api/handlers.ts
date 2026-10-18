@@ -1,4 +1,5 @@
 import { CATEGORY_LABELS, PRODUCT_CATEGORIES } from '../categories';
+import { chainWebsite } from '../chainSites';
 import type { PriceRepository } from '../db/repository';
 import { DEFAULT_LIMIT } from '../search/search';
 import type {
@@ -150,7 +151,13 @@ export async function handleChains(
   repo: PriceRepository,
   options: HandlerOptions = {},
 ): Promise<ApiResult<ChainsResponseBody>> {
-  return guarded(options, async () => ({ status: 200, body: { chains: await repo.listChains() } }));
+  return guarded(options, async () => {
+    const chains = (await repo.listChains()).map((chain) => {
+      const websiteUrl = chainWebsite(chain.slug);
+      return websiteUrl === undefined ? chain : { ...chain, websiteUrl };
+    });
+    return { status: 200, body: { chains } };
+  });
 }
 
 /** GET /api/categories. The list is fixed, so it doesn't need the database. */

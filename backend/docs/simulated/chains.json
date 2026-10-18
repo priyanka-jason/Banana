@@ -4,31 +4,36 @@
       "slug": "costco",
       "name": "Costco",
       "parentCompany": "Costco Wholesale",
-      "hasMemberPricing": false
+      "hasMemberPricing": false,
+      "websiteUrl": "https://www.costco.ca/"
     },
     {
       "slug": "no-frills",
       "name": "No Frills",
       "parentCompany": "Loblaw Companies",
-      "hasMemberPricing": false
+      "hasMemberPricing": false,
+      "websiteUrl": "https://www.nofrills.ca/"
     },
     {
       "slug": "real-canadian-superstore",
       "name": "Real Canadian Superstore",
       "parentCompany": "Loblaw Companies",
-      "hasMemberPricing": false
+      "hasMemberPricing": false,
+      "websiteUrl": "https://www.realcanadiansuperstore.ca/"
     },
     {
       "slug": "save-on-foods",
       "name": "Save-On-Foods",
       "parentCompany": "Pattison Food Group",
-      "hasMemberPricing": true
+      "hasMemberPricing": true,
+      "websiteUrl": "https://www.saveonfoods.com/"
     },
     {
       "slug": "walmart",
       "name": "Walmart",
       "parentCompany": "Walmart",
-      "hasMemberPricing": false
+      "hasMemberPricing": false,
+      "websiteUrl": "https://www.walmart.ca/"
     }
   ]
 }

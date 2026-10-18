@@ -83,8 +83,9 @@ describe('store choices through the handlers, on the simulated chains', () => {
     const within5 = await search({ query: 'milk', ...storeSelectionFilters({ where: { kind: 'nearby', ...SHOPPER, radiusKm: 5 } }) });
     const within10 = await search({ query: 'milk', ...storeSelectionFilters({ where: { kind: 'nearby', ...SHOPPER, radiusKm: 10 } }) });
 
-    expect(chainsOf(within5.rows)).toEqual(['costco', 'no-frills', 'real-canadian-superstore']);
-    expect(chainsOf(within10.rows)).toEqual(['costco', 'no-frills', 'real-canadian-superstore', 'save-on-foods', 'walmart']);
+    // The real stores (src/stores.ts) near this New Westminster shopper.
+    expect(chainsOf(within5.rows)).toEqual(['save-on-foods']);
+    expect(chainsOf(within10.rows)).toEqual(['costco', 'real-canadian-superstore', 'save-on-foods', 'walmart']);
     expect(within5.rows.every((row) => row.distanceKm !== undefined && row.distanceKm <= 5)).toBe(true);
     expect(within10.rows.every((row) => row.distanceKm !== undefined && row.distanceKm <= 10)).toBe(true);
   });

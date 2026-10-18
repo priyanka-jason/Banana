@@ -125,8 +125,9 @@ function comparatorFor(sortBy: PriceSort, sortOrder: SortOrder | undefined): Com
 /**
  * Search the final items. What each filter means:
  *
- * - `query`: every word must appear in the item's name or brand, in any order,
- *   ignoring case and accents. Blank means no filter.
+ * - `query`: every word must appear in the item's name, brand, size or store name ("milk walmart",
+ *   "milk 4 l"), in any order, ignoring case and accents. Blank means no filter. Category names are
+ *   left out on purpose: "eggs" should find eggs, not every cheese in Dairy & Eggs.
  * - `chainSlugs`, `parentCompanies`, `categories`: the item must match one of the listed values.
  *   An empty list means no filter.
  * - `locationIds`: stores picked on a map. An item priced for one store must be at one of them.
@@ -177,7 +178,7 @@ export function searchFinal(data: SearchData, filters: PriceFilters = {}): Price
     if (categoryFilter !== undefined && !categoryFilter.has(item.category)) continue;
 
     if (words.length > 0) {
-      const haystack = normalizeText(`${item.name} ${item.brand ?? ''}`);
+      const haystack = normalizeText(`${item.name} ${item.brand ?? ''} ${item.size ?? ''} ${chain.name}`);
       if (!words.every((word) => haystack.includes(word))) continue;
     }
 
