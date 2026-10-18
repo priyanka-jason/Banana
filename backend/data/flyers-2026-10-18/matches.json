@@ -1,0 +1,641 @@
+[
+  {
+    "flyerSku": "fly-honeycrisp-apples-per-lb",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Honeycrisp Apples",
+    "flyerSize": "per lb",
+    "match": "sim-honeycrisp-apples",
+    "confidence": "exact",
+    "note": "per lb"
+  },
+  {
+    "flyerSku": "fly-avalanto-tomatoes-each",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Avalanto Tomatoes",
+    "flyerSize": "each",
+    "match": null,
+    "confidence": "none",
+    "note": "tomato, but sim has roma (per kg) and cherry only"
+  },
+  {
+    "flyerSku": "fly-maple-lodge-cooked-chicken-breast",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Maple Lodge Cooked Chicken Breast",
+    "flyerSize": "per 100 g",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-navel-oranges-per-lb",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Navel Oranges",
+    "flyerSize": "per lb",
+    "match": "sim-navel-oranges",
+    "confidence": "exact",
+    "note": "per lb"
+  },
+  {
+    "flyerSku": "fly-orchard-run-bc-pears-per-lb",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Orchard Run BC Pears",
+    "flyerSize": "per lb",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-chocolate-chip-cookies-pack-of-10",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Chocolate Chip Cookies",
+    "flyerSize": "pack of 10 each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-gala-apples-3-lb",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Gala Apples or Ambrosia Apples",
+    "flyerSize": "3 lb each",
+    "match": "sim-gala-apples",
+    "confidence": "likely",
+    "note": "new size: 3 lb bag; flyer says \"Gala or Ambrosia\""
+  },
+  {
+    "flyerSku": "fly-yellow-potatoes-3-lb",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Yellow Potatoes or Red Potatoes",
+    "flyerSize": "3 lb each",
+    "match": null,
+    "confidence": "none",
+    "note": "potatoes, but sim has russet only"
+  },
+  {
+    "flyerSku": "fly-strawberries-1-lb",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Strawberries",
+    "flyerSize": "1 lb each",
+    "match": "sim-strawberries",
+    "confidence": "exact",
+    "note": "1 lb = the 454 g size"
+  },
+  {
+    "flyerSku": "fly-green-grapes-per-lb",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Green Grapes",
+    "flyerSize": "per lb",
+    "match": "sim-green-grapes",
+    "confidence": "exact",
+    "note": "per lb"
+  },
+  {
+    "flyerSku": "fly-white-pumpkin-each",
+    "chainSlug": "save-on-foods",
+    "flyerName": "White Pumpkin",
+    "flyerSize": "each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-coho-salmon-fillets-per-100g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Coho Salmon Fillets",
+    "flyerSize": "per 100 g",
+    "match": null,
+    "confidence": "none",
+    "note": "salmon, but sim has atlantic and sockeye"
+  },
+  {
+    "flyerSku": "fly-royal-mixed-nuts-per-100g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Royal Mixed Nuts Salted",
+    "flyerSize": "per 100 g",
+    "match": "sim-mixed-nuts",
+    "confidence": "likely",
+    "note": "new size: bulk per 100 g; flyer is salted"
+  },
+  {
+    "flyerSku": "fly-whole-natural-almonds-per-100g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Whole Natural Almonds",
+    "flyerSize": "per 100 g",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-kettle-brand-potato-chips-50g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Kettle Brand Potato Chips",
+    "flyerSize": "50 g each",
+    "match": null,
+    "confidence": "none",
+    "note": "chips, but 50 g single-serve; sim is 200 g"
+  },
+  {
+    "flyerSku": "fly-glaceau-vitamin-water-591ml",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Vitamin Water",
+    "flyerSize": "591 mL each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-quaker-crispy-minis-98g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Quaker Crispy Minis",
+    "flyerSize": "98 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-maple-leaf-flakes-of-meat-156g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Flakes of Meat",
+    "flyerSize": "156 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-betty-crocker-gushers-128g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Betty Crocker Gushers Fruit Snacks",
+    "flyerSize": "128 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-jet-puffed-marshmallows-400g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Jet-Puffed Marshmallows",
+    "flyerSize": "400 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-western-family-rice-crackers-100g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Western Family Rice Crackers",
+    "flyerSize": "100 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-country-farm-house-sourdough-675g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Country Farm House Sourdough Bread",
+    "flyerSize": "675 g each",
+    "match": null,
+    "confidence": "none",
+    "note": "bread 675 g, but sim has white and whole wheat only"
+  },
+  {
+    "flyerSku": "fly-bens-and-jerrys-ice-cream",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Ben & Jerry's Ice Cream",
+    "flyerSize": "each",
+    "match": null,
+    "confidence": "none",
+    "note": "ice cream, but a pint; sim is vanilla 1.5 L"
+  },
+  {
+    "flyerSku": "fly-miss-vickies-potato-chips-200g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Miss Vickie's Potato Chips",
+    "flyerSize": "200 g each",
+    "match": "sim-potato-chips",
+    "confidence": "likely",
+    "note": "same 200 g size; flyer is a brand, sim is generic sea salt"
+  },
+  {
+    "flyerSku": "fly-mr-noodles-instant-85g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Mr. Noodles Instant Noodles",
+    "flyerSize": "85 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-western-family-refried-beans-398ml",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Western Family Refried Beans",
+    "flyerSize": "398 mL each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-sesame-snaps-singles-30g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Sesame Snaps Singles",
+    "flyerSize": "30 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-bens-original-fast-and-fancy-rice",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Ben's Original Fast & Fancy Rice",
+    "flyerSize": "each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-bulk-raspberry-filled-donuts",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Bulk Raspberry Filled Jelly Donuts",
+    "flyerSize": "each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-bulk-bagels",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Bulk Bagels",
+    "flyerSize": "each",
+    "match": "sim-bagels",
+    "confidence": "likely",
+    "note": "new size: each (bulk); sim is plain bagels 6 or 12 ct"
+  },
+  {
+    "flyerSku": "fly-western-family-potato-chips",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Western Family Potato Chips",
+    "flyerSize": "each",
+    "match": "sim-potato-chips",
+    "confidence": "possible",
+    "note": "store brand, size not printed"
+  },
+  {
+    "flyerSku": "fly-kraft-jell-o-pudding",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Kraft Jell-O Pudding",
+    "flyerSize": "85 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-kraft-dinner-mac-and-cheese",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Kraft Dinner Mac & Cheese",
+    "flyerSize": "each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-swanson-meat-pie-200g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Swanson Meat Pie",
+    "flyerSize": "200 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-asian-family-rice-sticks-250g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Asian Family Rice Sticks",
+    "flyerSize": "250 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-summer-fresh-snack-and-go-hummus",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Summer Fresh Snack & Go Hummus",
+    "flyerSize": "85 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-mars-king-size-chocolate-bars",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Mars King Size Chocolate Bars",
+    "flyerSize": "80 g or 95 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-downy-perfumers-collection-beads-150g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Downy Perfumers Collection Beads",
+    "flyerSize": "150 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-idahoan-instant-potatoes-110g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Idahoan Instant Potatoes",
+    "flyerSize": "110 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-maple-lodge-farms-chicken-wieners-450g",
+    "chainSlug": "save-on-foods",
+    "flyerName": "Maple Lodge Farms Chicken Wieners",
+    "flyerSize": "450 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-raspberries-6-oz",
+    "chainSlug": "no-frills",
+    "flyerName": "Raspberries",
+    "flyerSize": "6 oz each",
+    "match": null,
+    "confidence": "none",
+    "note": "berries, but sim has blueberries and strawberries only"
+  },
+  {
+    "flyerSku": "fly-chicken-breast-per-lb",
+    "chainSlug": "no-frills",
+    "flyerName": "Chicken Breast",
+    "flyerSize": "per lb",
+    "match": "sim-chicken-breast",
+    "confidence": "likely",
+    "note": "flyer does not say boneless skinless"
+  },
+  {
+    "flyerSku": "fly-royal-gala-apples-per-lb",
+    "chainSlug": "no-frills",
+    "flyerName": "Royal Gala Apples",
+    "flyerSize": "per lb",
+    "match": "sim-gala-apples",
+    "confidence": "exact",
+    "note": "per lb"
+  },
+  {
+    "flyerSku": "fly-janes-chicken-wings",
+    "chainSlug": "no-frills",
+    "flyerName": "Janes Chicken Wings",
+    "flyerSize": "each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-blueberries",
+    "chainSlug": "no-frills",
+    "flyerName": "Blueberries",
+    "flyerSize": "each",
+    "match": "sim-blueberries",
+    "confidence": "likely",
+    "note": "size not printed; sim has 510 g and 1 kg"
+  },
+  {
+    "flyerSku": "fly-red-seedless-grapes-per-lb",
+    "chainSlug": "no-frills",
+    "flyerName": "Red Seedless Grapes",
+    "flyerSize": "per lb",
+    "match": "sim-red-grapes",
+    "confidence": "exact",
+    "note": "per lb"
+  },
+  {
+    "flyerSku": "fly-tomatoes-on-the-vine-per-lb",
+    "chainSlug": "no-frills",
+    "flyerName": "Tomatoes on the Vine",
+    "flyerSize": "per lb",
+    "match": null,
+    "confidence": "none",
+    "note": "tomato, but sim has roma (per kg) and cherry only"
+  },
+  {
+    "flyerSku": "fly-potatoes-10-lb-bag",
+    "chainSlug": "no-frills",
+    "flyerName": "Potatoes",
+    "flyerSize": "10 lb bag each",
+    "match": "sim-russet-potatoes",
+    "confidence": "likely",
+    "note": "10 lb = the 4.54 kg size; flyer does not say russet"
+  },
+  {
+    "flyerSku": "fly-lemons-2-lb-bag",
+    "chainSlug": "no-frills",
+    "flyerName": "Lemons",
+    "flyerSize": "2 lb bag each",
+    "match": "sim-lemons",
+    "confidence": "likely",
+    "note": "new size: 2 lb bag; sim is each"
+  },
+  {
+    "flyerSku": "fly-farmers-market-carrots-3-lb-bag",
+    "chainSlug": "no-frills",
+    "flyerName": "Farmers Market Carrots",
+    "flyerSize": "3 lb bag each",
+    "match": "sim-carrots",
+    "confidence": "likely",
+    "note": "new size: 3 lb (1.36 kg); sim has 907 g and 2.27 kg"
+  },
+  {
+    "flyerSku": "fly-farmers-market-grape-tomatoes-283g",
+    "chainSlug": "no-frills",
+    "flyerName": "Farmers Market Grape Tomatoes",
+    "flyerSize": "pkg of 6 (283 g) each",
+    "match": "sim-cherry-tomatoes",
+    "confidence": "likely",
+    "note": "same 283 g size; grape vs cherry tomatoes"
+  },
+  {
+    "flyerSku": "fly-english-cucumbers",
+    "chainSlug": "no-frills",
+    "flyerName": "English Cucumbers",
+    "flyerSize": "each",
+    "match": "sim-english-cucumber",
+    "confidence": "exact",
+    "note": "each"
+  },
+  {
+    "flyerSku": "fly-red-mangoes",
+    "chainSlug": "no-frills",
+    "flyerName": "Red Mangoes",
+    "flyerSize": "each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-honeydew-or-cantaloupe",
+    "chainSlug": "no-frills",
+    "flyerName": "Honeydew or Cantaloupe",
+    "flyerSize": "each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-pineapple",
+    "chainSlug": "no-frills",
+    "flyerName": "Pineapple",
+    "flyerSize": "each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-sliced-mushrooms-227g",
+    "chainSlug": "no-frills",
+    "flyerName": "Sliced Mushrooms",
+    "flyerSize": "227 g each",
+    "match": "sim-white-mushrooms",
+    "confidence": "likely",
+    "note": "same 227 g size; sliced vs whole"
+  },
+  {
+    "flyerSku": "fly-red-onions-3-lb-bag",
+    "chainSlug": "no-frills",
+    "flyerName": "Red Onions",
+    "flyerSize": "3 lb bag each",
+    "match": null,
+    "confidence": "none",
+    "note": "onions, but sim has yellow only"
+  },
+  {
+    "flyerSku": "fly-farmers-market-mandarins-4-lb-bag",
+    "chainSlug": "no-frills",
+    "flyerName": "Farmers Market Mandarins",
+    "flyerSize": "4 lb bag each",
+    "match": "sim-mandarins",
+    "confidence": "likely",
+    "note": "new size: 4 lb; sim has 2 lb and 5 lb"
+  },
+  {
+    "flyerSku": "fly-split-chicken-wings-per-lb",
+    "chainSlug": "no-frills",
+    "flyerName": "Split Chicken Wings",
+    "flyerSize": "per lb",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-no-name-large-eggs",
+    "chainSlug": "no-frills",
+    "flyerName": "No Name Large Eggs",
+    "flyerSize": "each",
+    "match": "sim-large-eggs-12",
+    "confidence": "likely",
+    "note": "size not printed; $3.33 fits a dozen"
+  },
+  {
+    "flyerSku": "fly-no-name-cream-cheese",
+    "chainSlug": "no-frills",
+    "flyerName": "No Name Cream Cheese",
+    "flyerSize": "each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-no-name-evaporated-milk",
+    "chainSlug": "no-frills",
+    "flyerName": "No Name Evaporated Milk",
+    "flyerSize": "each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-neilson-trutaste-milk-2l",
+    "chainSlug": "no-frills",
+    "flyerName": "Neilson TruTaste Milk",
+    "flyerSize": "2 L each",
+    "match": "sim-milk-1-2l",
+    "confidence": "possible",
+    "note": "same 2 L size; fat % not printed, sim is 1%"
+  },
+  {
+    "flyerSku": "fly-simply-juice-or-lemonade",
+    "chainSlug": "no-frills",
+    "flyerName": "Simply Lemonade, Limeade or Juice",
+    "flyerSize": "each",
+    "match": "sim-orange-juice",
+    "confidence": "possible",
+    "note": "flyer covers lemonade, limeade or juice; size not printed"
+  },
+  {
+    "flyerSku": "fly-wonder-bread",
+    "chainSlug": "no-frills",
+    "flyerName": "Wonder Bread",
+    "flyerSize": "each",
+    "match": "sim-white-bread",
+    "confidence": "likely",
+    "note": "size not printed; Wonder white is 675 g"
+  },
+  {
+    "flyerSku": "fly-terra-delyssa-deglet-noor-dates-1-25kg",
+    "chainSlug": "costco",
+    "flyerName": "Terra Delyssa Organic Deglet Noor Pitted Dates",
+    "flyerSize": "1.25 kg each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-hellmanns-real-mayonnaise-1-8l",
+    "chainSlug": "costco",
+    "flyerName": "Hellmann's Real Mayonnaise",
+    "flyerSize": "1.8 L each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-sesame-snaps-candy-36x35g",
+    "chainSlug": "costco",
+    "flyerName": "Sesame Snaps Candy",
+    "flyerSize": "36 × 35 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-heavenly-hunks-minis-brownie-544g",
+    "chainSlug": "costco",
+    "flyerName": "Heavenly Hunks Minis Brownie",
+    "flyerSize": "544 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-toblerone-biscoff-diamond-truffles-495g",
+    "chainSlug": "costco",
+    "flyerName": "Toblerone Biscoff Flavoured Diamond Truffles",
+    "flyerSize": "495 g each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  },
+  {
+    "flyerSku": "fly-amos-peelerz-halloween-party-mix-1-02kg",
+    "chainSlug": "costco",
+    "flyerName": "Amos Peelerz Halloween Spooky Party Mix",
+    "flyerSize": "1.02 kg each",
+    "match": null,
+    "confidence": "none",
+    "note": ""
+  }
+]

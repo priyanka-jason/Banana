@@ -54,3 +54,16 @@ Each file is a list (JSON array) of items. Each item has the same field names as
 
 - Reading prices from screenshots can misread small print. Items were included only when name and price were clear.
 - The total is far below the 300 target. The flyers are long image pages, and reading them by screenshot is slow. Walmart and Costco gave no usable data, and Superstore gave almost none.
+
+## Matches to the simulated catalogue
+
+`matches.json` says, for each flyer item, whether it is the same product as one of the
+simulated products (`sim-*` skus in `backend/src/connectors/sample/`), decided by hand.
+`build-matches.mjs` holds the decisions and rewrites the file.
+
+- `exact`: same product and the same size.
+- `likely`: same product; the size is new to the catalogue or wasn't printed.
+- `possible`: may be the same product; check before relying on it.
+- `none`: a product the catalogue doesn't have yet. `note` says when a similar product exists.
+
+Items with a match should join that product's price history; the rest become new products.
