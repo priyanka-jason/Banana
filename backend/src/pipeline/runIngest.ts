@@ -166,7 +166,7 @@ export async function runIngest(options: IngestOptions): Promise<IngestResult> {
     for (const connector of succeeded) {
       try {
         const locations = await connector.fetchLocations?.();
-        if (locations !== undefined) await final.upsertLocations(locations);
+        if (locations !== undefined) await final.saveChainLocations(connector.chain.slug, locations);
       } catch (error) {
         failures.push({ chainSlug: connector.chain.slug, error: `locations: ${messageOf(error)}` });
       }

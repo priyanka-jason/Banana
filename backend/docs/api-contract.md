@@ -93,7 +93,7 @@ Every field is optional. An empty body searches everything. Unknown fields are *
 
 | Field | Type | Meaning |
 |---|---|---|
-| `query` | text, up to 100 characters | Every word must appear in the item's name or brand, in any order. Ignores case and accents. Part of a word matches (`apple` finds `Apples`). |
+| `query` | text, up to 100 characters | Every word must appear in the item's name, brand, size or store name (`milk walmart`, `milk 4 l`), in any order. Ignores case and accents. Part of a word matches (`apple` finds `Apples`). Category names are not searched; use `categories`. |
 | `chainSlugs` | list of text, up to 50 | Only these chains (e.g. `["walmart", "costco"]`). |
 | `parentCompanies` | list of text, up to 50 | Only chains owned by these companies, ignoring case. |
 | `categories` | list of category slugs | Only these shared categories. Slugs come from `/api/categories`. |
@@ -197,7 +197,7 @@ Examples: [a list](examples/shopping-list.json), [within 10 km](examples/shoppin
 
 ### `GET /api/chains`, `GET /api/categories`
 
-`{ "chains": [{ slug, name, parentCompany, hasMemberPricing }] }` sorted by name, and
+`{ "chains": [{ slug, name, parentCompany, hasMemberPricing, websiteUrl? }] }` sorted by name, and
 `{ "categories": [{ "slug": "dairy-eggs", "label": "Dairy & Eggs" }] }`. Send the `slug` in searches and show the
 `label` to people.
 

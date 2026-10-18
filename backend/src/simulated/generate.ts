@@ -4,7 +4,8 @@ import type { StoreConnector } from '../connectors/types';
 import type { CategoryMap } from '../pipeline/categoryMap';
 import type { RawItem, StoreLocation } from '../types';
 import { CATALOG, type CatalogProduct } from './catalog';
-import { AREAS, SIMULATED_CHAINS, type SimulatedChainProfile } from './chains';
+import { storeLocationsFor } from '../stores';
+import { SIMULATED_CHAINS, type SimulatedChainProfile } from './chains';
 import { between, chance } from './random';
 
 /**
@@ -128,20 +129,9 @@ export function parseSimulatedItem(raw: SimulatedRawItem): RawItem {
   };
 }
 
-/** The chain's simulated stores: one per area, nudged a little so stores in one area don't overlap on a map. */
+/** The chain's stores: the real branches the website shows (stores.ts). Prices stay simulated. */
 export function simulatedLocationsFor(profile: SimulatedChainProfile): StoreLocation[] {
-  return profile.areas.map((areaId) => {
-    const area = AREAS[areaId];
-    const id = `${profile.chain.slug}-sim-${areaId}`;
-    return {
-      id,
-      chainSlug: profile.chain.slug,
-      name: `${profile.chain.name} (simulated, ${area.label})`,
-      city: area.city,
-      lat: Math.round((area.lat + between(-0.004, 0.004, id, 'lat')) * 1e5) / 1e5,
-      lng: Math.round((area.lng + between(-0.004, 0.004, id, 'lng')) * 1e5) / 1e5,
-    };
-  });
+  return storeLocationsFor(profile.chain.slug);
 }
 
 /** A connector for one simulated chain. It works exactly like a real one. */

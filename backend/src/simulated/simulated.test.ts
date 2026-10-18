@@ -58,7 +58,6 @@ describe('simulated chains', () => {
       expect(location.lat).toBeLessThan(49.4);
       expect(location.lng).toBeGreaterThan(-123.3);
       expect(location.lng).toBeLessThan(-122.5);
-      expect(location.name).toContain('simulated');
     }
   });
 

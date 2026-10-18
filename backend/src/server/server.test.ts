@@ -118,7 +118,7 @@ describe('local API server', () => {
     expect(categories.categories.length).toBeGreaterThan(0);
 
     const all = await json<{ stores: unknown[] }>(await fetch(`${running.url}/api/stores`));
-    expect(all.stores).toHaveLength(37);
+    expect(all.stores).toHaveLength(38);
     const two = await json<{ stores: Array<{ chainSlug: string }> }>(
       await fetch(`${running.url}/api/stores?chain=walmart&chain=costco`),
     );

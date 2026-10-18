@@ -43,7 +43,15 @@ export class MemoryFinal implements FinalRepository {
     for (const chain of chains) this.chains.set(chain.slug, jsonCopy(chain));
   }
 
-  async upsertLocations(locations: StoreLocation[]): Promise<void> {
+  async saveChainLocations(chainSlug: string, locations: StoreLocation[]): Promise<void> {
+    for (const location of locations) {
+      if (location.chainSlug !== chainSlug) throw new Error(`Store ${location.id} belongs to "${location.chainSlug}", not "${chainSlug}"`);
+    }
+    if (locations.length === 0) return;
+    const keep = new Set(locations.map((location) => location.id));
+    for (const [id, location] of this.locations) {
+      if (location.chainSlug === chainSlug && !keep.has(id)) this.locations.delete(id);
+    }
     for (const location of locations) this.locations.set(location.id, jsonCopy(location));
   }
 

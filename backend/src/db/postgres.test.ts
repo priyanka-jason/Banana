@@ -95,6 +95,21 @@ describe.skipIf(url === undefined)('Postgres storage (needs TEST_DATABASE_URL)',
     }
   });
 
+  it("removes a chain's stores that are no longer in its list, and only that chain's", async () => {
+    const final = new PostgresFinal(pool);
+    const before = (await final.listLocations()).length;
+    const extra = { id: 'walmart-test-closed', chainSlug: 'walmart', name: 'Closed store', lat: 49.25, lng: -123.1 };
+    const walmart = (await memoryFinal.listLocations()).filter((location) => location.chainSlug === 'walmart');
+    await final.saveChainLocations('walmart', [...walmart, extra]);
+    expect((await final.listLocations()).length).toBe(before + 1);
+
+    await final.saveChainLocations('walmart', walmart);
+    const after = await final.listLocations();
+    expect(after.length).toBe(before);
+    expect(after.some((location) => location.id === extra.id)).toBe(false);
+    expect(after.filter((location) => location.chainSlug === 'costco').length).toBeGreaterThan(0);
+  });
+
   it('can run again without making duplicates', async () => {
     const count = async () => Number((await pool.query('select count(*) from banana.prices')).rows[0].count);
     const before = await count();

@@ -1,0 +1,20 @@
+# Cloudflare Worker for the Banana API: https://banana-api.<account>.workers.dev
+# Deploy from this folder with `npx wrangler deploy` (after `npx wrangler login`),
+# or connect the Worker to the GitHub repo in the Cloudflare dashboard (root directory: backend).
+#
+# DATABASE_URL is a SECRET and is never written here. Set it once with
+#   npx wrangler secret put DATABASE_URL
+# or in the dashboard: Workers & Pages > banana-api > Settings > Variables and secrets.
+
+name = "banana-api"
+main = "src/worker.ts"
+compatibility_date = "2026-10-01"
+# The Postgres library needs Node compatibility (it then uses Cloudflare's own network sockets).
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+SUPABASE_URL = "https://wkqxnxjsvrnnpikibrfh.supabase.co"
+CORS_ORIGINS = "https://banana-8qk.pages.dev"
+
+[observability]
+enabled = true
