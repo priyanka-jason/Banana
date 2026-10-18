@@ -16,7 +16,7 @@ import { MapTrifoldIcon } from '@phosphor-icons/react/dist/csr/MapTrifold'
 import { RadiusSelect } from '../components/FilterControls'
 import { Price } from '../components/Offer'
 import { searchAddresses } from '../api/addressSearch'
-import { neighbourhoodOrigins, type SearchOrigin } from '../data/mockLocations'
+import { neighbourhoodOrigins, type SearchOrigin } from '../data/storeLocations'
 import {
   branchOffers,
   nearbyBranches,
@@ -226,7 +226,7 @@ export function LocationsPage({
     setQuery('')
     setMatches([])
     setMessage('')
-    setSelectedId('')
+    setSelectedId(null)
     setView('list')
   }
   function locate() {
@@ -399,6 +399,7 @@ export function LocationsPage({
                 className="text-button"
                 onClick={() => {
                   onOriginChange(null)
+                  setSelectedId(null)
                   setMessage('')
                   setQuery('')
                 }}

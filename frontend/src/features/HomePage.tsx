@@ -7,7 +7,7 @@ import { OfferCard } from '../components/Offer'
 import { getNearbyOffers } from '../lib/catalogue'
 import { pageHref, updateRoute } from '../lib/navigation'
 import type { Filters, NearbyOffer } from '../types'
-import type { SearchOrigin } from '../data/mockLocations'
+import type { SearchOrigin } from '../data/storeLocations'
 
 export function HomePage({
   filters,

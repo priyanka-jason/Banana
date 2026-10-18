@@ -31,6 +31,12 @@ export const stores: Store[] = [
     logo: '/images/stores/superstore-mark.svg',
     website: 'https://www.realcanadiansuperstore.ca/',
   },
+  {
+    id: 'costco',
+    name: 'Costco',
+    logo: '/images/stores/superstore.svg',
+    website: 'https://www.costco.ca/',
+  },
 ]
 
 const distances = {
@@ -38,9 +44,9 @@ const distances = {
   noFrills: { 'mount-pleasant': 1.4, kitsilano: 0.6, downtown: 3.8 },
   walmart: { 'mount-pleasant': 2.1, kitsilano: 6.2, downtown: 5.5 },
   superstore: { 'mount-pleasant': 3.2, kitsilano: 7.4, downtown: 6.8 },
+  costco: { 'mount-pleasant': 1.9, kitsilano: 4.8, downtown: 1.2 },
 }
 
-// Illustrative offers, not live prices. Kept separate from UI for future API integration.
 export const offers: Offer[] = [
   {
     id: 'gala-saveon',
@@ -92,6 +98,19 @@ export const offers: Offer[] = [
     unitPrice: '$2.25/L',
     storeId: 'superstore',
     distances: distances.superstore,
+    featured: true,
+  },
+  {
+    id: 'milk-costco',
+    name: '2% milk',
+    pack: '4 L bulk',
+    category: 'Dairy',
+    image: '/images/milk.webp',
+    price: 6.99,
+    regularPrice: 7.99,
+    unitPrice: '$1.75/L',
+    storeId: 'costco',
+    distances: distances.costco,
     featured: true,
   },
   {

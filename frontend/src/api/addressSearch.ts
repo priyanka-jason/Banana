@@ -1,4 +1,4 @@
-import type { SearchOrigin } from '../data/mockLocations'
+import type { SearchOrigin } from '../data/storeLocations'
 
 // Public BC geocoder; no API key, paid fallback, or address persistence.
 // Search only on explicit submit. Keep this boundary replaceable by a future API.

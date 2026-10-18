@@ -1,5 +1,5 @@
 import { areas, offers, stores } from '../data/mockOffers.ts'
-import { branches, type SearchOrigin } from '../data/mockLocations.ts'
+import { branches, type SearchOrigin } from '../data/storeLocations.ts'
 import { distanceKm } from './locations.ts'
 import type { Filters, NearbyOffer, SortOrder } from '../types.ts'
 

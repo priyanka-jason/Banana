@@ -2,7 +2,7 @@ import {
   branches,
   type SearchOrigin,
   type StoreBranch,
-} from '../data/mockLocations.ts'
+} from '../data/storeLocations.ts'
 import { offers, stores } from '../data/mockOffers.ts'
 import type { NearbyOffer } from '../types.ts'
 

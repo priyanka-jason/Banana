@@ -8,7 +8,7 @@ import { OfferTable } from '../components/Offer'
 import { filterOffers, getNearbyOffers } from '../lib/catalogue'
 import { updateRoute } from '../lib/navigation'
 import type { Filters, NearbyOffer } from '../types'
-import { branches, type SearchOrigin } from '../data/mockLocations'
+import { branches, type SearchOrigin } from '../data/storeLocations'
 import { pageHref } from '../lib/navigation'
 
 function FilterDialog({
