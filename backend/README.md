@@ -17,6 +17,25 @@ npm run ingest           # run the pipeline once and print a summary
 `PORT=9000 npm run api` picks another port. The website's Vite dev proxy finds the API with
 `API_PROXY_TARGET=http://127.0.0.1:8787`.
 
+## Using the Supabase database
+
+Without `DATABASE_URL` everything runs in memory, as above. With it (in `backend/.env`, never
+committed; see `.env.example`):
+
+```sh
+npm run ingest -- --simulated --database   # write the simulated data into raw.<chain> and banana.*
+npm run api                                # read prices and keep saved lists in the database
+```
+
+The database must have `sql/supabase-setup.sql` (and, for saved lists, `sql/accounts-setup.sql`)
+run once. The backend connects as the database owner, so it filters every saved-list query by the
+signed-in person itself. The API keeps a 60-second copy of the prices, so new prices show up within
+a minute of an ingest.
+
+Database tests run only against a throwaway database set up like Supabase:
+`TEST_DATABASE_URL=postgres://... npm test`. Without it they are skipped. Never point it at the
+team's Supabase.
+
 ## How it fits together
 
 ```

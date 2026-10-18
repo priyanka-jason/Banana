@@ -10,9 +10,13 @@
  *
  * Accounts (saved lists) switch on when SUPABASE_URL is set, in the environment or in
  * backend/.env. Only the project URL is needed to check login tokens, no secret key.
+ *
+ * With DATABASE_URL set (in backend/.env, never committed), prices and saved lists come
+ * from the database instead of memory, and --sample is ignored.
  */
 import { fileURLToPath } from 'node:url';
-import { createBackend } from '../app';
+import { createBackend, createDatabaseBackend } from '../app';
+import { poolOptionsFromEnv } from '../db/postgres';
 import { createSupabaseVerifier, type TokenVerifier } from '../auth/tokens';
 import { startServer } from './server';
 
@@ -41,23 +45,38 @@ async function main(): Promise<void> {
 
   const source = args.includes('--sample') ? 'sample' : 'simulated';
   const port = readPort(process.env['PORT']);
-  const { prices, ingest, lists } = await createBackend({ source });
+  const database = poolOptionsFromEnv();
+  let prices, lists;
+  let closeDatabase = async (): Promise<void> => undefined;
+  if (database !== undefined) {
+    const backend = createDatabaseBackend(database);
+    ({ prices, lists } = backend);
+    closeDatabase = backend.close;
+    const chains = await prices.listChains();
+    console.log(`Reading prices and saved lists from the database (${chains.length} chains).`);
+  } else {
+    const backend = await createBackend({ source });
+    ({ prices, lists } = backend);
+    for (const failure of backend.ingest.failures) console.error(`Could not load ${failure.chainSlug}: ${failure.error}`);
+    console.log(`Loaded ${backend.ingest.savedItems} ${source} items from ${backend.ingest.chains.length} chains into memory.`);
+  }
   const supabaseUrl = process.env['SUPABASE_URL']?.trim();
   const tokens: TokenVerifier | undefined = supabaseUrl ? createSupabaseVerifier(supabaseUrl) : undefined;
-  for (const failure of ingest.failures) console.error(`Could not load ${failure.chainSlug}: ${failure.error}`);
-  console.log(`Loaded ${ingest.savedItems} ${source} items from ${ingest.chains.length} chains.`);
 
   console.log(
     tokens === undefined
       ? 'Accounts are off (no SUPABASE_URL), so /api/lists answers 503.'
-      : 'Accounts are on: /api/lists checks Supabase login tokens. Saved lists are kept in memory for now.',
+      : `Accounts are on: /api/lists checks Supabase login tokens. Saved lists are kept ${database ? 'in the database' : 'in memory'}.`,
   );
 
   const running = await startServer({ prices, lists, tokens, port });
   console.log(`Banana API listening on ${running.url}/api (Ctrl+C to stop)`);
 
   const stop = (): void => {
-    running.close().finally(() => process.exit(0));
+    running
+      .close()
+      .then(closeDatabase)
+      .finally(() => process.exit(0));
   };
   process.once('SIGINT', stop);
   process.once('SIGTERM', stop);
