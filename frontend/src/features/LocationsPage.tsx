@@ -25,6 +25,7 @@ import './LocationsPage.css'
 import { useCatalogue, catalogueBranches } from '../data/catalogueState'
 import { ProductImage, StoreLogo } from '../components/ProductImage'
 import { Freshness } from '../components/SearchForm'
+import { useAuth } from '../data/authState'
 
 const LocationsMap = lazy(() => import('../components/LocationsMap'))
 
@@ -63,14 +64,19 @@ function StoreRow({
   const uniqueOffers = [
     ...new Map(linkedOffers.map((offer) => [offer.name, offer])).values(),
   ]
+  // Four examples: the first product, a dairy item if there is one, then the next ones.
+  const dairy = uniqueOffers.find(
+    (offer) =>
+      offer.id !== uniqueOffers[0]?.id &&
+      ['Dairy', 'dairy-eggs'].includes(offer.category),
+  )
   const previews = [
-    uniqueOffers[0],
-    uniqueOffers.find(
-      (offer) =>
-        offer.id !== uniqueOffers[0]?.id &&
-        ['Dairy', 'dairy-eggs'].includes(offer.category),
-    ) ?? uniqueOffers[1],
-  ].filter((offer): offer is NearbyOffer => Boolean(offer))
+    ...new Set(
+      [uniqueOffers[0], dairy, ...uniqueOffers.slice(1)].filter(
+        (offer): offer is NearbyOffer => Boolean(offer),
+      ),
+    ),
+  ].slice(0, 4)
   return (
     <article
       id={`store-${branch.id}`}
@@ -167,6 +173,7 @@ export function LocationsPage({
   onOpen,
 }: Props) {
   const { data } = useCatalogue()
+  const { user, saveLocationToAccount } = useAuth()
   const origin = savedOrigin ?? neighbourhoodOrigins[filters.area]
   const [query, setQuery] = useState('')
   const [matches, setMatches] = useState<SearchOrigin[]>([])
@@ -179,6 +186,8 @@ export function LocationsPage({
   const controller = useRef<AbortController | null>(null)
   const requestId = useRef(0)
   const input = useRef<HTMLInputElement>(null)
+  // Searches on its own shortly after the visitor stops typing.
+  const typingTimer = useRef<number | undefined>(undefined)
   const locationList = useMemo(() => {
     const result = catalogueBranches(data!, origin, filters.radius)
     if (sort === 'name')
@@ -195,6 +204,7 @@ export function LocationsPage({
         locationList[0])
   useEffect(
     () => () => {
+      window.clearTimeout(typingTimer.current)
       controller.current?.abort()
       requestId.current++
     },
@@ -212,9 +222,13 @@ export function LocationsPage({
     })
   }, [])
 
-  async function findAddress() {
-    if (query.trim().length < 3) {
-      setMessage('Enter a street address in Vancouver.')
+  /** partial: started by typing. Keeps the current choices on screen until the new
+   * ones arrive, so the dropdown doesn't flicker between keystrokes. */
+  async function findAddress(text = query, partial = false) {
+    window.clearTimeout(typingTimer.current)
+    if (text.trim().length < 3) {
+      if (partial) return
+      setMessage('Enter a street address in Metro Vancouver.')
       input.current?.focus()
       return
     }
@@ -222,18 +236,20 @@ export function LocationsPage({
     const abort = new AbortController()
     controller.current = abort
     const currentRequest = ++requestId.current
-    setMatches([])
-    setMessage('')
+    if (!partial) {
+      setMatches([])
+      setMessage('')
+    }
     setSearching(true)
     const timeout = window.setTimeout(() => abort.abort(), 12000)
     try {
-      const result = await searchAddresses(query.trim(), abort.signal)
+      const result = await searchAddresses(text.trim(), abort.signal, partial)
       if (currentRequest !== requestId.current) return
       setMatches(result)
       setMessage(
         result.length
           ? 'Choose an address below to update nearby stores.'
-          : 'No Vancouver addresses found. Try the full street address.',
+          : 'No Metro Vancouver addresses found. Try the full street address and city.',
       )
     } catch {
       if (currentRequest === requestId.current)
@@ -246,7 +262,11 @@ export function LocationsPage({
     }
   }
   function chooseAddress(next: SearchOrigin) {
+    window.clearTimeout(typingTimer.current)
     onOriginChange(next)
+    if (user) {
+      void saveLocationToAccount(next)
+    }
     setQuery('')
     setMatches([])
     setMessage('')
@@ -309,43 +329,78 @@ export function LocationsPage({
           </div>
           <div className="locations-controls">
             <div className="location-search-row">
-              <form
-                className="location-address-form"
-                onSubmit={(event) => {
-                  event.preventDefault()
-                  void findAddress()
-                }}
-                role="search"
-                aria-label="Find an address"
-              >
-                <label className="sr-only" htmlFor="address-search">
-                  Search an address in Vancouver
-                </label>
-                <input
-                  ref={input}
-                  id="address-search"
-                  value={query}
-                  onChange={(event) => {
-                    controller.current?.abort()
-                    requestId.current++
-                    setSearching(false)
-                    setMatches([])
-                    setMessage('')
-                    setQuery(event.target.value)
+              <div className="location-address-field">
+                <form
+                  className="location-address-form"
+                  onSubmit={(event) => {
+                    event.preventDefault()
+                    void findAddress()
                   }}
-                  placeholder="Search an address in Vancouver"
-                  autoComplete="off"
-                  maxLength={200}
-                  disabled={locating}
-                />
-                <button
-                  type="submit"
-                  aria-label="Search address"
-                  disabled={searching || locating}
+                  role="search"
+                  aria-label="Find an address"
                 >
-                  <MagnifyingGlassIcon size={23} aria-hidden="true" />
-                </button>
-              </form>
+                  <label className="sr-only" htmlFor="address-search">
+                    Search an address in Metro Vancouver
+                  </label>
+                  <input
+                    ref={input}
+                    id="address-search"
+                    value={query}
+                    onChange={(event) => {
+                      const value = event.target.value
+                      window.clearTimeout(typingTimer.current)
+                      controller.current?.abort()
+                      requestId.current++
+                      setSearching(false)
+                      setQuery(value)
+                      if (value.trim().length < 3) {
+                        setMatches([])
+                        setMessage('')
+                        return
+                      }
+                      typingTimer.current = window.setTimeout(
+                        () => void findAddress(value, true),
+                        350,
+                      )
+                    }}
+                    placeholder="Search a Metro Vancouver address"
+                    autoComplete="off"
+                    maxLength={200}
+                    disabled={locating}
+                  />
+                  <button
+                    type="submit"
+                    aria-label="Search address"
+                    disabled={searching || locating}
+                  >
+                    <MagnifyingGlassIcon size={23} aria-hidden="true" />
+                  </button>
+                </form>
+                {/* Drops down from the address box, at its width. */}
+                {(searching || message || matches.length > 0) && (
+                  <div className="address-dropdown">
+                    {searching && matches.length === 0 && (
+                      <p role="status">Searching addresses…</p>
+                    )}
+                    {message && <p role="status">{message}</p>}
+                    {matches.length > 0 && (
+                      <ul
+                        className="address-matches"
+                        aria-label="Address search results"
+                      >
+                        {matches.map((match, index) => (
+                          <li key={`${match.label}-${index}`}>
+                            <button onClick={() => chooseAddress(match)}>
+                              <MapPinIcon size={19} aria-hidden="true" />
+                              <span>{match.label}</span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
+              </div>
               <button
                 className="locate-button"
                 onClick={locate}
@@ -365,22 +420,6 @@ export function LocationsPage({
               Approximate straight-line radius · Showing stores with item data
             </p>
           </div>
-        </div>
-        <div className="shell address-feedback">
-          {searching && <p role="status">Searching addresses…</p>}
-          {message && <p role="status">{message}</p>}
-          {matches.length > 0 && (
-            <ul className="address-matches" aria-label="Address search results">
-              {matches.map((match, index) => (
-                <li key={`${match.label}-${index}`}>
-                  <button onClick={() => chooseAddress(match)}>
-                    <MapPinIcon size={19} aria-hidden="true" />
-                    <span>{match.label}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
       </section>
       <div className="locations-mobile-tabs" aria-label="Locations view">

@@ -33,6 +33,9 @@ export interface Catalogue {
 export interface ProductRow {
   id: number
   chain_slug: string
+  comparison_group_id?: string | null
+  brand?: string | null
+  upc?: string | null
   sku: string
   name: string
   size: string | null
@@ -73,6 +76,7 @@ const assets: Record<string, string> = {
   'no-frills': '/images/stores/no-frills.svg',
   walmart: '/images/stores/walmart.svg',
   'real-canadian-superstore': '/images/stores/superstore-mark.svg',
+  costco: '/images/stores/costco.svg',
 }
 export function unitPrice(product: ProductRow, cents: number): string {
   const total = Number(product.size_total_base)
@@ -120,6 +124,19 @@ export function mapPrice(row: PriceRow, now = new Date()): Offer | null {
     category: product.category ?? 'other',
     image: productImage(product.sku, product.size),
     price: cents / 100,
+    spec: {
+      sku: product.sku,
+      comparisonGroupId: product.comparison_group_id ?? undefined,
+      brand: product.brand ?? undefined,
+      upc: product.upc ?? undefined,
+      packCount: product.pack_count,
+      sizeKind: product.size_kind ?? undefined,
+      totalBase:
+        product.size_total_base == null
+          ? undefined
+          : Number(product.size_total_base),
+      pricedByWeight: product.priced_by_weight,
+    },
     regularPrice: active ? regular / 100 : undefined,
     unitPrice: unitPrice(product, cents),
     storeId: product.chain_slug,
@@ -231,7 +248,7 @@ export async function loadCatalogue(
       pages<ChainRow>('chains', '*'),
       pages<PriceRow>(
         'prices',
-        'id,location_id,regular_price_cents,sale_price_cents,sale_start,sale_end,scraped_at,source_url,products!inner(id,chain_slug,sku,name,size,category,pack_count,priced_by_weight,size_kind,size_total_base,size_unit)',
+        'id,location_id,regular_price_cents,sale_price_cents,sale_start,sale_end,scraped_at,source_url,products!inner(*)',
         '&location_id=is.null',
       ),
       read<BranchRow[]>('rpc/stores_within_radius', signal, {

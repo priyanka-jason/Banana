@@ -1,20 +1,60 @@
+import { useState, useRef, useEffect } from 'react'
 import { HouseIcon } from '@phosphor-icons/react/dist/csr/House'
 import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/csr/MagnifyingGlass'
 import { MapPinIcon } from '@phosphor-icons/react/dist/csr/MapPin'
+import { CrownSimpleIcon } from '@phosphor-icons/react/dist/csr/CrownSimple'
 import { CaretDownIcon } from '@phosphor-icons/react/dist/csr/CaretDown'
-import { areas } from '../data/mockOffers'
-import { pageHref, updateRoute } from '../lib/navigation'
-import type { AreaId, Page } from '../types'
+import { UserCircleIcon } from '@phosphor-icons/react/dist/csr/UserCircle'
+import { IdentificationCardIcon } from '@phosphor-icons/react/dist/csr/IdentificationCard'
+import { CardholderIcon } from '@phosphor-icons/react/dist/csr/Cardholder'
+import { BookmarkSimpleIcon } from '@phosphor-icons/react/dist/csr/BookmarkSimple'
+import { SignOutIcon } from '@phosphor-icons/react/dist/csr/SignOut'
+import { pageHref } from '../lib/navigation'
+import type { Page } from '../types'
+import { useAuth } from '../data/authState'
+import './Header.css'
 
 interface Props {
   page: Page
   params: URLSearchParams
-  area: AreaId
-  onAreaChange?: () => void
 }
 
-export function Header({ page, params, area, onAreaChange }: Props) {
-  const areaName = areas.find((item) => item.id === area)!.name
+export function Header({ page, params }: Props) {
+  const {
+    user,
+    account,
+    openAuthModal,
+    openProfileModal,
+    openMembershipsModal,
+    openSavedListsModal,
+    signOut,
+  } = useAuth()
+
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
+
+  const displayName =
+    account?.name || user?.email?.split('@')[0] || 'My Account'
+
   return (
     <header className="site-header">
       <div className="shell header-inner">
@@ -44,35 +84,116 @@ export function Header({ page, params, area, onAreaChange }: Props) {
           >
             Locations
           </a>
-        </nav>
-        <label className="location-control">
-          <MapPinIcon size={21} aria-hidden="true" />
-          <span>
-            {areaName}
-            <span className="location-city">, Vancouver</span>
-          </span>
-          <CaretDownIcon size={15} aria-hidden="true" />
-          <select
-            aria-label="Your neighbourhood"
-            value={area}
-            onChange={(event) => {
-              onAreaChange?.()
-              updateRoute(page, params, { area: event.target.value })
-            }}
+          <a
+            href={pageHref('plans', params)}
+            aria-current={page === 'plans' ? 'page' : undefined}
           >
-            {areas.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}, Vancouver
-              </option>
-            ))}
-          </select>
-        </label>
+            Plans
+          </a>
+        </nav>
+
+        <div className="header-auth-control" ref={menuRef}>
+          {!user ? (
+            <button
+              className="auth-sign-in-button"
+              onClick={openAuthModal}
+              aria-label="Sign in or register"
+            >
+              <UserCircleIcon size={22} aria-hidden="true" />
+              <span>Sign in</span>
+            </button>
+          ) : (
+            <div className="account-dropdown-wrapper">
+              <button
+                className={`my-account-button ${dropdownOpen ? 'is-active' : ''}`}
+                onClick={() => setDropdownOpen((prev) => !prev)}
+                aria-expanded={dropdownOpen}
+                aria-haspopup="true"
+                aria-label="User account menu"
+              >
+                <UserCircleIcon size={22} aria-hidden="true" />
+                <span className="my-account-label">My Account</span>
+                <CaretDownIcon
+                  size={15}
+                  style={{
+                    transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    transition: 'transform 0.15s ease',
+                  }}
+                  aria-hidden="true"
+                />
+              </button>
+
+              {dropdownOpen && (
+                <div className="account-dropdown-menu" role="menu">
+                  <div className="account-dropdown-header">
+                    <p className="account-user-name">{displayName}</p>
+                    <p className="account-user-email">{user.email}</p>
+                  </div>
+                  <div className="account-dropdown-divider" />
+                  <button
+                    className="account-menu-item"
+                    role="menuitem"
+                    onClick={() => {
+                      setDropdownOpen(false)
+                      openProfileModal()
+                    }}
+                  >
+                    <IdentificationCardIcon size={20} aria-hidden="true" />
+                    <span>Profile</span>
+                  </button>
+                  <button
+                    className="account-menu-item"
+                    role="menuitem"
+                    onClick={() => {
+                      setDropdownOpen(false)
+                      openSavedListsModal()
+                    }}
+                  >
+                    <BookmarkSimpleIcon size={20} aria-hidden="true" />
+                    <span>Saved lists</span>
+                  </button>
+                  <button
+                    className="account-menu-item"
+                    role="menuitem"
+                    onClick={() => {
+                      setDropdownOpen(false)
+                      openMembershipsModal()
+                    }}
+                  >
+                    <CardholderIcon size={20} aria-hidden="true" />
+                    <span>Memberships</span>
+                  </button>
+                  <div className="account-dropdown-divider" />
+                  <button
+                    className="account-menu-item sign-out"
+                    role="menuitem"
+                    onClick={() => {
+                      setDropdownOpen(false)
+                      void signOut()
+                    }}
+                  >
+                    <SignOutIcon size={20} aria-hidden="true" />
+                    <span>Sign out</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </header>
   )
 }
 
-export function MobileNav({ page, params }: Omit<Props, 'area'>) {
+export function MobileNav({
+  page,
+  params,
+}: {
+  page: Page
+  params: URLSearchParams
+}) {
+  const { user, openAuthModal, openProfileModal } = useAuth()
+
   return (
     <nav className="mobile-nav" aria-label="Main navigation">
       <a
@@ -104,6 +225,25 @@ export function MobileNav({ page, params }: Omit<Props, 'area'>) {
         />
         <span>Locations</span>
       </a>
+      <a
+        href={pageHref('plans', params)}
+        aria-current={page === 'plans' ? 'page' : undefined}
+      >
+        <CrownSimpleIcon
+          size={25}
+          weight={page === 'plans' ? 'fill' : 'regular'}
+          aria-hidden="true"
+        />
+        <span>Plans</span>
+      </a>
+      <button
+        type="button"
+        className="mobile-account-btn"
+        onClick={user ? openProfileModal : openAuthModal}
+      >
+        <UserCircleIcon size={25} aria-hidden="true" />
+        <span>{user ? 'Account' : 'Sign in'}</span>
+      </button>
     </nav>
   )
 }

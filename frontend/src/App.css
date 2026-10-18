@@ -225,9 +225,25 @@ p {
   letter-spacing: 0.7px;
   line-height: 1.5;
 }
-.home-intro .freshness {
-  border-top: 1px solid #e4e2dc;
-  padding: 12px 0 21px;
+/* The price source note sits at the bottom of Home and Search, like Locations. */
+.page-data-note {
+  border-top: 1px solid var(--line);
+  margin-top: 24px;
+  padding-block: 16px 28px;
+}
+.page-data-note .freshness {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0;
+}
+@media (max-width: 700px) {
+  /* Room for the floating My list button, so it never covers the note. */
+  .page-data-note {
+    padding-bottom: 84px;
+  }
+}
+.home-intro .shell {
+  padding-bottom: 24px;
 }
 .deals-section {
   padding-top: 24px;
@@ -365,26 +381,32 @@ p {
   border-radius: 50%;
   overflow: hidden;
 }
+/* 71% is the largest square that fits inside the circle, so no logo loses its corners. */
 .merchant-logo img {
-  width: 100%;
-  height: 100%;
+  width: 71%;
+  height: 71%;
   object-fit: contain;
 }
 .merchant-logo.save-on-foods {
   background: transparent;
-  padding: 4px;
 }
 .merchant-logo.no-frills {
   background: #ffdf00;
-  padding: 5px;
 }
 .merchant-logo.walmart {
   background: #087bdf;
-  padding: 7px;
 }
-.merchant-logo.superstore {
+.merchant-logo.costco {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #e3e1d6;
+}
+.merchant-logo.real-canadian-superstore {
   border-radius: 3px;
   padding: 2px;
+}
+.merchant-logo.real-canadian-superstore img {
+  width: 100%;
+  height: 100%;
 }
 .merchant-name {
   display: block;
@@ -791,9 +813,13 @@ dialog::backdrop {
   .merchant-compact .merchant-logo {
     display: none;
   }
-  .offer-table .flyer-button {
+  .offer-table .flyer-button,
+  .offer-table .list-add-button {
     font-size: 12px;
-    padding: 9px;
+    padding: 9px 6px;
+  }
+  .offer-table .list-add-button svg {
+    display: none;
   }
   .offer-table .flyer-button svg {
     display: none;
@@ -1408,6 +1434,12 @@ dialog::backdrop {
   color: #214d37;
   font-weight: 600;
 }
+.merchant-logo .store-initials,
+.location-store-logo .store-initials {
+  width: 100%;
+  height: 100%;
+  font-size: 0.8em;
+}
 .load-more {
   margin: 24px auto;
   display: block;
@@ -1491,6 +1523,15 @@ dialog::backdrop {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+/* The action column gets narrow at half-window widths: let the labels wrap inside
+   their buttons instead of spilling past the border. */
+.table-actions > .list-add-button,
+.table-actions > .flyer-button {
+  white-space: normal;
+  text-align: center;
+  line-height: 1.15;
+  min-width: 0;
 }
 .result-row > .list-add-button {
   margin: 0 0 12px 112px;
@@ -1603,5 +1644,281 @@ dialog::backdrop {
   .result-row > .list-add-button {
     margin-left: 0;
     width: 100%;
+  }
+}
+
+.basket-dialog {
+  width: min(780px, calc(100vw - 32px));
+  max-width: 780px;
+}
+.requested-basket {
+  margin: 20px 0;
+}
+.requested-basket h3,
+.chosen-basket h3,
+.basket-options > h3 {
+  font-size: 20px;
+  margin: 0 0 8px;
+}
+.requested-basket > ul,
+.basket-picks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.requested-basket > ul > li,
+.basket-picks > li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.list-item-text {
+  min-width: 0;
+}
+.basket-picks > li {
+  align-items: flex-start;
+  font-size: 13px;
+}
+.basket-picks > li > div > span {
+  display: block;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.basket-picks > li > strong {
+  white-space: nowrap;
+}
+.chosen-basket {
+  background: #fff9dd;
+  border: 1px solid #e7d486;
+  padding: 18px;
+  border-radius: 12px;
+  margin: 20px 0 28px;
+}
+.basket-option-heading {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.basket-option-heading h4 {
+  font-size: 17px;
+  margin: 0 0 5px;
+}
+.basket-option-heading p {
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+  color: #616b65;
+}
+.chosen-total {
+  font-size: 25px;
+  white-space: nowrap;
+}
+.chosen-total small {
+  display: block;
+  font-size: 10px;
+  white-space: normal;
+}
+.basket-option-total {
+  text-align: right;
+  flex-shrink: 0;
+}
+.basket-option-total strong {
+  display: block;
+  font-size: 21px;
+}
+.basket-option-total span {
+  font-size: 10px;
+  color: #616b65;
+}
+.basket-section-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 24px 0 10px;
+}
+.basket-option {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 10px 0;
+}
+.basket-option.is-chosen {
+  border-color: var(--green);
+  box-shadow: 0 0 0 1px var(--green);
+}
+.basket-option-actions {
+  margin-top: 12px;
+}
+.basket-option-actions > button {
+  margin-top: 12px;
+  min-height: 40px;
+  padding: 8px 14px;
+  width: auto;
+  font-size: 13px;
+}
+.basket-selected {
+  background: #e6f2e9;
+  color: #185a37;
+  border: none;
+  border-radius: 8px;
+}
+.basket-saving {
+  color: #07532f;
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+.basket-options summary,
+.chosen-basket summary {
+  font-size: 13px;
+  cursor: pointer;
+  padding: 8px 0;
+}
+.basket-change-label {
+  font-weight: 600;
+  color: #775110 !important;
+}
+.basket-changed-line {
+  background: #fffaf0;
+  padding-inline: 8px !important;
+}
+.basket-notice,
+.basket-missing {
+  font-size: 13px;
+  color: #805310;
+  background: #fff7e7;
+  padding: 12px;
+  border-radius: 8px;
+  line-height: 1.6;
+}
+.basket-incomplete {
+  margin-block: 22px;
+}
+@media (max-width: 600px) {
+  .basket-dialog .dialog-inner {
+    padding: 18px;
+  }
+  .basket-option {
+    padding: 12px;
+  }
+  .basket-option-heading {
+    gap: 8px;
+  }
+  .basket-option-heading h4 {
+    font-size: 15px;
+  }
+  .basket-option-total strong {
+    font-size: 19px;
+  }
+  .basket-option-heading p {
+    font-size: 12px;
+  }
+  .requested-basket .list-stepper {
+    gap: 4px;
+  }
+  .chosen-basket {
+    padding: 12px;
+  }
+}
+
+/* Saved lists inside My list */
+.saved-lists {
+  margin: 18px 0 6px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  text-align: left;
+  width: 100%;
+}
+.saved-lists h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+.saved-list-form {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.saved-list-form label {
+  font-size: 13px;
+  font-weight: 600;
+}
+.saved-list-form > div {
+  display: flex;
+  gap: 8px;
+}
+.saved-list-form input,
+.saved-list-rename input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #d9dbdc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 15px;
+}
+.saved-list-form .flyer-button {
+  flex-shrink: 0;
+}
+.saved-list-form > .text-button {
+  justify-self: start;
+}
+.saved-list-status {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--green);
+}
+.saved-list-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.saved-list-items li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+.saved-list-items li > svg {
+  flex-shrink: 0;
+  color: var(--green);
+}
+.saved-list-name {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+}
+.saved-list-name strong {
+  overflow-wrap: anywhere;
+}
+.saved-list-name span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.saved-list-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.saved-list-actions .flyer-button {
+  min-height: 36px;
+  padding: 6px 14px;
+}
+.saved-list-rename {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+@media (max-width: 420px) {
+  .saved-list-items li {
+    flex-wrap: wrap;
+  }
+  .saved-list-actions {
+    width: 100%;
+    justify-content: flex-end;
   }
 }

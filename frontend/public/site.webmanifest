@@ -1,0 +1,23 @@
+{
+  "name": "Banana — Grocery deals near you",
+  "short_name": "Banana",
+  "description": "Discover nearby grocery discounts and compare everyday prices in Vancouver.",
+  "start_url": "./#/",
+  "display": "standalone",
+  "background_color": "#faf9f5",
+  "theme_color": "#faf9f5",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

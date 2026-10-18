@@ -1,0 +1,372 @@
+.account-modal-content {
+  position: relative;
+  background: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 520px;
+  padding: 32px;
+  box-shadow: 0 20px 48px rgba(12, 39, 34, 0.18);
+  animation: scaleUp 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.account-modal-header {
+  margin-bottom: 24px;
+}
+
+.account-modal-header h2 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 28px;
+  color: #0c2722;
+  margin-bottom: 6px;
+}
+
+.memberships-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #07562d;
+}
+
+.memberships-header-title h2 {
+  margin-bottom: 0;
+}
+
+.account-modal-subtitle {
+  font-size: 14px;
+  color: #69717b;
+  line-height: 1.4;
+}
+
+.account-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.account-alert.success {
+  background: #eafaf1;
+  border: 1px solid #c3e6cb;
+  color: #1e8449;
+}
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.disabled-input {
+  background: #f4f3ee;
+  color: #69717b;
+  cursor: not-allowed;
+}
+
+.form-field-hint {
+  font-size: 12px;
+  color: #889098;
+  margin-top: 2px;
+}
+
+.account-section {
+  border-top: 1px solid #e6e7e5;
+  padding-top: 20px;
+  margin-top: 4px;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: #07562d;
+}
+
+.section-title-row h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #13251c;
+  margin: 0;
+}
+
+.location-info-card {
+  background: #f8f8f5;
+  border: 1px solid #e0e1dc;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.location-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.location-card-badge {
+  display: inline-block;
+  background: #eafaf1;
+  color: #1e8449;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.location-card-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #13251c;
+  margin: 0;
+}
+
+.location-card-coords {
+  font-size: 13px;
+  color: #69717b;
+  margin: 0;
+}
+
+.clear-location-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #e0e1dc;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #c0392b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.clear-location-btn:hover {
+  background: #fdf2f2;
+  border-color: #f5c6cb;
+}
+
+.location-empty-card {
+  background: #faf9f5;
+  border: 1px dashed #d2d4ce;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  color: #69717b;
+}
+
+.location-empty-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #13251c;
+  margin: 0 0 2px 0;
+}
+
+.location-empty-desc {
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.account-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.account-save-btn {
+  background: #07562d;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.account-save-btn:hover:not(:disabled) {
+  background: #054222;
+}
+
+/* Memberships Modal specific */
+.banana-perk-banner {
+  background: linear-gradient(135deg, #07562d 0%, #0d3d23 100%);
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.perk-icon {
+  color: #ffdc59;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.perk-badge {
+  display: inline-block;
+  background: rgba(255, 220, 89, 0.2);
+  color: #ffdc59;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.perk-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+
+.perk-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.memberships-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.memberships-list h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #13251c;
+  margin: 0 0 4px 0;
+}
+
+.membership-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #e2e4de;
+  border-radius: 14px;
+  padding: 16px 16px 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.membership-color-strip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+}
+
+.membership-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.membership-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.membership-title-row h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #13251c;
+  margin: 0;
+}
+
+.membership-status-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.membership-status-pill.active {
+  background: #eafaf1;
+  color: #1e8449;
+}
+
+.membership-status-pill.inactive {
+  background: #f4f3ee;
+  color: #69717b;
+}
+
+.membership-store {
+  font-size: 12px;
+  font-weight: 600;
+  color: #07562d;
+  margin: 0;
+}
+
+.membership-desc {
+  font-size: 13px;
+  color: #69717b;
+  margin: 2px 0 0 0;
+  line-height: 1.35;
+}
+
+.membership-toggle-btn {
+  background: #ffffff;
+  border: 1px solid #dedfdc;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #13251c;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.membership-toggle-btn:hover {
+  background: #f5f4ee;
+  border-color: #07562d;
+}
+
+.membership-toggle-btn.is-linked {
+  background: #eafaf1;
+  border-color: #c3e6cb;
+  color: #1e8449;
+}
+
+/* "Saved lists" shortcut in the profile window (the phone tab bar opens Profile). */
+.account-link-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e6e7e5;
+  border-radius: 10px;
+  background: white;
+  font-weight: 600;
+  text-align: left;
+}
+.account-link-btn:hover {
+  background: #f7f7f2;
+}

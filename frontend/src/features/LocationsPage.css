@@ -41,6 +41,15 @@
   border-radius: 12px 0 0 12px;
   font-size: 16px;
 }
+/* Focus shows on the whole box, like the home page search, instead of a thick
+   outline around the text field alone. */
+.location-address-form:focus-within {
+  border-color: #af9235;
+  box-shadow: 0 0 0 2px #ffdc5935;
+}
+.location-address-form input:focus-visible {
+  outline: none;
+}
 .location-address-form input::placeholder {
   color: #7c8491;
   opacity: 1;
@@ -86,30 +95,36 @@
   text-align: right;
   color: var(--muted);
 }
-.address-feedback {
-  font-size: 14px;
+/* The address box and its dropdown: the dropdown hangs just below the box at
+   the box's own width, whatever the window size. */
+.location-address-field {
   position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
 }
-.address-feedback:empty {
-  display: none;
-}
-.address-feedback > p {
-  margin: 0;
-  padding-bottom: 16px;
-}
-.address-matches {
+.address-dropdown {
   position: absolute;
-  left: 48px;
-  right: 48px;
-  top: 18px;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
   z-index: 15;
-  margin: 0;
-  list-style: none;
   padding: 8px;
+  font-size: 14px;
   background: white;
   box-shadow: 0 8px 28px #17251b20;
   border: 1px solid var(--line);
   border-radius: 12px;
+}
+.address-dropdown > p {
+  margin: 0;
+  padding: 6px 8px;
+  color: var(--muted);
+}
+.address-matches {
+  margin: 0;
+  list-style: none;
+  padding: 0;
 }
 .address-matches button {
   width: 100%;
@@ -198,7 +213,7 @@
 }
 .location-store-summary {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 134px 24px;
+  grid-template-columns: minmax(0, 1fr) 134px 42px;
   gap: 8px;
   align-items: start;
 }
@@ -222,9 +237,10 @@
   background: white;
   border: 1px solid var(--line);
 }
+/* 71% is the largest square that fits inside the circle, so no logo loses its corners. */
 .location-store-logo img {
-  width: 65px;
-  height: 65px;
+  width: 71%;
+  height: 71%;
   object-fit: contain;
 }
 .location-store-logo.no-frills {
@@ -261,10 +277,11 @@
   width: auto;
   color: #14251d;
 }
-.store-expand {
-  padding: 6px 0;
-  width: 24px;
-  min-height: 44px;
+/* The round icon button is 42px; its grid column matches so it stays inside the card. */
+.location-store-summary > .store-expand {
+  width: 42px;
+  height: 42px;
+  padding: 0;
 }
 .location-chain-offers {
   margin-top: 20px;
@@ -286,22 +303,20 @@
   margin: 0;
   letter-spacing: -0.4px;
 }
+/* Four offers as a compact 2 x 2 grid. */
 .location-offer-previews {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
   list-style: none;
-  margin: 18px 0 0;
-  padding: 4px 2px 10px;
+  margin: 12px 0 0;
+  padding: 0;
 }
 .location-offer-previews > li {
-  flex: 1 0 200px;
-  scroll-snap-align: start;
-  padding-right: 14px;
-}
-.location-offer-previews > li + li {
-  border-left: 1px solid var(--line);
-  padding-left: 14px;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 .location-offer {
   display: flex;
@@ -313,9 +328,11 @@
   padding: 0;
   background: none;
 }
-.location-offer > img {
-  width: 64px;
-  height: 72px;
+.location-offer > img,
+.location-offer > picture > img,
+.location-offer > .product-placeholder {
+  width: 48px;
+  height: 52px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -331,7 +348,7 @@
   margin-top: 4px;
 }
 .location-offer .price-line {
-  margin-top: 8px;
+  margin-top: 4px;
   gap: 7px;
   flex-wrap: wrap;
 }
@@ -495,7 +512,7 @@
     font-size: 13px;
   }
   .location-store-summary {
-    grid-template-columns: minmax(0, 1fr) 24px;
+    grid-template-columns: minmax(0, 1fr) 42px;
   }
   .location-store-actions {
     grid-column: 1;
@@ -513,10 +530,6 @@
     width: 60px;
     height: 60px;
     flex-basis: 60px;
-  }
-  .location-store-logo img {
-    width: 50px;
-    height: 50px;
   }
   .location-store-name {
     font-size: 14px;
@@ -551,7 +564,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
-  .location-address-form {
+  .location-address-field {
     grid-column: 1 / -1;
   }
   .location-address-form input {
@@ -572,12 +585,8 @@
     text-align: left;
     line-height: 1.5;
   }
-  .address-feedback > p {
+  .address-dropdown > p {
     font-size: 13px;
-  }
-  .address-matches {
-    left: 20px;
-    right: 20px;
   }
   .locations-mobile-tabs {
     display: flex;
@@ -627,17 +636,13 @@
     padding: 14px 9px;
   }
   .location-store-summary {
-    grid-template-columns: minmax(0, 1fr) 22px;
+    grid-template-columns: minmax(0, 1fr) 42px;
     gap: 4px;
   }
   .location-store-logo {
     width: 58px;
     height: 58px;
     flex-basis: 58px;
-  }
-  .location-store-logo img {
-    width: 48px;
-    height: 48px;
   }
   .store-select {
     gap: 12px;
@@ -726,16 +731,17 @@
   }
 }
 .location-offer > span > strong {
-  font-size: 15px;
+  font-size: 14px;
+  line-height: 1.25;
 }
 .location-offer .pack {
-  font-size: 14px;
+  font-size: 12px;
 }
 .location-offer .unit-price {
-  font-size: 13px;
+  font-size: 12px;
 }
 .location-offer .price-line strong {
-  font-size: 26px;
+  font-size: 20px;
   color: var(--green);
 }
 @media (min-width: 701px) and (max-width: 900px) {
@@ -752,5 +758,16 @@
 @media (max-width: 700px) {
   .location-map-panel {
     height: max(390px, calc(100dvh - 490px));
+  }
+}
+/* On phones the grid cells are narrow: picture above the text. */
+@media (max-width: 700px) {
+  .location-offer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .location-offer .price-line strong {
+    font-size: 18px;
   }
 }
