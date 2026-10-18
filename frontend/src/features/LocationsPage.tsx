@@ -15,6 +15,7 @@ import { ListIcon } from '@phosphor-icons/react/dist/csr/List'
 import { MapTrifoldIcon } from '@phosphor-icons/react/dist/csr/MapTrifold'
 import { RadiusSelect } from '../components/FilterControls'
 import { Price, MissingOfferData } from '../components/Offer'
+import { showBackendGaps } from '../lib/devFlags'
 import { searchAddresses } from '../api/addressSearch'
 import { neighbourhoodOrigins, type SearchOrigin } from '../data/storeLocations'
 import { type NearbyBranch } from '../lib/locations'
@@ -91,14 +92,15 @@ function StoreRow({
             <span>{branch.name}</span>
             <span
               className={
-                branch.missingAddress || !branch.address
+                showBackendGaps && (branch.missingAddress || !branch.address)
                   ? 'missing-backend'
                   : undefined
               }
             >
-              {branch.missingAddress
+              {showBackendGaps && branch.missingAddress
                 ? `Missing backend: street address${branch.address ? ` · ${branch.address}` : ''}`
-                : branch.address || 'Missing backend: street address'}
+                : branch.address ||
+                  (showBackendGaps ? 'Missing backend: street address' : '')}
             </span>
           </span>
         </button>
