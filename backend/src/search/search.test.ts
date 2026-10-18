@@ -4,7 +4,7 @@ import { MemoryFinal, MemoryStoreData } from '../db/memory';
 import { distanceKm } from '../geo';
 import { runIngest } from '../pipeline/runIngest';
 import type { FinalItem } from '../pipeline/types';
-import type { Chain, StoreLocation } from '../types';
+import type { Chain, PriceFilters, StoreLocation } from '../types';
 import { DEFAULT_LIMIT, findItems, normalizeText, searchFinal, storesWithinRadius, type SearchData } from './search';
 
 const NOW = new Date('2026-10-17T20:00:00.000Z');
@@ -242,6 +242,123 @@ describe('searchFinal: sorting', () => {
 
     expect(firstWithout).toBe(10);
     expect(rows.slice(firstWithout).every((row) => row.discountPercent === undefined)).toBe(true);
+  });
+});
+
+describe('searchFinal: sortOrder', () => {
+  const tied: SearchData = {
+    items: [
+      finalItem({ id: 'walmart:3', name: 'B', regularPriceCents: 300 }),
+      finalItem({ id: 'walmart:2', name: 'A', regularPriceCents: 300 }),
+      finalItem({ id: 'walmart:1', name: 'A', regularPriceCents: 300 }),
+      finalItem({ id: 'walmart:0', name: 'Cheap', regularPriceCents: 50 }),
+      finalItem({ id: 'walmart:9', name: 'Dear', regularPriceCents: 900 }),
+    ],
+    chains: [walmart],
+    locations: [],
+  };
+
+  it('sorts most expensive first with desc, keeping ties in name then id order', () => {
+    expect(ids(searchFinal(tied, { sortBy: 'price', sortOrder: 'desc' }))).toEqual([
+      'walmart:9',
+      'walmart:1',
+      'walmart:2',
+      'walmart:3',
+      'walmart:0',
+    ]);
+  });
+
+  it('applies to the default sort (price) when sortBy is left out', () => {
+    expect(ids(searchFinal(tied, { sortOrder: 'desc' }))).toEqual(ids(searchFinal(tied, { sortBy: 'price', sortOrder: 'desc' })));
+  });
+
+  it('gives the same order as no sortOrder when asking for the natural direction', async () => {
+    const data = await sampleData();
+    const natural = { price: 'asc', unitPrice: 'asc', name: 'asc', discount: 'desc' } as const;
+    for (const [sortBy, sortOrder] of Object.entries(natural)) {
+      const filters = { sortBy: sortBy as keyof typeof natural };
+      expect(ids(searchFinal(data, { ...filters, sortOrder })), sortBy).toEqual(ids(searchFinal(data, filters)));
+    }
+  });
+
+  it('sorts names Z to A with desc, ties still by id A to Z', () => {
+    expect(ids(searchFinal(tied, { sortBy: 'name', sortOrder: 'desc' }))).toEqual([
+      'walmart:9',
+      'walmart:0',
+      'walmart:3',
+      'walmart:1',
+      'walmart:2',
+    ]);
+  });
+
+  it('keeps items with no unit price last in both directions, and unit kinds in the same groups', async () => {
+    const data = await sampleData();
+    for (const sortOrder of ['asc', 'desc'] as const) {
+      const rows = searchFinal(data, { sortBy: 'unitPrice', sortOrder }).rows;
+      const firstMissing = rows.findIndex((row) => row.comparableUnitPrice === undefined);
+      expect(firstMissing, sortOrder).toBeGreaterThan(0);
+      expect(rows.slice(firstMissing).every((row) => row.comparableUnitPrice === undefined), sortOrder).toBe(true);
+
+      const order = ['100g', '100ml', 'each'];
+      const kinds = rows.slice(0, firstMissing).map((row) => order.indexOf(row.comparableUnitPrice?.per ?? ''));
+      expect(kinds, sortOrder).toEqual([...kinds].sort((a, b) => a - b));
+    }
+  });
+
+  it('sorts most expensive per unit first with desc, within one kind', async () => {
+    const result = searchFinal(await sampleData(), { query: 'banana', sortBy: 'unitPrice', sortOrder: 'desc' });
+    expect(ids(result)).toEqual(['save-on-foods:SOF-1001', 'walmart:W-2001', 'costco:C-3001']);
+  });
+
+  it('sorts smallest discount first with asc, with items not on sale still last', async () => {
+    const rows = searchFinal(await sampleData(), { sortBy: 'discount', sortOrder: 'asc' }).rows;
+    const onSale = rows.filter((row) => row.discountPercent !== undefined);
+    expect(onSale).toHaveLength(10);
+    expect(rows.slice(0, 10)).toEqual(onSale);
+    const percents = onSale.map((row) => row.discountPercent ?? 0);
+    expect(percents).toEqual([...percents].sort((a, b) => a - b));
+  });
+
+  it('sorts farthest first with distance desc', () => {
+    const data: SearchData = {
+      items: [
+        finalItem({ id: 'walmart:near', locationId: 'walmart-a' }),
+        finalItem({ id: 'walmart:far', locationId: 'walmart-b' }),
+      ],
+      chains: [walmart],
+      locations: [nearStore, farStore],
+    };
+    const near = { ...SHOPPER, radiusKm: 100 };
+    expect(ids(searchFinal(data, { near, sortBy: 'distance' }))).toEqual(['walmart:near', 'walmart:far']);
+    expect(ids(searchFinal(data, { near, sortBy: 'distance', sortOrder: 'desc' }))).toEqual(['walmart:far', 'walmart:near']);
+  });
+});
+
+describe('searchFinal: categories', () => {
+  it('finds only meat', async () => {
+    const result = searchFinal(await sampleData(), { categories: ['meat'] });
+    expect(result.total).toBe(6);
+    expect(result.rows.every((row) => row.category === 'meat')).toBe(true);
+  });
+
+  it('finds only vegetables', async () => {
+    const result = searchFinal(await sampleData(), { categories: ['vegetables'] });
+    expect(result.total).toBe(6);
+    expect(result.rows.every((row) => row.category === 'vegetables')).toBe(true);
+  });
+
+  it('combines several categories with a sort and pages through them without gaps or repeats', async () => {
+    const data = await sampleData();
+    const filters: PriceFilters = { categories: ['meat', 'vegetables', 'fruits'], sortBy: 'price', sortOrder: 'desc' };
+    const all = searchFinal(data, { ...filters, limit: 100 });
+    expect(all.total).toBe(18);
+    expect(new Set(all.rows.map((row) => row.category))).toEqual(new Set(['meat', 'vegetables', 'fruits']));
+    const prices = all.rows.map((row) => row.priceCents);
+    expect(prices).toEqual([...prices].sort((a, b) => b - a));
+
+    const pages = [0, 5, 10, 15].map((offset) => searchFinal(data, { ...filters, limit: 5, offset }));
+    expect(pages.every((page) => page.total === 18)).toBe(true);
+    expect(pages.flatMap(ids)).toEqual(ids(all));
   });
 });
 

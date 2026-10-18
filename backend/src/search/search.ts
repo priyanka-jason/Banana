@@ -9,6 +9,7 @@ import type {
   PriceRow,
   PriceSearchResult,
   PriceSort,
+  SortOrder,
   StoreLocation,
 } from '../types';
 
@@ -64,43 +65,61 @@ function byPrice(a: PriceRow, b: PriceRow): number {
 /** Unit prices are only comparable within the same kind, so kinds are kept together. */
 const UNIT_KIND_ORDER = { '100g': 0, '100ml': 1, each: 2 } as const;
 
-function byUnitPrice(a: PriceRow, b: PriceRow): number {
-  const unitA = a.comparableUnitPrice;
-  const unitB = b.comparableUnitPrice;
-  if (unitA === undefined && unitB === undefined) return byPrice(a, b);
-  if (unitA === undefined) return 1;
-  if (unitB === undefined) return -1;
-  return UNIT_KIND_ORDER[unitA.per] - UNIT_KIND_ORDER[unitB.per] || unitA.cents - unitB.cents || byNameThenId(a, b);
+type Compare = (a: PriceRow, b: PriceRow) => number;
+
+/**
+ * How one `sortBy` orders rows. `key` is written in the sort's natural direction and is the
+ * only part `sortOrder` flips. Rows that are `missing` the value always come last, and
+ * `tieBreak` never flips, so equal rows keep the same order either way.
+ */
+interface SortRule {
+  natural: SortOrder;
+  key: Compare;
+  tieBreak: Compare;
+  /** Compared before `key` and never flipped, e.g. keeping per-100 g and per-100 ml prices apart. */
+  group?: Compare;
+  missing?: (row: PriceRow) => boolean;
 }
 
-function byDistance(a: PriceRow, b: PriceRow): number {
-  const distanceA = a.distanceKm ?? Number.POSITIVE_INFINITY;
-  const distanceB = b.distanceKm ?? Number.POSITIVE_INFINITY;
-  if (distanceA !== distanceB) return distanceA < distanceB ? -1 : 1;
-  return byPrice(a, b);
-}
+const SORT_RULES: Record<PriceSort, SortRule> = {
+  price: { natural: 'asc', key: (a, b) => a.priceCents - b.priceCents, tieBreak: byNameThenId },
+  name: {
+    natural: 'asc',
+    key: (a, b) => compareText(normalizeText(a.name), normalizeText(b.name)),
+    tieBreak: (a, b) => compareText(a.id, b.id),
+  },
+  unitPrice: {
+    natural: 'asc',
+    missing: (row) => row.comparableUnitPrice === undefined,
+    group: (a, b) => UNIT_KIND_ORDER[a.comparableUnitPrice!.per] - UNIT_KIND_ORDER[b.comparableUnitPrice!.per],
+    key: (a, b) => a.comparableUnitPrice!.cents - b.comparableUnitPrice!.cents,
+    // Rows with no unit price are ordered among themselves by price.
+    tieBreak: (a, b) => (a.comparableUnitPrice === undefined ? byPrice(a, b) : byNameThenId(a, b)),
+  },
+  distance: {
+    natural: 'asc',
+    missing: (row) => row.distanceKm === undefined,
+    key: (a, b) => a.distanceKm! - b.distanceKm!,
+    tieBreak: byPrice,
+  },
+  discount: {
+    natural: 'desc',
+    missing: (row) => row.discountCents === undefined,
+    key: (a, b) => (b.discountPercent ?? 0) - (a.discountPercent ?? 0) || (b.discountCents ?? 0) - (a.discountCents ?? 0),
+    tieBreak: byPrice,
+  },
+};
 
-function byDiscount(a: PriceRow, b: PriceRow): number {
-  return (
-    (b.discountPercent ?? -1) - (a.discountPercent ?? -1) ||
-    (b.discountCents ?? 0) - (a.discountCents ?? 0) ||
-    byPrice(a, b)
-  );
-}
-
-function comparatorFor(sortBy: PriceSort): (a: PriceRow, b: PriceRow) => number {
-  switch (sortBy) {
-    case 'name':
-      return byNameThenId;
-    case 'unitPrice':
-      return byUnitPrice;
-    case 'distance':
-      return byDistance;
-    case 'discount':
-      return byDiscount;
-    case 'price':
-      return byPrice;
-  }
+function comparatorFor(sortBy: PriceSort, sortOrder: SortOrder | undefined): Compare {
+  const rule = SORT_RULES[sortBy];
+  const sign = sortOrder === undefined || sortOrder === rule.natural ? 1 : -1;
+  return (a, b) => {
+    const missingA = rule.missing?.(a) ?? false;
+    const missingB = rule.missing?.(b) ?? false;
+    if (missingA !== missingB) return missingA ? 1 : -1;
+    if (missingA) return rule.tieBreak(a, b);
+    return (rule.group?.(a, b) ?? 0) || sign * rule.key(a, b) || rule.tieBreak(a, b);
+  };
 }
 
 /**
@@ -116,7 +135,7 @@ function comparatorFor(sortBy: PriceSort): (a: PriceRow, b: PriceRow) => number 
  *   the nearest matching store of that chain.
  * - `onSaleOnly`: the price the shopper pays must be below the original price. That depends on
  *   `memberPricing`: a member price counts for a member but not for a non-member.
- * - `sortBy`: see PriceFilters. 'distance' without `near` is treated as 'price'.
+ * - `sortBy`, `sortOrder`: see PriceFilters. 'distance' without `near` is treated as 'price'.
  */
 export function searchFinal(data: SearchData, filters: PriceFilters = {}): PriceSearchResult {
   const memberPricing = filters.memberPricing ?? 'non-member';
@@ -186,7 +205,7 @@ export function searchFinal(data: SearchData, filters: PriceFilters = {}): Price
   }
 
   const sortBy = filters.sortBy === 'distance' && filters.near === undefined ? 'price' : (filters.sortBy ?? 'price');
-  rows.sort(comparatorFor(sortBy));
+  rows.sort(comparatorFor(sortBy, filters.sortOrder));
 
   return { rows: rows.slice(offset, offset + limit), total: rows.length };
 }

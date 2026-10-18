@@ -1,6 +1,6 @@
 import { PRODUCT_CATEGORIES, isProductCategory } from '../categories';
 import { MAX_LIMIT } from '../search/search';
-import type { MemberPricing, PriceFilters, PriceSort } from '../types';
+import type { MemberPricing, PriceFilters, PriceSort, SortOrder } from '../types';
 import type { ApiErrorDetail } from './types';
 
 /**
@@ -27,10 +27,12 @@ const SEARCH_FIELDS = [
   'memberPricing',
   'categories',
   'sortBy',
+  'sortOrder',
   'limit',
   'offset',
 ] as const;
 const SORTS: readonly PriceSort[] = ['price', 'unitPrice', 'name', 'distance', 'discount'];
+const SORT_ORDERS: readonly SortOrder[] = ['asc', 'desc'];
 const MEMBER_PRICINGS: readonly MemberPricing[] = ['member', 'non-member'];
 
 type Errors = ApiErrorDetail[];
@@ -201,6 +203,15 @@ export function parseSearchBody(body: unknown): ParseResult<PriceFilters> {
       errors.push({ field: 'sortBy', message: 'can only be "distance" when "near" is given' });
     } else {
       filters.sortBy = sortBy as PriceSort;
+    }
+  }
+
+  const sortOrder = obj['sortOrder'];
+  if (sortOrder !== undefined) {
+    if (typeof sortOrder !== 'string' || !SORT_ORDERS.includes(sortOrder as SortOrder)) {
+      errors.push({ field: 'sortOrder', message: `must be one of: ${SORT_ORDERS.join(', ')}` });
+    } else {
+      filters.sortOrder = sortOrder as SortOrder;
     }
   }
 

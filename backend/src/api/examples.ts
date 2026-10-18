@@ -79,6 +79,11 @@ export async function buildExamples(): Promise<Record<string, ExampleFile>> {
     { onSaleOnly: true, sortBy: 'discount', limit: 5 },
   );
   await search(
+    'search-meat-most-expensive-first.json',
+    'Only meat, most expensive first: sortOrder "desc" flips the price sort. Equal prices still go by name, then id.',
+    { categories: ['meat'], sortBy: 'price', sortOrder: 'desc', limit: 5 },
+  );
+  await search(
     'search-fruit-and-vegetables-page-2.json',
     'Filter by shared categories and ask for the second page of 4. "total" is the number of matches before paging.',
     { categories: ['fruits', 'vegetables'], sortBy: 'name', limit: 4, offset: 4 },
@@ -96,7 +101,7 @@ export async function buildExamples(): Promise<Record<string, ExampleFile>> {
   await search(
     'search-invalid.json',
     'A request with several problems. Every problem is listed in error.details, not just the first.',
-    { query: 'milk', near: { lat: 123, lng: -123.1, radiusKm: 5 }, sortBy: 'cheapest', limit: 500, chains: ['walmart'] },
+    { query: 'milk', near: { lat: 123, lng: -123.1, radiusKm: 5 }, sortBy: 'cheapest', sortOrder: 'down', limit: 500, chains: ['walmart'] },
   );
 
   files['get-item.json'] = example(

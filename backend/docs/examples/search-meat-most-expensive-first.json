@@ -1,0 +1,144 @@
+{
+  "description": "Only meat, most expensive first: sortOrder \"desc\" flips the price sort. Equal prices still go by name, then id.",
+  "request": {
+    "method": "POST",
+    "path": "/api/prices/search",
+    "body": {
+      "categories": [
+        "meat"
+      ],
+      "sortBy": "price",
+      "sortOrder": "desc",
+      "limit": 5
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "id": "costco:C-3005",
+          "chainSlug": "costco",
+          "chainName": "Costco",
+          "parentCompany": "Costco Wholesale",
+          "sku": "C-3005",
+          "name": "Boneless Skinless Chicken Breast",
+          "size": "approx. 2.5 kg",
+          "sizeAmount": 2.5,
+          "sizeUnit": "kg",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "meat",
+          "priceCents": 2499,
+          "regularPriceCents": 2499,
+          "unitPriceCents": 100,
+          "unitLabel": "100g",
+          "comparableUnitPrice": {
+            "per": "100g",
+            "cents": 99.96
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "walmart:W-2005",
+          "chainSlug": "walmart",
+          "chainName": "Walmart",
+          "parentCompany": "Walmart",
+          "sku": "W-2005",
+          "name": "Boneless Skinless Chicken Breast Family Pack",
+          "size": "per kg",
+          "sizeAmount": 1,
+          "sizeUnit": "kg",
+          "packCount": 1,
+          "pricedByWeight": true,
+          "category": "meat",
+          "priceCents": 1297,
+          "regularPriceCents": 1297,
+          "unitPriceCents": 130,
+          "unitLabel": "100g",
+          "comparableUnitPrice": {
+            "per": "100g",
+            "cents": 129.7
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "costco:C-3006",
+          "chainSlug": "costco",
+          "chainName": "Costco",
+          "parentCompany": "Costco Wholesale",
+          "sku": "C-3006",
+          "name": "Lean Ground Beef",
+          "size": "1.36 kg",
+          "sizeAmount": 1.36,
+          "sizeUnit": "kg",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "meat",
+          "priceCents": 1249,
+          "regularPriceCents": 1499,
+          "discountCents": 250,
+          "discountPercent": 17,
+          "salePriceCents": 1249,
+          "comparableUnitPrice": {
+            "per": "100g",
+            "cents": 91.84
+          },
+          "saleEnd": "2026-10-25",
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "save-on-foods:SOF-1005",
+          "chainSlug": "save-on-foods",
+          "chainName": "Save-On-Foods",
+          "parentCompany": "Pattison Food Group",
+          "sku": "SOF-1005",
+          "name": "Boneless Skinless Chicken Breast",
+          "size": "per kg",
+          "sizeAmount": 1,
+          "sizeUnit": "kg",
+          "packCount": 1,
+          "pricedByWeight": true,
+          "category": "meat",
+          "priceCents": 1199,
+          "regularPriceCents": 1499,
+          "discountCents": 300,
+          "discountPercent": 20,
+          "salePriceCents": 1199,
+          "unitPriceCents": 120,
+          "unitLabel": "100g",
+          "comparableUnitPrice": {
+            "per": "100g",
+            "cents": 119.9
+          },
+          "saleEnd": "2026-10-22",
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        },
+        {
+          "id": "save-on-foods:SOF-1006",
+          "chainSlug": "save-on-foods",
+          "chainName": "Save-On-Foods",
+          "parentCompany": "Pattison Food Group",
+          "sku": "SOF-1006",
+          "name": "Lean Ground Beef 454 g",
+          "size": "454 g",
+          "sizeAmount": 454,
+          "sizeUnit": "g",
+          "packCount": 1,
+          "pricedByWeight": false,
+          "category": "meat",
+          "priceCents": 749,
+          "regularPriceCents": 749,
+          "comparableUnitPrice": {
+            "per": "100g",
+            "cents": 164.98
+          },
+          "scrapedAt": "2026-10-17T20:00:00.000Z"
+        }
+      ],
+      "total": 6,
+      "limit": 5,
+      "offset": 0
+    }
+  }
+}

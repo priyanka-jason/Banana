@@ -188,6 +188,32 @@ describe('parseSearchBody', () => {
     });
   });
 
+  describe('sortOrder', () => {
+    it('accepts asc and desc, with or without sortBy', () => {
+      expect(parseSearchBody({ sortBy: 'price', sortOrder: 'desc' })).toEqual({
+        ok: true,
+        value: { sortBy: 'price', sortOrder: 'desc' },
+      });
+      expect(parseSearchBody({ sortOrder: 'asc' })).toEqual({ ok: true, value: { sortOrder: 'asc' } });
+    });
+
+    it('rejects anything else', () => {
+      for (const sortOrder of ['DESC', 'down', '', 1, true, null, ['desc']]) {
+        expect(problems(parseSearchBody({ sortOrder })), JSON.stringify(sortOrder)).toEqual([
+          'sortOrder: must be one of: asc, desc',
+        ]);
+      }
+    });
+
+    it('is reported together with the other problems', () => {
+      expect(problems(parseSearchBody({ sortBy: 'cheapest', sortOrder: 'down', categories: ['meats'] }))).toEqual([
+        'categories: has unknown categories (meats). Known: fruits, vegetables, meat, seafood, dairy-eggs, bakery, frozen, beverages, snacks, pantry, household, other',
+        'sortBy: must be one of: price, unitPrice, name, distance, discount',
+        'sortOrder: must be one of: asc, desc',
+      ]);
+    });
+  });
+
   describe('limit and offset', () => {
     it('accepts the edges', () => {
       expect(parseSearchBody({ limit: 1, offset: 0 }).ok).toBe(true);

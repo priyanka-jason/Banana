@@ -80,6 +80,7 @@ Every field is optional. An empty body searches everything. Unknown fields are *
 | `onSaleOnly` | true or false | Only items where the price you pay is below the original price. Depends on `memberPricing`. |
 | `memberPricing` | `"member"` or `"non-member"` | Which price to work with. Default `"non-member"`. A member also gets the member price. |
 | `sortBy` | see below | Default `"price"`. |
+| `sortOrder` | `"asc"` or `"desc"` | Flips the direction of `sortBy`. Leave it out for the natural direction below. |
 | `limit` | whole number, 1 to 100 | Page size. Default 50. |
 | `offset` | whole number, 0 or more | How many results to skip. Default 0. |
 
@@ -94,7 +95,14 @@ An empty list (`[]`) means "don't filter on this", the same as leaving the field
 - `distance`: nearest first. Only allowed when `near` is given.
 - `discount`: biggest percent off first. This is the "top deals" sort.
 
-Ties are always broken by price, then name, then id, so the order is stable.
+`sortOrder` turns any of these around: `"asc"` is low to high (cheapest, A to Z, nearest, smallest discount first)
+and `"desc"` is high to low. Without it each sort uses its natural direction above, which is `"asc"` for all of them
+except `discount`, where it is `"desc"`. So "most expensive first" is `{ "sortBy": "price", "sortOrder": "desc" }`.
+`sortOrder` without `sortBy` applies to the default `price` sort.
+
+Only the main value flips. Ties are always broken by price (cheapest first), then name (A to Z), then id, in both
+directions, so the order is stable. Items with nothing to sort on stay last in both directions: no unit price for
+`unitPrice`, not on sale for `discount`. Unit price groups (per 100 g, per 100 ml, each) also keep their order.
 
 **Response** (`200`):
 
@@ -106,6 +114,7 @@ Ties are always broken by price, then name, then id, so the order is stable.
 Examples: [bananas](examples/search-bananas.json),
 [members, best value](examples/search-milk-members-best-value.json),
 [top deals](examples/search-top-deals.json),
+[most expensive meat first](examples/search-meat-most-expensive-first.json),
 [second page](examples/search-fruit-and-vegetables-page-2.json),
 [near me](examples/search-near-me.json),
 [picked stores](examples/search-picked-stores.json),

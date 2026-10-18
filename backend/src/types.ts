@@ -166,6 +166,9 @@ export type MemberPricing = 'member' | 'non-member';
 
 export type PriceSort = 'price' | 'unitPrice' | 'name' | 'distance' | 'discount';
 
+/** Which way to sort: 'asc' is low to high (A to Z, nearest first), 'desc' is high to low. */
+export type SortOrder = 'asc' | 'desc';
+
 /** One page of search results. */
 export interface PriceSearchResult {
   rows: PriceRow[];
@@ -203,6 +206,14 @@ export interface PriceFilters {
    * first (needs `near`); 'discount' biggest percent off first (for "top deals").
    */
   sortBy?: PriceSort;
+  /**
+   * Flip the direction of `sortBy`. Leave it out for the natural direction above:
+   * 'asc' for price, unitPrice, name and distance, 'desc' for discount.
+   * So { sortBy: 'price', sortOrder: 'desc' } is most expensive first.
+   * Only the main value flips. Ties are still broken by price (cheapest first), then name
+   * (A to Z), then id, and items with no unit price, distance or discount still come last.
+   */
+  sortOrder?: SortOrder;
   /** Default: 50. Largest allowed: 100. */
   limit?: number;
   offset?: number;

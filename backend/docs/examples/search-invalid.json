@@ -11,6 +11,7 @@
         "radiusKm": 5
       },
       "sortBy": "cheapest",
+      "sortOrder": "down",
       "limit": 500,
       "chains": [
         "walmart"
@@ -22,11 +23,11 @@
     "body": {
       "error": {
         "code": "invalid_request",
-        "message": "The request has 4 problems.",
+        "message": "The request has 5 problems.",
         "details": [
           {
             "field": "chains",
-            "message": "is not a known field (known fields: query, chainSlugs, parentCompanies, locationIds, near, onSaleOnly, memberPricing, categories, sortBy, limit, offset)"
+            "message": "is not a known field (known fields: query, chainSlugs, parentCompanies, locationIds, near, onSaleOnly, memberPricing, categories, sortBy, sortOrder, limit, offset)"
           },
           {
             "field": "near.lat",
@@ -35,6 +36,10 @@
           {
             "field": "sortBy",
             "message": "must be one of: price, unitPrice, name, distance, discount"
+          },
+          {
+            "field": "sortOrder",
+            "message": "must be one of: asc, desc"
           },
           {
             "field": "limit",
