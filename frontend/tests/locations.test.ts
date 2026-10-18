@@ -4,8 +4,10 @@ import { branches, neighbourhoodOrigins } from '../src/data/storeLocations.ts'
 import {
   branchOffers,
   distanceKm,
+  loadSavedOrigin,
   nearbyBranches,
   radiusRing,
+  saveOrigin,
 } from '../src/lib/locations.ts'
 import { getNearbyOffers, readFilters } from '../src/lib/catalogue.ts'
 
@@ -63,4 +65,51 @@ test('catalogue follows the selected branch distance and hides brands without su
       .filter((offer) => offer.storeId === 'unknown-brand')
       .every((offer) => offer.distance === Infinity),
   )
+})
+
+class MockStorage implements Storage {
+  private store = new Map<string, string>()
+  get length() {
+    return this.store.size
+  }
+  clear() {
+    this.store.clear()
+  }
+  getItem(key: string) {
+    return this.store.get(key) ?? null
+  }
+  key(index: number) {
+    return Array.from(this.store.keys())[index] ?? null
+  }
+  removeItem(key: string) {
+    this.store.delete(key)
+  }
+  setItem(key: string, value: string) {
+    this.store.set(key, value)
+  }
+}
+
+test('origin persistence loads, saves, and clears search origin', () => {
+  const mockStorage = new MockStorage()
+  assert.equal(loadSavedOrigin(mockStorage), null)
+
+  const customOrigin = {
+    label: '123 Grandview Hwy, Vancouver, BC',
+    latitude: 49.258,
+    longitude: -123.056,
+  }
+  saveOrigin(customOrigin, mockStorage)
+  assert.deepEqual(loadSavedOrigin(mockStorage), customOrigin)
+
+  saveOrigin(null, mockStorage)
+  assert.equal(loadSavedOrigin(mockStorage), null)
+})
+
+test('loadSavedOrigin handles invalid JSON or corrupted data gracefully', () => {
+  const mockStorage = new MockStorage()
+  mockStorage.setItem('banana_search_origin', 'invalid json')
+  assert.equal(loadSavedOrigin(mockStorage), null)
+
+  mockStorage.setItem('banana_search_origin', JSON.stringify({ label: 123 }))
+  assert.equal(loadSavedOrigin(mockStorage), null)
 })

@@ -6,6 +6,7 @@ import { SearchPage } from './features/SearchPage'
 import { LocationsPage } from './features/LocationsPage'
 import type { SearchOrigin } from './data/storeLocations'
 import { readFilters } from './lib/catalogue'
+import { loadSavedOrigin, saveOrigin } from './lib/locations'
 import { useRoute } from './lib/navigation'
 import type { NearbyOffer } from './types'
 import { BackendReadiness } from './components/BackendReadiness'
@@ -23,7 +24,14 @@ function App() {
     categories: catalogue.data?.offers.map((offer) => offer.category) ?? [],
   })
   const [selected, setSelected] = useState<NearbyOffer | null>(null)
-  const [origin, setOrigin] = useState<SearchOrigin | null>(null)
+  const [origin, setOriginState] = useState<SearchOrigin | null>(
+    loadSavedOrigin,
+  )
+
+  const setOrigin = (nextOrigin: SearchOrigin | null) => {
+    setOriginState(nextOrigin)
+    saveOrigin(nextOrigin)
+  }
   useEffect(() => {
     document.title = `${page === 'home' ? 'Nearby grocery deals' : page === 'locations' ? 'Grocery store locations' : 'Search groceries'} | Banana`
     window.scrollTo({ top: 0, behavior: 'instant' })

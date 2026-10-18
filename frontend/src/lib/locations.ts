@@ -41,6 +41,58 @@ export function nearbyBranches(
 
 export type NearbyBranch = ReturnType<typeof nearbyBranches>[number]
 
+export const LOCATION_STORAGE_KEY = 'banana_search_origin'
+
+export function loadSavedOrigin(
+  storage: Storage = typeof localStorage !== 'undefined'
+    ? localStorage
+    : ({} as Storage),
+): SearchOrigin | null {
+  try {
+    const raw = storage.getItem(LOCATION_STORAGE_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw) as unknown
+    if (
+      typeof parsed === 'object' &&
+      parsed !== null &&
+      'label' in parsed &&
+      'latitude' in parsed &&
+      'longitude' in parsed &&
+      typeof parsed.label === 'string' &&
+      typeof parsed.latitude === 'number' &&
+      typeof parsed.longitude === 'number' &&
+      !Number.isNaN(parsed.latitude) &&
+      !Number.isNaN(parsed.longitude)
+    ) {
+      return {
+        label: parsed.label,
+        latitude: parsed.latitude,
+        longitude: parsed.longitude,
+      }
+    }
+  } catch {
+    // Ignore storage read errors
+  }
+  return null
+}
+
+export function saveOrigin(
+  origin: SearchOrigin | null,
+  storage: Storage = typeof localStorage !== 'undefined'
+    ? localStorage
+    : ({} as Storage),
+) {
+  try {
+    if (origin) {
+      storage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(origin))
+    } else {
+      storage.removeItem(LOCATION_STORAGE_KEY)
+    }
+  } catch {
+    // Ignore storage write errors
+  }
+}
+
 export function branchOffers(branch: NearbyBranch): NearbyOffer[] {
   return offers
     .filter((offer) => offer.storeId === branch.brandId)
