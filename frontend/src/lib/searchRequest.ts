@@ -35,12 +35,13 @@ export function roundedPoint(point: Point): Point {
   }
 }
 
-// 'recommended' has no ranking of its own yet, so it shows the cheapest first.
+// 'recommended' (shown as "Featured") puts current deals first, biggest discount
+// first, then everything else cheapest first.
 const SORTS: Record<
   SortOrder,
   Pick<SearchOffersBody, 'p_sort_by' | 'p_sort_order'>
 > = {
-  recommended: { p_sort_by: 'price', p_sort_order: null },
+  recommended: { p_sort_by: 'discount', p_sort_order: null },
   price: { p_sort_by: 'price', p_sort_order: null },
   'price-desc': { p_sort_by: 'price', p_sort_order: 'desc' },
   distance: { p_sort_by: 'distance', p_sort_order: null },
