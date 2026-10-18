@@ -105,3 +105,9 @@ button:disabled {
     font-size: max(16px, 1em) !important;
   }
 }
+
+/* Installed app only (src/lib/appZoom.ts): scrolling still works, but pinch and
+   double-tap no longer zoom the page. */
+html.installed-app {
+  touch-action: pan-x pan-y;
+}

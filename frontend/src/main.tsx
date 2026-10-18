@@ -4,6 +4,13 @@ import './index.css'
 import App from './App.tsx'
 import { CatalogueProvider } from './data/CatalogueContext'
 import { AuthProvider } from './data/AuthContext'
+import { lockAppZoom } from './lib/appZoom'
+
+// Safari's navigator.standalone isn't in the standard types.
+lockAppZoom(
+  document,
+  window as Window & { navigator: Navigator & { standalone?: boolean } },
+)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
