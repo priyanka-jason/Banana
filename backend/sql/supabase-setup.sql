@@ -27,6 +27,10 @@ begin;
 create extension if not exists postgis with schema extensions;   -- map locations and radius search
 create extension if not exists pg_trgm with schema extensions;   -- fast "name contains this text" search
 
+-- Supabase already lets its roles use the add-ons; saying it again is harmless and
+-- makes this file work on a plain Postgres too.
+grant usage on schema extensions to anon, authenticated, service_role;
+
 
 -- ===========================================================================
 -- LAYER 1: PER-STORE (schema "raw")
@@ -47,10 +51,33 @@ create table raw.save_on_foods (
   original   jsonb check (original is null or jsonb_typeof(original) = 'object')
 );
 
-create table raw.walmart (like raw.save_on_foods including all);
-create table raw.costco (like raw.save_on_foods including all);
-create table raw.no_frills (like raw.save_on_foods including all);
-create table raw.real_canadian_superstore (like raw.save_on_foods including all);
+create table raw.walmart (
+  sku        text primary key,
+  scraped_at timestamptz not null,
+  payload    jsonb not null check (jsonb_typeof(payload) = 'object'),
+  original   jsonb check (original is null or jsonb_typeof(original) = 'object')
+);
+
+create table raw.costco (
+  sku        text primary key,
+  scraped_at timestamptz not null,
+  payload    jsonb not null check (jsonb_typeof(payload) = 'object'),
+  original   jsonb check (original is null or jsonb_typeof(original) = 'object')
+);
+
+create table raw.no_frills (
+  sku        text primary key,
+  scraped_at timestamptz not null,
+  payload    jsonb not null check (jsonb_typeof(payload) = 'object'),
+  original   jsonb check (original is null or jsonb_typeof(original) = 'object')
+);
+
+create table raw.real_canadian_superstore (
+  sku        text primary key,
+  scraped_at timestamptz not null,
+  payload    jsonb not null check (jsonb_typeof(payload) = 'object'),
+  original   jsonb check (original is null or jsonb_typeof(original) = 'object')
+);
 
 -- Private: row level security with no policies keeps the website's keys out, and
 -- taking away privileges is a second lock. Only the backend (service role key, or
