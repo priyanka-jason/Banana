@@ -86,30 +86,36 @@
   text-align: right;
   color: var(--muted);
 }
-.address-feedback {
-  font-size: 14px;
+/* The address box and its dropdown: the dropdown hangs just below the box at
+   the box's own width, whatever the window size. */
+.location-address-field {
   position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
 }
-.address-feedback:empty {
-  display: none;
-}
-.address-feedback > p {
-  margin: 0;
-  padding-bottom: 16px;
-}
-.address-matches {
+.address-dropdown {
   position: absolute;
-  left: 48px;
-  right: 48px;
-  top: 18px;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
   z-index: 15;
-  margin: 0;
-  list-style: none;
   padding: 8px;
+  font-size: 14px;
   background: white;
   box-shadow: 0 8px 28px #17251b20;
   border: 1px solid var(--line);
   border-radius: 12px;
+}
+.address-dropdown > p {
+  margin: 0;
+  padding: 6px 8px;
+  color: var(--muted);
+}
+.address-matches {
+  margin: 0;
+  list-style: none;
+  padding: 0;
 }
 .address-matches button {
   width: 100%;
@@ -547,7 +553,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
-  .location-address-form {
+  .location-address-field {
     grid-column: 1 / -1;
   }
   .location-address-form input {
@@ -568,12 +574,8 @@
     text-align: left;
     line-height: 1.5;
   }
-  .address-feedback > p {
+  .address-dropdown > p {
     font-size: 13px;
-  }
-  .address-matches {
-    left: 20px;
-    right: 20px;
   }
   .locations-mobile-tabs {
     display: flex;

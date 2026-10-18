@@ -314,43 +314,67 @@ export function LocationsPage({
           </div>
           <div className="locations-controls">
             <div className="location-search-row">
-              <form
-                className="location-address-form"
-                onSubmit={(event) => {
-                  event.preventDefault()
-                  void findAddress()
-                }}
-                role="search"
-                aria-label="Find an address"
-              >
-                <label className="sr-only" htmlFor="address-search">
-                  Search an address in Metro Vancouver
-                </label>
-                <input
-                  ref={input}
-                  id="address-search"
-                  value={query}
-                  onChange={(event) => {
-                    controller.current?.abort()
-                    requestId.current++
-                    setSearching(false)
-                    setMatches([])
-                    setMessage('')
-                    setQuery(event.target.value)
+              <div className="location-address-field">
+                <form
+                  className="location-address-form"
+                  onSubmit={(event) => {
+                    event.preventDefault()
+                    void findAddress()
                   }}
-                  placeholder="Search a Metro Vancouver address"
-                  autoComplete="off"
-                  maxLength={200}
-                  disabled={locating}
-                />
-                <button
-                  type="submit"
-                  aria-label="Search address"
-                  disabled={searching || locating}
+                  role="search"
+                  aria-label="Find an address"
                 >
-                  <MagnifyingGlassIcon size={23} aria-hidden="true" />
-                </button>
-              </form>
+                  <label className="sr-only" htmlFor="address-search">
+                    Search an address in Metro Vancouver
+                  </label>
+                  <input
+                    ref={input}
+                    id="address-search"
+                    value={query}
+                    onChange={(event) => {
+                      controller.current?.abort()
+                      requestId.current++
+                      setSearching(false)
+                      setMatches([])
+                      setMessage('')
+                      setQuery(event.target.value)
+                    }}
+                    placeholder="Search a Metro Vancouver address"
+                    autoComplete="off"
+                    maxLength={200}
+                    disabled={locating}
+                  />
+                  <button
+                    type="submit"
+                    aria-label="Search address"
+                    disabled={searching || locating}
+                  >
+                    <MagnifyingGlassIcon size={23} aria-hidden="true" />
+                  </button>
+                </form>
+                {/* Drops down from the address box, at its width. */}
+                {(searching || message || matches.length > 0) && (
+                  <div className="address-dropdown">
+                    {searching && <p role="status">Searching addresses…</p>}
+                    {message && <p role="status">{message}</p>}
+                    {matches.length > 0 && (
+                      <ul
+                        className="address-matches"
+                        aria-label="Address search results"
+                      >
+                        {matches.map((match, index) => (
+                          <li key={`${match.label}-${index}`}>
+                            <button onClick={() => chooseAddress(match)}>
+                              <MapPinIcon size={19} aria-hidden="true" />
+                              <span>{match.label}</span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
+              </div>
               <button
                 className="locate-button"
                 onClick={locate}
@@ -370,22 +394,6 @@ export function LocationsPage({
               Approximate straight-line radius · Showing stores with item data
             </p>
           </div>
-        </div>
-        <div className="shell address-feedback">
-          {searching && <p role="status">Searching addresses…</p>}
-          {message && <p role="status">{message}</p>}
-          {matches.length > 0 && (
-            <ul className="address-matches" aria-label="Address search results">
-              {matches.map((match, index) => (
-                <li key={`${match.label}-${index}`}>
-                  <button onClick={() => chooseAddress(match)}>
-                    <MapPinIcon size={19} aria-hidden="true" />
-                    <span>{match.label}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
       </section>
       <div className="locations-mobile-tabs" aria-label="Locations view">
