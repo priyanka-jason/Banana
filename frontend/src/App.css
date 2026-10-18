@@ -1037,15 +1037,20 @@ dialog::backdrop {
     height: calc(65px + env(safe-area-inset-bottom));
     padding-bottom: env(safe-area-inset-bottom);
   }
-  .mobile-nav a {
+  /* Five equal tabs; the Sign in tab is a button, so it gets the same box. */
+  .mobile-nav a,
+  .mobile-nav .mobile-account-btn {
     display: flex;
     gap: 3px;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     position: relative;
-    width: 46%;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0;
     font-size: 11px;
+    white-space: nowrap;
     color: var(--muted);
   }
   .mobile-nav a[aria-current] {
@@ -1055,7 +1060,7 @@ dialog::backdrop {
     content: '';
     height: 3px;
     background: var(--yellow);
-    width: 76px;
+    width: min(76px, 90%);
     position: absolute;
     bottom: 0;
   }
@@ -1640,6 +1645,14 @@ dialog::backdrop {
   padding: 24px 0;
 }
 @media (max-width: 700px) {
+  /* Phones: just the basket icon and the count. The button's aria-label still says "My basket". */
+  .list-launcher {
+    padding: 10px 14px;
+    gap: 6px;
+  }
+  .list-label {
+    display: none;
+  }
   .list-launcher {
     right: 12px;
     bottom: calc(77px + env(safe-area-inset-bottom));
