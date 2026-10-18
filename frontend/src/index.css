@@ -92,3 +92,16 @@ button:disabled {
     transition: none !important;
   }
 }
+
+/* iPhones and iPads zoom the page in when you tap a text box whose text is smaller
+   than 16px, and the installed app then stays zoomed (cut off at the right and
+   bottom). So on phones and touch screens every text box, dropdown and password
+   field is at least 16px. !important because component styles set smaller sizes
+   with more specific selectors. */
+@media (max-width: 700px), (pointer: coarse) {
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1em) !important;
+  }
+}
