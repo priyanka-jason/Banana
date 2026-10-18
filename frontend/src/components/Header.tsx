@@ -85,10 +85,10 @@ export function Header({ page, params }: Props) {
             Locations
           </a>
           <a
-            href={pageHref('membership', params)}
-            aria-current={page === 'membership' ? 'page' : undefined}
+            href={pageHref('plans', params)}
+            aria-current={page === 'plans' ? 'page' : undefined}
           >
-            Membership
+            Plans
           </a>
         </nav>
 
@@ -226,15 +226,15 @@ export function MobileNav({
         <span>Locations</span>
       </a>
       <a
-        href={pageHref('membership', params)}
-        aria-current={page === 'membership' ? 'page' : undefined}
+        href={pageHref('plans', params)}
+        aria-current={page === 'plans' ? 'page' : undefined}
       >
         <CrownSimpleIcon
           size={25}
-          weight={page === 'membership' ? 'fill' : 'regular'}
+          weight={page === 'plans' ? 'fill' : 'regular'}
           aria-hidden="true"
         />
-        <span>Membership</span>
+        <span>Plans</span>
       </a>
       <button
         type="button"

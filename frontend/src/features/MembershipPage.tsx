@@ -90,7 +90,7 @@ function PlanCard({ plan }: { plan: Plan }) {
 export function MembershipPage() {
   return (
     <main id="main-content" tabIndex={-1} className="shell membership-page">
-      <h1 className="page-title">Membership</h1>
+      <h1 className="page-title">Plans</h1>
       <p className="membership-intro">
         Banana is free to use. Premium gets you fresher prices, so you catch
         every sale the day it starts.

@@ -64,7 +64,7 @@ function App() {
   }
 
   useEffect(() => {
-    document.title = `${page === 'home' ? 'Nearby grocery deals' : page === 'locations' ? 'Grocery store locations' : page === 'membership' ? 'Membership' : 'Search groceries'} | Banana`
+    document.title = `${page === 'home' ? 'Nearby grocery deals' : page === 'locations' ? 'Grocery store locations' : page === 'plans' ? 'Plans' : 'Search groceries'} | Banana`
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [page])
   return (
@@ -81,7 +81,7 @@ function App() {
       </a>
       <Header page={page} params={params} />
       <BackendReadiness />
-      {page === 'membership' ? (
+      {page === 'plans' ? (
         <MembershipPage />
       ) : catalogue.loading || catalogue.error ? (
         <main
