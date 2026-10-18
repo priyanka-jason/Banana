@@ -10,6 +10,7 @@ import { loadSavedOrigin, saveOrigin } from './lib/locations'
 import { useRoute } from './lib/navigation'
 import type { NearbyOffer } from './types'
 import { BackendReadiness } from './components/BackendReadiness'
+import { ListLauncher } from './components/ShoppingList'
 import './App.css'
 import { useCatalogue } from './data/catalogueState'
 
@@ -100,6 +101,7 @@ function App() {
           origin={origin}
         />
       )}
+      <ListLauncher />
       <MobileNav page={page} params={params} />
       {selected ? (
         <OfferDialog offer={selected} onClose={() => setSelected(null)} />
