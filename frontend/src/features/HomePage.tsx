@@ -67,7 +67,6 @@ export function HomePage({
               />
             </div>
           </div>
-          <Freshness />
         </div>
       </section>
       <section className="shell deals-section" aria-labelledby="nearby-heading">
@@ -97,6 +96,9 @@ export function HomePage({
           </div>
         )}
       </section>
+      <footer className="shell page-data-note">
+        <Freshness />
+      </footer>
     </main>
   )
 }

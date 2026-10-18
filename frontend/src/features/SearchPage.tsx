@@ -199,7 +199,6 @@ export function SearchPage({
             </button>
           ) : null}
         </p>
-        <Freshness />
       </div>
       {items.length ? (
         <>
@@ -248,6 +247,9 @@ export function SearchPage({
           }}
         />
       ) : null}
+      <footer className="page-data-note">
+        <Freshness />
+      </footer>
     </main>
   )
 }
