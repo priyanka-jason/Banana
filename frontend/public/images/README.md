@@ -1,9 +1,8 @@
 # UI assets
 
-The four grocery images were created with built-in image generation using the
-approved Home mockup as the reference. WebP files preserve transparency and
-are sized for the product slots. Original PNGs are retained in
-`frontend/design/product-assets/`.
+Product pictures (`products/` and the four sample images `avocados.webp`, `eggs-v2.webp`,
+`gala-apples.webp`, `milk.webp`) are built from Microsoft's Fluent Emoji icons (MIT); see
+`CREDITS.md`. `eggs.webp` is not used.
 
 Store identities use existing logo assets rather than code-drawn substitutes:
 

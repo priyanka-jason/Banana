@@ -1,0 +1,11 @@
+{
+  "name": "banana-product-icons",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs ../../src/data/productImages.ts"
+  },
+  "devDependencies": {
+    "sharp": "0.35.5"
+  }
+}
