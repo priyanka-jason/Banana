@@ -21,7 +21,11 @@ export function inMetroVancouver(longitude: number, latitude: number) {
   )
 }
 
-export function addressSearchUrl(query: string): URL {
+/** Neighbours just east of Metro Vancouver that the box clips. */
+const outsideMetro = new Set(['Abbotsford', 'Mission'])
+
+/** partial: the visitor is still typing, so let the geocoder complete the last word. */
+export function addressSearchUrl(query: string, partial = false): URL {
   const url = new URL('https://geocoder.api.gov.bc.ca/addresses.geojson')
   url.search = new URLSearchParams({
     addressString: /\bB\.?C\.?\b|british columbia/i.test(query)
@@ -30,7 +34,7 @@ export function addressSearchUrl(query: string): URL {
     maxResults: '5',
     outputSRS: '4326',
     minScore: '70',
-    autoComplete: 'false',
+    autoComplete: partial ? 'true' : 'false',
     bbox: [
       metroVancouver.west,
       metroVancouver.south,
@@ -44,7 +48,7 @@ export function addressSearchUrl(query: string): URL {
 interface GeocoderResponse {
   features?: {
     geometry?: { coordinates?: number[] }
-    properties?: { fullAddress?: string }
+    properties?: { fullAddress?: string; localityName?: string }
   }[]
 }
 
@@ -56,7 +60,8 @@ export function metroAddresses(data: GeocoderResponse): SearchOrigin[] {
       !label ||
       !Number.isFinite(longitude) ||
       !Number.isFinite(latitude) ||
-      !inMetroVancouver(longitude, latitude)
+      !inMetroVancouver(longitude, latitude) ||
+      outsideMetro.has(feature.properties?.localityName ?? '')
     )
       return []
     return [{ label, longitude, latitude }]
@@ -66,8 +71,9 @@ export function metroAddresses(data: GeocoderResponse): SearchOrigin[] {
 export async function searchAddresses(
   query: string,
   signal: AbortSignal,
+  partial = false,
 ): Promise<SearchOrigin[]> {
-  const response = await fetch(addressSearchUrl(query), {
+  const response = await fetch(addressSearchUrl(query, partial), {
     signal,
     credentials: 'omit',
     referrerPolicy: 'no-referrer',

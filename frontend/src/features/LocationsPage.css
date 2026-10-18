@@ -41,6 +41,15 @@
   border-radius: 12px 0 0 12px;
   font-size: 16px;
 }
+/* Focus shows on the whole box, like the home page search, instead of a thick
+   outline around the text field alone. */
+.location-address-form:focus-within {
+  border-color: #af9235;
+  box-shadow: 0 0 0 2px #ffdc5935;
+}
+.location-address-form input:focus-visible {
+  outline: none;
+}
 .location-address-form input::placeholder {
   color: #7c8491;
   opacity: 1;

@@ -64,3 +64,39 @@ test('ignores results without a label or coordinates', () => {
   assert.equal(inMetroVancouver(-123.1, 49.25), true)
   assert.equal(inMetroVancouver(-121.3, 49.38), false)
 })
+
+test('typing asks the geocoder to complete the last word; Enter does not', () => {
+  assert.equal(
+    addressSearchUrl('3511 granv', true).searchParams.get('autoComplete'),
+    'true',
+  )
+  assert.equal(
+    addressSearchUrl('3511 granville ave').searchParams.get('autoComplete'),
+    'false',
+  )
+})
+
+test('drops Abbotsford and Mission, which the Metro box clips on its east edge', () => {
+  const results = metroAddresses({
+    features: [
+      {
+        geometry: { coordinates: [-122.33, 49.06] },
+        properties: {
+          fullAddress: '4700 Kingfisher Dr, Abbotsford, BC',
+          localityName: 'Abbotsford',
+        },
+      },
+      {
+        geometry: { coordinates: [-122.8456, 49.1213] },
+        properties: {
+          fullAddress: '4700 King George Blvd, Surrey, BC',
+          localityName: 'Surrey',
+        },
+      },
+    ],
+  })
+  assert.deepEqual(
+    results.map((result) => result.label),
+    ['4700 King George Blvd, Surrey, BC'],
+  )
+})
