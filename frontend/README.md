@@ -81,14 +81,14 @@ MapLibre and OpenFreeMap provide map rendering and tiles without a billing
 account or API key. The BC geocoder's public endpoint was verified without a key
 and with CORS on October 17, 2026; its access policy can change. Search runs only
 on explicit submission, with cancellation and a timeout. The address is sent to
-BC Address Geocoder, but Banana keeps the chosen point only in page memory; it
-is not persisted or included in share URLs. Browser geolocation coordinates are
+BC Address Geocoder, and Banana saves the chosen point in browser storage (`localStorage`) so it
+persists across page reloads. Browser geolocation coordinates are
 not sent to the geocoder. The map requests geographic tiles from OpenFreeMap.
 
 Store records are loaded from Supabase through its radius RPC. Only branches of brands
 with usable item prices are shown; same-brand branches share chain-wide offers. This
 does not establish live inventory at an individual branch. Home and Search use distances
-to these branch coordinates. A full reload resets the temporary visitor origin.
+to these branch coordinates. A full reload retains the saved visitor origin.
 
 - `src/api/addressSearch.ts`: replaceable public address-search client.
 - `src/data/storeLocations.ts`: default neighbourhood centers, types and legacy test fixtures.
