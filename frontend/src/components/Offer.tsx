@@ -3,10 +3,11 @@ import { CaretRightIcon } from '@phosphor-icons/react/dist/csr/CaretRight'
 import { currency, isDiscounted } from '../lib/catalogue'
 import { ProductImage, StoreLogo } from './ProductImage'
 import type { NearbyOffer } from '../types'
+import { showBackendGaps } from '../lib/devFlags'
 import { AddToListButton } from './ShoppingList'
 
 export function MissingOfferData({ offer }: { offer: NearbyOffer }) {
-  if (!offer.missingFields?.length) return null
+  if (!showBackendGaps || !offer.missingFields?.length) return null
   return (
     <small className="missing-backend">
       Missing backend: {offer.missingFields.join(' · ')}
