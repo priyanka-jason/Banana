@@ -123,6 +123,27 @@ describe('simulated data through the pipeline', () => {
     expect(result.savedItems).toBeLessThanOrEqual(500);
   });
 
+  it('covers Save-On-Foods, Walmart and Costco only', async () => {
+    const { result } = await ingest();
+    expect(result.chains.map((chain) => chain.slug)).toEqual(['save-on-foods', 'walmart', 'costco']);
+  });
+
+  it('has one price per chain: every store of a chain shows the same prices', async () => {
+    const { final } = await ingest();
+    expect((await final.listItems()).every((item) => item.locationId === undefined)).toBe(true);
+
+    const repo = await loadSimulated();
+    for (const profile of SIMULATED_CHAINS) {
+      const stores = simulatedLocationsFor(profile);
+      expect(stores.length).toBeGreaterThan(1);
+      const pricesAt = async (storeId: string) =>
+        (await repo.searchPrices({ locationIds: [storeId], limit: 100 })).rows.map((row) => [row.id, row.priceCents]);
+      const first = await pricesAt(stores[0]!.id);
+      expect(first.length).toBeGreaterThan(0);
+      for (const store of stores.slice(1)) expect(await pricesAt(store.id), store.id).toEqual(first);
+    }
+  });
+
   it('can be searched by category and sorted', async () => {
     const repo = await loadSimulated();
     const meat = await repo.searchPrices({ categories: ['meat'], limit: 100 });

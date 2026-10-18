@@ -8,8 +8,9 @@ import { AREAS, SIMULATED_CHAINS, type SimulatedChainProfile } from './chains';
 import { between, chance } from './random';
 
 /**
- * SIMULATED data for the hackathon demo: made-up prices for the main Lower
- * Mainland grocery chains, built from catalog.ts and chains.ts.
+ * SIMULATED data for the hackathon demo: made-up prices for Save-On-Foods,
+ * Walmart and Costco, built from catalog.ts and chains.ts. One price per item
+ * per chain, the same at every store in the Lower Mainland.
  *
  * It is the same every run (no real randomness), so item ids and tests are stable.
  * It goes through the same pipeline as real data would: connector, per-store
@@ -60,7 +61,6 @@ function carries(profile: SimulatedChainProfile, product: CatalogProduct): boole
   const isCostco = profile.chain.slug === 'costco';
   if (isCostco && product.costco === undefined) return false;
   if (STAPLES.has(product.key)) return true;
-  if (product.specialty === true && profile.chain.slug === 't-and-t') return true;
 
   const share = product.specialty === true ? profile.carries * 0.4 : profile.carries;
   return chance(profile.chain.slug, product.key, 'carries') < share;

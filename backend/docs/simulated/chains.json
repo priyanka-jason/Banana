@@ -7,40 +7,10 @@
       "hasMemberPricing": false
     },
     {
-      "slug": "freshco",
-      "name": "FreshCo",
-      "parentCompany": "Sobeys (Empire Company)",
-      "hasMemberPricing": false
-    },
-    {
-      "slug": "no-frills",
-      "name": "No Frills",
-      "parentCompany": "Loblaw Companies",
-      "hasMemberPricing": false
-    },
-    {
-      "slug": "real-canadian-superstore",
-      "name": "Real Canadian Superstore",
-      "parentCompany": "Loblaw Companies",
-      "hasMemberPricing": false
-    },
-    {
-      "slug": "safeway",
-      "name": "Safeway",
-      "parentCompany": "Sobeys (Empire Company)",
-      "hasMemberPricing": true
-    },
-    {
       "slug": "save-on-foods",
       "name": "Save-On-Foods",
       "parentCompany": "Pattison Food Group",
       "hasMemberPricing": true
-    },
-    {
-      "slug": "t-and-t",
-      "name": "T&T Supermarket",
-      "parentCompany": "Loblaw Companies",
-      "hasMemberPricing": false
     },
     {
       "slug": "walmart",

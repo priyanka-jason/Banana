@@ -7,9 +7,12 @@ import type { Chain } from '../types';
 /**
  * SIMULATED store chains for the hackathon demo.
  *
- * The chain names are the real grocery chains in the Lower Mainland, but every
- * price, sale and store spot here is made up. Store spots are rough
+ * The three chains this part of the backend covers. The chain names are real,
+ * but every price, sale and store spot here is made up. Store spots are rough
  * neighbourhood centres, not real store addresses.
+ *
+ * Prices are chain-wide: every store of a chain charges the same price
+ * anywhere in the Lower Mainland, so items carry no store id.
  */
 
 /** Rough centres of Lower Mainland neighbourhoods. Not store addresses. */
@@ -73,9 +76,6 @@ export interface SimulatedChainProfile {
   departments: Departments;
 }
 
-const loblaw = 'Loblaw Companies';
-const sobeys = 'Sobeys (Empire Company)';
-
 export const SIMULATED_CHAINS: SimulatedChainProfile[] = [
   {
     chain: saveOnFoodsChain,
@@ -123,84 +123,6 @@ export const SIMULATED_CHAINS: SimulatedChainProfile[] = [
       fruits: 'Fresh Produce', vegetables: 'Fresh Produce', meat: 'Meat & Seafood', seafood: 'Meat & Seafood',
       'dairy-eggs': 'Deli & Dairy', bakery: 'Bakery', frozen: 'Frozen', beverages: 'Beverages', snacks: 'Snacks',
       pantry: 'Pantry & Dry Goods', household: 'Household',
-    },
-  },
-  {
-    chain: { slug: 'real-canadian-superstore', name: 'Real Canadian Superstore', parentCompany: loblaw, hasMemberPricing: false },
-    code: 'rcss',
-    areas: ['grandview', 'marpole', 'edmonds', 'richmond-centre', 'port-coquitlam', 'guildford', 'newton', 'maple-ridge'],
-    priceLevel: 0.96,
-    endings: [98, 48, 28],
-    weightUnit: 'kg',
-    carries: 0.85,
-    onSale: 0.2,
-    memberDeals: 0,
-    departments: {
-      fruits: 'Fruits & Vegetables', vegetables: 'Fruits & Vegetables', meat: 'Meat', seafood: 'Fish & Seafood',
-      'dairy-eggs': 'Dairy & Eggs', bakery: 'Bakery', frozen: 'Frozen', beverages: 'Drinks', snacks: 'Snacks, Chips & Candy',
-      pantry: 'Pantry', household: 'Cleaning, Laundry & Paper',
-    },
-  },
-  {
-    chain: { slug: 'no-frills', name: 'No Frills', parentCompany: loblaw, hasMemberPricing: false },
-    code: 'nf',
-    areas: ['mount-pleasant', 'hastings-sunrise', 'collingwood', 'edmonds', 'new-westminster', 'north-delta', 'surrey-central'],
-    priceLevel: 0.91,
-    endings: [99, 49, 29],
-    weightUnit: 'kg',
-    carries: 0.7,
-    onSale: 0.15,
-    memberDeals: 0,
-    departments: {
-      fruits: 'Fruits & Vegetables', vegetables: 'Fruits & Vegetables', meat: 'Meat', seafood: 'Fish & Seafood',
-      'dairy-eggs': 'Dairy & Eggs', bakery: 'Bakery', frozen: 'Frozen', beverages: 'Drinks', snacks: 'Snacks, Chips & Candy',
-      pantry: 'Pantry', household: 'Cleaning, Laundry & Paper',
-    },
-  },
-  {
-    chain: { slug: 'safeway', name: 'Safeway', parentCompany: sobeys, hasMemberPricing: true },
-    code: 'sw',
-    areas: ['downtown-vancouver', 'mount-pleasant', 'kitsilano', 'kerrisdale', 'lonsdale', 'lynn-valley', 'brentwood', 'ladner', 'south-surrey'],
-    priceLevel: 1.09,
-    endings: [99, 49, 29, 79],
-    weightUnit: 'lb',
-    carries: 0.85,
-    onSale: 0.3,
-    memberDeals: 0.15,
-    departments: {
-      fruits: 'Fruits & Vegetables', vegetables: 'Fruits & Vegetables', meat: 'Meat & Seafood', seafood: 'Meat & Seafood',
-      'dairy-eggs': 'Dairy, Eggs & Cheese', bakery: 'Bread & Bakery', frozen: 'Frozen Foods', beverages: 'Beverages',
-      snacks: 'Snacks & Chips', pantry: 'Pantry Essentials', household: 'Cleaning & Household',
-    },
-  },
-  {
-    chain: { slug: 't-and-t', name: 'T&T Supermarket', parentCompany: loblaw, hasMemberPricing: false },
-    code: 'tt',
-    areas: ['downtown-vancouver', 'oakridge', 'metrotown', 'lougheed', 'aberdeen', 'coquitlam', 'guildford'],
-    priceLevel: 1.0,
-    endings: [98, 88, 68, 38],
-    weightUnit: 'lb',
-    carries: 0.6,
-    onSale: 0.25,
-    memberDeals: 0,
-    departments: {
-      fruits: 'Fruits', vegetables: 'Vegetables', meat: 'Meat', seafood: 'Seafood', 'dairy-eggs': 'Dairy & Eggs',
-      bakery: 'Bakery', frozen: 'Frozen', beverages: 'Drinks', snacks: 'Snacks', pantry: 'Grocery', household: 'Household',
-    },
-  },
-  {
-    chain: { slug: 'freshco', name: 'FreshCo', parentCompany: sobeys, hasMemberPricing: false },
-    code: 'fc',
-    areas: ['hastings-sunrise', 'collingwood', 'new-westminster', 'newton', 'north-delta', 'port-coquitlam', 'maple-ridge'],
-    priceLevel: 0.92,
-    endings: [99, 49, 77],
-    weightUnit: 'lb',
-    carries: 0.6,
-    onSale: 0.15,
-    memberDeals: 0,
-    departments: {
-      fruits: 'Produce', vegetables: 'Produce', meat: 'Meat', seafood: 'Seafood', 'dairy-eggs': 'Dairy',
-      bakery: 'Bakery', frozen: 'Frozen', beverages: 'Beverages', snacks: 'Snacks', pantry: 'Grocery', household: 'Household',
     },
   },
 ];

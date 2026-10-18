@@ -18,12 +18,13 @@ npm --prefix backend run examples
 
 ## Simulated Lower Mainland data (bigger mock set)
 
-[`docs/simulated/`](simulated/) holds a larger **made-up** data set for the demo: 8 chains (Save-On-Foods, Walmart,
-Costco, Real Canadian Superstore, No Frills, Safeway, T&T Supermarket, FreshCo), 60 stores across Metro Vancouver and
-433 items. Prices, sales and store spots are invented; store spots are rough neighbourhood centres, not real
-addresses. Each file is the body an endpoint would send: `chains.json`, `categories.json`, `stores.json`, and
-`prices.json` (every `PriceRow`, sorted by name). Regenerate with `npm --prefix backend run simulate`, or load it
-through the pipeline with `npm --prefix backend run ingest -- --simulated`.
+[`docs/simulated/`](simulated/) holds a larger **made-up** data set for the demo: Save-On-Foods, Walmart and Costco,
+with 22 stores across Metro Vancouver. Prices, sales and store spots are invented; store spots are rough
+neighbourhood centres, not real addresses. **Prices are chain-wide:** an item costs the same at every store of a
+chain in the Lower Mainland, so rows have no `locationId`. Each file is the body an endpoint would send:
+`chains.json`, `categories.json`, `stores.json`, and `prices.json` (every `PriceRow`, sorted by name). Regenerate with
+`npm --prefix backend run simulate`, or load it through the pipeline with
+`npm --prefix backend run ingest -- --simulated`.
 
 ## Ground rules
 

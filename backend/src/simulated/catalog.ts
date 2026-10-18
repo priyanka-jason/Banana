@@ -21,7 +21,7 @@ export interface CatalogProduct {
   cents: number;
   /** Costco sells a bigger pack instead: its size and typical price. Without this, Costco doesn't carry it. */
   costco?: { size: string; cents: number };
-  /** Mostly carried by T&T; other stores carry it less often. */
+  /** A speciality item (e.g. Asian vegetables): stores carry it less often. */
   specialty?: boolean;
 }
 
