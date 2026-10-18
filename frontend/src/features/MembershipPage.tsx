@@ -103,13 +103,13 @@ export function MembershipPage() {
       <section className="food-bank-note" aria-labelledby="food-bank-heading">
         <HandHeartIcon size={32} aria-hidden="true" />
         <div>
-          <h2 id="food-bank-heading">
-            {Math.round(FOOD_BANK_SHARE * 100)}% to food banks
-          </h2>
+          <h2 id="food-bank-heading">Your subscription helps feed others</h2>
           <p>
-            We donate {Math.round(FOOD_BANK_SHARE * 100)}% of every Premium
-            subscription payment to local food banks, so cheaper groceries help
-            more than one household.
+            {Math.round(FOOD_BANK_SHARE * 100)}% of every Premium payment goes
+            straight to local food banks. The other{' '}
+            {Math.round((1 - FOOD_BANK_SHARE) * 100)}% keeps Banana running:
+            price data, hosting and payment fees. Whatever is left over after
+            those costs is donated to food banks too.
           </p>
         </div>
       </section>
