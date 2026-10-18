@@ -12,7 +12,9 @@ import { createClient } from 'npm:@supabase/supabase-js@2.118.0'
 import { accountFromCheckout, subscriptionFields } from './handler.ts'
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '')
-const signingSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? ''
+// Trimmed: a secret pasted into the dashboard can carry a stray space or newline,
+// which makes every signature check fail.
+const signingSecret = (Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '').trim()
 const cryptoProvider = Stripe.createSubtleCryptoProvider()
 const db = createClient(
   Deno.env.get('SUPABASE_URL') ?? '',
@@ -40,7 +42,12 @@ Deno.serve(async (request) => {
       undefined,
       cryptoProvider,
     )
-  } catch {
+  } catch (error) {
+    // Logs why the check failed, never the secret itself.
+    console.error('signature check failed:', (error as Error).message, {
+      secretLength: signingSecret.length,
+      secretLooksRight: signingSecret.startsWith('whsec_'),
+    })
     return reply(400, 'Invalid signature')
   }
 
