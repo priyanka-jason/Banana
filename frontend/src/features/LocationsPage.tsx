@@ -181,6 +181,8 @@ export function LocationsPage({
   const controller = useRef<AbortController | null>(null)
   const requestId = useRef(0)
   const input = useRef<HTMLInputElement>(null)
+  // Searches on its own shortly after the visitor stops typing.
+  const typingTimer = useRef<number | undefined>(undefined)
   const locationList = useMemo(() => {
     const result = catalogueBranches(data!, origin, filters.radius)
     if (sort === 'name')
@@ -197,6 +199,7 @@ export function LocationsPage({
         locationList[0])
   useEffect(
     () => () => {
+      window.clearTimeout(typingTimer.current)
       controller.current?.abort()
       requestId.current++
     },
@@ -214,8 +217,12 @@ export function LocationsPage({
     })
   }, [])
 
-  async function findAddress() {
-    if (query.trim().length < 3) {
+  /** partial: started by typing. Keeps the current choices on screen until the new
+   * ones arrive, so the dropdown doesn't flicker between keystrokes. */
+  async function findAddress(text = query, partial = false) {
+    window.clearTimeout(typingTimer.current)
+    if (text.trim().length < 3) {
+      if (partial) return
       setMessage('Enter a street address in Metro Vancouver.')
       input.current?.focus()
       return
@@ -224,12 +231,14 @@ export function LocationsPage({
     const abort = new AbortController()
     controller.current = abort
     const currentRequest = ++requestId.current
-    setMatches([])
-    setMessage('')
+    if (!partial) {
+      setMatches([])
+      setMessage('')
+    }
     setSearching(true)
     const timeout = window.setTimeout(() => abort.abort(), 12000)
     try {
-      const result = await searchAddresses(query.trim(), abort.signal)
+      const result = await searchAddresses(text.trim(), abort.signal, partial)
       if (currentRequest !== requestId.current) return
       setMatches(result)
       setMessage(
@@ -248,6 +257,7 @@ export function LocationsPage({
     }
   }
   function chooseAddress(next: SearchOrigin) {
+    window.clearTimeout(typingTimer.current)
     onOriginChange(next)
     if (user) {
       void saveLocationToAccount(next)
@@ -332,12 +342,21 @@ export function LocationsPage({
                     id="address-search"
                     value={query}
                     onChange={(event) => {
+                      const value = event.target.value
+                      window.clearTimeout(typingTimer.current)
                       controller.current?.abort()
                       requestId.current++
                       setSearching(false)
-                      setMatches([])
-                      setMessage('')
-                      setQuery(event.target.value)
+                      setQuery(value)
+                      if (value.trim().length < 3) {
+                        setMatches([])
+                        setMessage('')
+                        return
+                      }
+                      typingTimer.current = window.setTimeout(
+                        () => void findAddress(value, true),
+                        350,
+                      )
                     }}
                     placeholder="Search a Metro Vancouver address"
                     autoComplete="off"
@@ -355,7 +374,9 @@ export function LocationsPage({
                 {/* Drops down from the address box, at its width. */}
                 {(searching || message || matches.length > 0) && (
                   <div className="address-dropdown">
-                    {searching && <p role="status">Searching addresses…</p>}
+                    {searching && matches.length === 0 && (
+                      <p role="status">Searching addresses…</p>
+                    )}
                     {message && <p role="status">{message}</p>}
                     {matches.length > 0 && (
                       <ul
