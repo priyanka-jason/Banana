@@ -216,7 +216,7 @@ export function LocationsPage({
 
   async function findAddress() {
     if (query.trim().length < 3) {
-      setMessage('Enter a street address in Vancouver.')
+      setMessage('Enter a street address in Metro Vancouver.')
       input.current?.focus()
       return
     }
@@ -235,7 +235,7 @@ export function LocationsPage({
       setMessage(
         result.length
           ? 'Choose an address below to update nearby stores.'
-          : 'No Vancouver addresses found. Try the full street address.',
+          : 'No Metro Vancouver addresses found. Try the full street address and city.',
       )
     } catch {
       if (currentRequest === requestId.current)
@@ -324,7 +324,7 @@ export function LocationsPage({
                 aria-label="Find an address"
               >
                 <label className="sr-only" htmlFor="address-search">
-                  Search an address in Vancouver
+                  Search an address in Metro Vancouver
                 </label>
                 <input
                   ref={input}
@@ -338,7 +338,7 @@ export function LocationsPage({
                     setMessage('')
                     setQuery(event.target.value)
                   }}
-                  placeholder="Search an address in Vancouver"
+                  placeholder="Search a Metro Vancouver address"
                   autoComplete="off"
                   maxLength={200}
                   disabled={locating}
