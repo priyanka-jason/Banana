@@ -222,9 +222,10 @@
   background: white;
   border: 1px solid var(--line);
 }
+/* 71% is the largest square that fits inside the circle, so no logo loses its corners. */
 .location-store-logo img {
-  width: 65px;
-  height: 65px;
+  width: 71%;
+  height: 71%;
   object-fit: contain;
 }
 .location-store-logo.no-frills {
@@ -514,10 +515,6 @@
     height: 60px;
     flex-basis: 60px;
   }
-  .location-store-logo img {
-    width: 50px;
-    height: 50px;
-  }
   .location-store-name {
     font-size: 14px;
   }
@@ -634,10 +631,6 @@
     width: 58px;
     height: 58px;
     flex-basis: 58px;
-  }
-  .location-store-logo img {
-    width: 48px;
-    height: 48px;
   }
   .store-select {
     gap: 12px;
