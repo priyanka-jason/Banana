@@ -7,8 +7,13 @@
  *
  * It only listens on 127.0.0.1, so other machines can't reach it. The website's Vite dev
  * proxy finds it with API_PROXY_TARGET=http://127.0.0.1:8787. Stop it with Ctrl+C.
+ *
+ * Accounts (saved lists) switch on when SUPABASE_URL is set, in the environment or in
+ * backend/.env. Only the project URL is needed to check login tokens, no secret key.
  */
+import { fileURLToPath } from 'node:url';
 import { createBackend } from '../app';
+import { createSupabaseVerifier, type TokenVerifier } from '../auth/tokens';
 import { startServer } from './server';
 
 const DEFAULT_PORT = 8787;
@@ -27,13 +32,28 @@ async function main(): Promise<void> {
     return;
   }
 
+  try {
+    // Reads backend/.env if there is one (it is never committed). Values already set win.
+    process.loadEnvFile(fileURLToPath(new URL('../../.env', import.meta.url)));
+  } catch {
+    // No .env file: fine, accounts just stay off.
+  }
+
   const source = args.includes('--sample') ? 'sample' : 'simulated';
   const port = readPort(process.env['PORT']);
-  const { prices, ingest } = await createBackend({ source });
+  const { prices, ingest, lists } = await createBackend({ source });
+  const supabaseUrl = process.env['SUPABASE_URL']?.trim();
+  const tokens: TokenVerifier | undefined = supabaseUrl ? createSupabaseVerifier(supabaseUrl) : undefined;
   for (const failure of ingest.failures) console.error(`Could not load ${failure.chainSlug}: ${failure.error}`);
   console.log(`Loaded ${ingest.savedItems} ${source} items from ${ingest.chains.length} chains.`);
 
-  const running = await startServer({ prices, port });
+  console.log(
+    tokens === undefined
+      ? 'Accounts are off (no SUPABASE_URL), so /api/lists answers 503.'
+      : 'Accounts are on: /api/lists checks Supabase login tokens. Saved lists are kept in memory for now.',
+  );
+
+  const running = await startServer({ prices, lists, tokens, port });
   console.log(`Banana API listening on ${running.url}/api (Ctrl+C to stop)`);
 
   const stop = (): void => {

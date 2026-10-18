@@ -9,6 +9,7 @@ import type {
   ShoppingListRequest,
   SortOrder,
 } from '../types';
+import { MAX_LIST_NAME_LENGTH, type SavedListInput } from '../lists/lists';
 import type { ApiErrorDetail } from './types';
 
 /**
@@ -368,4 +369,53 @@ export function parseChainParams(value: unknown): ParseResult<string[]> {
     return { ok: false, errors: [{ field: 'chain', message: 'must be a chain slug, like chain=walmart' }] };
   }
   return { ok: true, value: (list as string[]).map((entry) => entry.trim()) };
+}
+
+/** The body of POST /api/lists and PUT /api/lists/{id}: { name, items }. */
+export function parseSavedListBody(body: unknown): ParseResult<SavedListInput> {
+  const errors: Errors = [];
+  const obj = asObject(body, errors);
+  if (obj === undefined) return { ok: false, errors };
+  rejectUnknownFields(obj, ['name', 'items'], errors);
+
+  const name = obj['name'];
+  let cleanName = '';
+  if (name === undefined) {
+    errors.push({ field: 'name', message: 'is required' });
+  } else if (typeof name !== 'string' || name.trim() === '' || name.trim().length > MAX_LIST_NAME_LENGTH) {
+    errors.push({ field: 'name', message: `must be text, 1 to ${MAX_LIST_NAME_LENGTH} characters` });
+  } else {
+    cleanName = name.trim();
+  }
+
+  const entries: SavedListInput['items'] = [];
+  const items = obj['items'];
+  if (items !== undefined) {
+    if (!Array.isArray(items)) {
+      errors.push({ field: 'items', message: 'must be a list (it can be empty)' });
+    } else if (items.length > MAX_LIST_ITEMS) {
+      errors.push({ field: 'items', message: `can have at most ${MAX_LIST_ITEMS} entries` });
+    } else {
+      items.forEach((value, index) => {
+        const entry = readListEntry(value, index, errors);
+        if (entry !== undefined) entries.push(entry);
+      });
+    }
+  }
+
+  return finish(errors, { name: cleanName, items: entries });
+}
+
+/**
+ * The body of POST /api/lists/{id}/prices: where to shop (chains, picked stores or a radius,
+ * member pricing, matches per item). The entries come from the saved list, so "items" is not allowed.
+ */
+export function parseSavedListPriceBody(body: unknown, items: ShoppingListEntry[]): ParseResult<ShoppingListRequest> {
+  const errors: Errors = [];
+  const obj = asObject(body, errors);
+  if (obj === undefined) return { ok: false, errors };
+  if (obj['items'] !== undefined) {
+    return { ok: false, errors: [{ field: 'items', message: 'comes from the saved list, so leave it out' }] };
+  }
+  return parseShoppingListBody({ ...obj, items });
 }
