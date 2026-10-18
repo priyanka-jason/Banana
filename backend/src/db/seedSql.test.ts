@@ -67,6 +67,7 @@ describe('buildSeedSql', () => {
 
 function itemBase() {
   return {
+    category: 'pantry' as const,
     id: 'walmart:W-1',
     chainSlug: 'walmart',
     sku: 'W-1',
