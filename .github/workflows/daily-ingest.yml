@@ -1,0 +1,58 @@
+# Daily data update: runs the backend's ingest against Supabase on GitHub's servers,
+# so no teammate's computer has to be on. Free for this repository.
+#
+# Needs one repository secret (GitHub > Settings > Secrets and variables > Actions):
+#   DATABASE_URL  the Supabase "Session pooler" connection string.
+# Without it the job skips with a note instead of failing.
+#
+# Today it reloads the simulated data (same ids, so nothing is duplicated and nothing real is
+# overwritten). When real price collection exists, it plugs in here.
+
+name: Daily data update
+
+on:
+  schedule:
+    - cron: '0 13 * * *' # 13:00 UTC = 6:00 AM in Vancouver (summer time)
+  workflow_dispatch: {}  # a "Run workflow" button in the Actions tab
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - name: Skip if the database secret is missing
+        id: check
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "DATABASE_URL is not set in the repository secrets; nothing to do."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.check.outputs.ready == 'true'
+      - uses: actions/setup-node@v4
+        if: steps.check.outputs.ready == 'true'
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: Install
+        if: steps.check.outputs.ready == 'true'
+        run: npm ci --no-audit --no-fund
+      - name: Load data into Supabase
+        if: steps.check.outputs.ready == 'true'
+        # --rows 0: print counts only, never sample rows.
+        run: npm run ingest -- --simulated --database --rows 0

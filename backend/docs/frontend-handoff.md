@@ -1,5 +1,9 @@
 # Banana: backend handoff to the frontend
 
+> **Replaced.** The frontend now reads Supabase directly (see the frontend's "direct Supabase handoff").
+> Use [`supabase-direct-reply.md`](supabase-direct-reply.md) instead. This page describes the earlier
+> plan of calling the backend's own API, kept for local development and history.
+
 Reply to the frontend handoff of October 17, 2026.
 
 ## In one paragraph
